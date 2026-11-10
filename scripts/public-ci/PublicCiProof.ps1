@@ -25,6 +25,28 @@ function Invoke-PublicCiGit([string]$Root,[string[]]$Arguments) {
     $output
 }
 
+function Initialize-PublicCiGitMetadata([string]$Checkout,[string]$Work,[string]$Repository,[string]$Commit) {
+    if($Commit -cnotmatch '^[0-9a-f]{40}$' -or $Repository -cnotmatch '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'){throw 'SF-CI-PROVENANCE'}
+    $head=(Invoke-PublicCiGit $Checkout @('rev-parse','HEAD')) -join ''
+    if($head -cne $Commit){throw 'SF-CI-REVISION'}
+    $origin=(Invoke-PublicCiGit $Checkout @('remote','get-url','origin')) -join ''
+    $url='https://github.com/'+$Repository
+    if($origin -cne $url -and $origin -cne ($url+'.git')){throw 'SF-CI-REPOSITORY'}
+    $workRoot=[IO.Path]::GetFullPath($Work)
+    $checkoutRoot=[IO.Path]::GetFullPath($Checkout)
+    if($workRoot -eq $checkoutRoot -or $workRoot.StartsWith($checkoutRoot+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'SF-CI-ISOLATION'}
+    $metadata=Join-Path $workRoot '.git'
+    if([IO.Path]::Exists($metadata)){throw 'SF-CI-ISOLATION'}
+    # Source Link's documented minimal metadata, NOT a new Git history:
+    # https://github.com/dotnet/sourcelink/blob/main/docs/README.md#minimal-git-repository-metadata
+    # Only verified public identity is written. No objects, index, credentials,
+    # global/private config, hooks or links to the checkout's .git are copied.
+    # The enclosing owned scratch cleanup removes these two temporary files.
+    [void][IO.Directory]::CreateDirectory($metadata)
+    [IO.File]::WriteAllText((Join-Path $metadata 'HEAD'),$head+"`n",[Text.UTF8Encoding]::new($false))
+    [IO.File]::WriteAllText((Join-Path $metadata 'config'),('[remote "origin"]'+"`n"+'url = '+$url+"`n"),[Text.UTF8Encoding]::new($false))
+}
+
 function Get-PublicCiRoute([string[]]$Paths,[string]$Event,[bool]$PrivateRepository=$false) {
     # Classify project membership structurally; no excluded source blob is needed.
     $projects=@(Get-PublicCiProjects)
@@ -277,6 +299,56 @@ function Save-PublicCiOfflineTrx($Validated,[string]$Path,[string]$Assembly) {
     [void][IO.Directory]::CreateDirectory((Split-Path $Path));$xml.Save($Path)
 }
 
+function Read-PublicCiSourceLink($Reader,[string]$Repository,[string]$Commit) {
+    $records=@(foreach($handle in $Reader.CustomDebugInformation){
+        $info=$Reader.GetCustomDebugInformation($handle)
+        if($Reader.GetGuid($info.Kind) -eq [guid]'CC110556-A091-4D38-9FEC-25AB9A351A6A'){$info}
+    })
+    if(!$Repository){if($records.Count){throw 'SF-CI-PRIVATE-SOURCELINK'};return $null}
+    if(!$records.Count){throw 'SF-CI-SOURCELINK-RECORD'}
+    if($records.Count -ne 1){throw 'SF-CI-SOURCELINK-DUPLICATE'}
+    if($records[0].Parent.Kind -ne [Reflection.Metadata.HandleKind]::ModuleDefinition){throw 'SF-CI-SOURCELINK-RECORD'}
+    try{
+        $json=[Text.Json.JsonDocument]::Parse([Text.Encoding]::UTF8.GetString($Reader.GetBlobBytes($records[0].Value)))
+    }catch{throw 'SF-CI-SOURCELINK-FORMAT'}
+    try{
+        if($json.RootElement.ValueKind -ne [Text.Json.JsonValueKind]::Object){throw 'SF-CI-SOURCELINK-FORMAT'}
+        $properties=@($json.RootElement.EnumerateObject())
+        if($properties.Count -ne 1 -or $properties[0].Name -cne 'documents' -or $properties[0].Value.ValueKind -ne [Text.Json.JsonValueKind]::Object){throw 'SF-CI-SOURCELINK-FORMAT'}
+        $entries=@($properties[0].Value.EnumerateObject())
+        if(!$entries.Count){throw 'SF-CI-SOURCELINK-EMPTY'}
+        $keys=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        $mappings=@(foreach($entry in $entries){
+            if(!$keys.Add($entry.Name)){throw 'SF-CI-SOURCELINK-AMBIGUOUS'}
+            if($entry.Value.ValueKind -ne [Text.Json.JsonValueKind]::String){throw 'SF-CI-SOURCELINK-FORMAT'}
+            $key=$entry.Name;$url=$entry.Value.GetString()
+            if(!$key.StartsWith('/_/',[StringComparison]::Ordinal) -or $key -cmatch '(^|/)\.{1,2}(/|$)|[\\\r\n?]' -or $key.Contains('//') -or $key -cmatch '\*.+|\*.*\*'){throw 'SF-CI-SOURCELINK-PATH'}
+            if($url -cnotmatch '^https://raw\.githubusercontent\.com/([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)/([^/]+)/(.+)$' -or $Matches[1] -cne $Repository){throw 'SF-CI-SOURCELINK-REPOSITORY'}
+            if($Matches[2] -cne $Commit){throw 'SF-CI-SOURCELINK-REVISION'}
+            $path=$Matches[3]
+            if($path -cmatch '(^|/)\.{1,2}(/|$)|[\\\r\n?#%:]' -or $path.StartsWith('/') -or $path.Contains('//') -or $path -cmatch '\*.+|\*.*\*' -or $key.EndsWith('*') -ne $path.EndsWith('*')){throw 'SF-CI-SOURCELINK-PATH'}
+            @{key=$key;url=$url;wildcard=$key.EndsWith('*')}
+        })
+        return ,$mappings
+    }finally{$json.Dispose()}
+}
+
+function Resolve-PublicCiSourceLink([object[]]$Mappings,[string]$Document,[string]$Repository,[string]$Commit) {
+    $matches=@(foreach($mapping in $Mappings){
+        if($mapping.wildcard){
+            $prefix=$mapping.key.Substring(0,$mapping.key.Length-1)
+            if($Document.StartsWith($prefix,[StringComparison]::Ordinal)){$mapping.url.Substring(0,$mapping.url.Length-1)+$Document.Substring($prefix.Length)}
+        }elseif($mapping.key -ceq $Document){$mapping.url}
+    })
+    if(!$matches.Count){throw 'SF-CI-SOURCELINK-UNCOVERED'}
+    if($matches.Count -ne 1){throw 'SF-CI-SOURCELINK-AMBIGUOUS'}
+    $prefix="https://raw.githubusercontent.com/$Repository/$Commit/"
+    if($matches[0] -cne ($prefix+$Document.Substring(3))){throw 'SF-CI-SOURCELINK-PATH'}
+    # Resolve the public URL to bytes in the verified public source copy. No
+    # network/HTTP-200 assertion or local absolute PDB path is trusted here.
+    return $matches[0].Substring($prefix.Length)
+}
+
 function Assert-PublicCiSymbols([string]$Root,[string]$Repository,[string]$Commit) {
     $projects=@(Get-PublicCiProjects)
     $sources=[Collections.Generic.HashSet[string]]::new([string[]]@(Get-PublicCiSourcePaths $Root),[StringComparer]::Ordinal)
@@ -295,18 +367,23 @@ function Assert-PublicCiSymbols([string]$Root,[string]$Repository,[string]$Commi
             $provider=[Reflection.Metadata.MetadataReaderProvider]::FromPortablePdbStream($stream)
             try{
                 $reader=$provider.GetMetadataReader()
+                $mappings=Read-PublicCiSourceLink $reader $Repository $Commit
+                if($Repository){$links++}
                 foreach($handle in $reader.Documents){
                     $document=$reader.GetDocument($handle)
                     $name=$reader.GetString($document.Name)
-                    if(!$name.StartsWith('/_/',[StringComparison]::Ordinal)){throw 'SF-CI-PDB-PATH'}
-                    $relative=$name.Substring(3)
+                    # Git discovery makes the repository /_/ and the NuGet
+                    # source root /_1/. Only the locked xUnit member below may
+                    # use the latter; it never becomes a repository document.
+                    $relative=if($name.StartsWith('/_/',[StringComparison]::Ordinal)){$name.Substring(3)}else{''}
                     if($relative -cmatch '(^|/)\.{1,2}(/|$)|[\\\r\n]' -or $relative.Contains('//')){throw 'SF-CI-PDB-PATH'}
                     if($sources.Contains($relative)){
+                        if($Repository){$relative=Resolve-PublicCiSourceLink $mappings $name $Repository $Commit}
                         if($reader.GetGuid($document.HashAlgorithm) -ne [guid]'8829d00f-11b8-4213-878b-770e8597ac16' -or
                             (Get-FileHash -LiteralPath (Join-Path $Root $relative)).Hash -cne [Convert]::ToHexString($reader.GetBlobBytes($document.Hash))){throw 'SF-CI-PDB-CHECKSUM'}
                         continue
                     }
-                    if(@($generatedRoots|Where-Object {$relative.StartsWith($_,[StringComparison]::Ordinal)}).Count){continue}
+                    if($relative -and @($generatedRoots|Where-Object {$relative.StartsWith($_,[StringComparison]::Ordinal)}).Count){continue}
                     # xUnit attaches this precise locked source in BeforeCompile,
                     # after MSBuild's evaluation-only item inventory. Its NuGet
                     # canonical document is neither a repository file nor obj/.
@@ -316,21 +393,12 @@ function Assert-PublicCiSymbols([string]$Root,[string]$Repository,[string]$Commi
                             $packageSources[$owner.Assembly]=Get-PublicCiLockedPackageMember (Join-Path $Root $owner.Path) 'xunit.v3.core.mtp-v1' '_content/DefaultRunnerReporters.cs' 'buildTransitive/xunit.v3.core.mtp-v1.targets'
                         }
                         $member=$packageSources[$owner.Assembly]
-                        if($member -and $name -ceq $member.Canonical){
+                        if($member -and ($name -ceq $member.Canonical -or ($Repository -and $name -ceq ('/_1/'+$member.Canonical.Substring(3))))){
                             if($reader.GetGuid($document.HashAlgorithm) -ne [guid]'8829d00f-11b8-4213-878b-770e8597ac16' -or $member.Checksum -cne [Convert]::ToHexString($reader.GetBlobBytes($document.Hash))){throw 'SF-CI-PDB-CHECKSUM'}
                             continue
                         }
                     }
                     throw 'SF-CI-PDB-PATH'
-                }
-                foreach($handle in $reader.CustomDebugInformation){
-                    $info=$reader.GetCustomDebugInformation($handle)
-                    if($reader.GetGuid($info.Kind) -ne [guid]'CC110556-A091-4D38-9FEC-25AB9A351A6A'){continue}
-                    if(!$Repository){throw 'SF-CI-PRIVATE-SOURCELINK'}
-                    $data=[Text.Encoding]::UTF8.GetString($reader.GetBlobBytes($info.Value))|ConvertFrom-Json -AsHashtable
-                    if($data.documents.Count -eq 0){throw 'SF-CI-SOURCELINK'}
-                    foreach($url in $data.documents.Values){if($url -cne "https://raw.githubusercontent.com/$Repository/$Commit/*"){throw 'SF-CI-SOURCELINK'}}
-                    $links++
                 }
             }finally{$provider.Dispose()}
         }finally{$stream.Dispose()}

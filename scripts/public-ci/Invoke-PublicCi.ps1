@@ -92,6 +92,9 @@ function Get-CiFailureCode([Management.Automation.ErrorRecord]$Failure) {
         'SF-CI-PROOF-DIRECTORY','SF-CI-PROVENANCE','SF-CI-REFERENCE',
         'SF-CI-REPORT','SF-CI-REPOSITORY','SF-CI-RESOURCE','SF-CI-RESULT',
         'SF-CI-REVISION','SF-CI-SCOPE','SF-CI-SHARDS','SF-CI-SOURCELINK',
+        'SF-CI-SOURCELINK-RECORD','SF-CI-SOURCELINK-DUPLICATE','SF-CI-SOURCELINK-FORMAT',
+        'SF-CI-SOURCELINK-EMPTY','SF-CI-SOURCELINK-REPOSITORY','SF-CI-SOURCELINK-REVISION',
+        'SF-CI-SOURCELINK-UNCOVERED','SF-CI-SOURCELINK-AMBIGUOUS','SF-CI-SOURCELINK-PATH',
         'SF-CI-SUITES','SF-CI-SYMLINK','SF-CI-TRX'
     )
     if($codes -ccontains $Failure.Exception.Message){return $Failure.Exception.Message}
@@ -102,7 +105,8 @@ function Run-CiDotnet([string[]]$Arguments,[string]$Log) {
     if($LASTEXITCODE -ne 0){throw 'SF-CI-DOTNET'}
 }
 function Set-CiGitProvenance {
-    # Only used for actual public SourceLink, or P04 provenance AFTER build (--no-build).
+    # P04 provenance only, AFTER build (--no-build). The SDK discovers public
+    # metadata in the scratch itself; private builds never see checkout Git.
     $env:GIT_DIR=(Invoke-PublicCiGit $RepositoryRoot @('rev-parse','--absolute-git-dir')) -join ''
     $env:GIT_WORK_TREE=$work
     Remove-Item Env:GIT_COMMON_DIR -ErrorAction SilentlyContinue
@@ -136,7 +140,7 @@ try{
     $env:NUGET_PACKAGES=Join-Path $scratch 'packages'
     $env:SITEFACTORY_TEST_PUBLIC_REPOSITORY=$work
     $env:DOTNET_CLI_USE_MSBUILD_SERVER='0';$env:MSBUILDDISABLENODEREUSE='1'
-    if($PublicRepository){Set-CiGitProvenance}
+    if($PublicRepository){Initialize-PublicCiGitMetadata $RepositoryRoot $work $PublicRepository $ExpectedCommit}
     Push-Location $work
     try{
         Set-CiPhase 'RESTORE'
