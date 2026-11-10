@@ -11,6 +11,51 @@ function Reject([scriptblock]$Action,[string]$Name,[string]$Code){
     $rejected=$false;try{& $Action|Out-Null}catch{$rejected=(!$Code -or $_.Exception.Message -ceq $Code)}
     Check $rejected $Name
 }
+function Edit-CompiledSourceLink([byte[]]$Bytes,[string]$Json,[ValidateSet('Replace','Missing','Duplicate')][string]$Mode='Replace'){
+    # Mutate a copy of an actual compiler-produced PDB in place. Retain its
+    # document table, checksums and method data; no fabricated PDB/JSON-only proof.
+    $changed=[byte[]]$Bytes.Clone();$stream=[IO.MemoryStream]::new($Bytes,$false)
+    try{
+        $provider=[Reflection.Metadata.MetadataReaderProvider]::FromPortablePdbStream($stream)
+        try{
+            $reader=$provider.GetMetadataReader();$rows=@();$row=0
+            $table=[Reflection.Metadata.Ecma335.TableIndex]::CustomDebugInformation
+            $offset=[Reflection.Metadata.Ecma335.MetadataReaderExtensions]::GetTableMetadataOffset($reader,$table)
+            $size=[Reflection.Metadata.Ecma335.MetadataReaderExtensions]::GetTableRowSize($reader,$table)
+            $blobWidth=if([Reflection.Metadata.Ecma335.MetadataReaderExtensions]::GetHeapSize($reader,[Reflection.Metadata.Ecma335.HeapIndex]::Blob) -gt 65535){4}else{2}
+            $guidWidth=if([Reflection.Metadata.Ecma335.MetadataReaderExtensions]::GetHeapSize($reader,[Reflection.Metadata.Ecma335.HeapIndex]::Guid) -gt 65535){4}else{2}
+            foreach($handle in $reader.CustomDebugInformation){
+                $info=$reader.GetCustomDebugInformation($handle)
+                $rows+=@{info=$info;offset=($offset+$row*$size);length=$reader.GetBlobBytes($info.Value).Length;sourceLink=($reader.GetGuid($info.Kind) -eq [guid]'CC110556-A091-4D38-9FEC-25AB9A351A6A')};$row++
+            }
+            $links=@($rows|Where-Object sourceLink)
+            Check ($links.Count -eq 1) 'mutation starts from one real compiled SourceLink record'
+            $link=$links[0]
+            if($Mode -ceq 'Missing'){
+                $guid=[guid]'CC110556-A091-4D38-9FEC-25AB9A351A6A';$hex=[Convert]::ToHexString($Bytes);$needle=[Convert]::ToHexString($guid.ToByteArray());$at=$hex.IndexOf($needle,[StringComparison]::Ordinal)
+                Check ($at -ge 0 -and $at%2 -eq 0 -and $hex.LastIndexOf($needle,[StringComparison]::Ordinal) -eq $at) 'record kind has one unambiguous compiled GUID'
+                [Array]::Copy(([guid]'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee').ToByteArray(),0,$changed,($at/2),16)
+            }elseif($Mode -ceq 'Duplicate'){
+                $other=@($rows|Where-Object {!$_.sourceLink})[0]
+                [Array]::Copy($Bytes,($link.offset+$size-$blobWidth-$guidWidth),$changed,($other.offset+$size-$blobWidth-$guidWidth),($guidWidth+$blobWidth))
+            }else{
+                $payload=[Text.Encoding]::UTF8.GetBytes($Json)
+                # Reuse a sufficiently large existing CDI blob when the new
+                # mapping is longer. Only a fixture's embedded-source blob is
+                # repurposed; document names and hashes remain compiler output.
+                $candidate=@($rows|Where-Object {$_.length -ge $payload.Length}|Sort-Object length)[0]
+                $heap=[Reflection.Metadata.Ecma335.MetadataReaderExtensions]::GetHeapMetadataOffset($reader,[Reflection.Metadata.Ecma335.HeapIndex]::Blob)
+                $blob=[Reflection.Metadata.Ecma335.MetadataTokens]::GetHeapOffset([Reflection.Metadata.BlobHandle]$candidate.info.Value)
+                $prefix=if($candidate.length -lt 128){1}elseif($candidate.length -lt 16384){2}else{4}
+                $start=$heap+$blob+$prefix
+                for($i=0;$i -lt $candidate.length;$i++){$changed[$start+$i]=32}
+                [Array]::Copy($payload,0,$changed,$start,$payload.Length)
+                [Array]::Copy($Bytes,($candidate.offset+$size-$blobWidth),$changed,($link.offset+$size-$blobWidth),$blobWidth)
+            }
+        }finally{$provider.Dispose()}
+    }finally{$stream.Dispose()}
+    return ,$changed
+}
 if($CompiledRoot){
     # This mode consumes a real build only. Never call Offline, restore, build or
     # the YAML guard here: the outer harness invokes it after its own build.
@@ -52,7 +97,37 @@ if($CompiledRoot){
         $sourceBytes=[IO.File]::ReadAllBytes($sourcePath);[IO.File]::AppendAllText($sourcePath,[Environment]::NewLine)
         Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'changed original source fails PDB checksum' 'SF-CI-PDB-CHECKSUM'
         [IO.File]::WriteAllBytes($sourcePath,$sourceBytes)
-        Reject {Assert-PublicCiSymbols $symbolRoot 'unapproved/expected-public' $Commit} 'missing or mismatched SourceLink rejected' 'SF-CI-SOURCELINK'
+        Reject {Assert-PublicCiSymbols $symbolRoot 'unapproved/expected-public' $Commit} 'missing or mismatched SourceLink rejected' $(if($PublicRepository){'SF-CI-SOURCELINK-REPOSITORY'}else{'SF-CI-SOURCELINK-RECORD'})
+        if($PublicRepository){
+            Reject {Assert-PublicCiSymbols $symbolRoot '' $Commit} 'public symbols cannot leak into private mode' 'SF-CI-PRIVATE-SOURCELINK'
+            $otherCommit=if($Commit -ceq ('0'*40)){'1'*40}else{'0'*40}
+            Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $otherCommit} 'wrong executed SHA rejected' 'SF-CI-SOURCELINK-REVISION'
+            $url="https://raw.githubusercontent.com/$PublicRepository/$Commit/"
+            $cases=@(
+                @{name='empty';json='{"documents":{}}';code='SF-CI-SOURCELINK-EMPTY'},
+                @{name='malformed';json='{broken';code='SF-CI-SOURCELINK-FORMAT'},
+                @{name='uncovered';json=(@{documents=@{'/_/unused/*'=($url+'*')}}|ConvertTo-Json -Compress);code='SF-CI-SOURCELINK-UNCOVERED'},
+                @{name='unexpected path';json=(@{documents=@{'/_/*'=($url+'unexpected/*')}}|ConvertTo-Json -Compress);code='SF-CI-SOURCELINK-PATH'},
+                @{name='encoded path';json=(@{documents=@{'/_/*'=($url+'%2e%2e/*')}}|ConvertTo-Json -Compress);code='SF-CI-SOURCELINK-PATH'},
+                @{name='overlap';json=(@{documents=@{'/_/*'=($url+'*');'/_/src/*'=($url+'src/*')}}|ConvertTo-Json -Compress);code='SF-CI-SOURCELINK-AMBIGUOUS'},
+                @{name='duplicate key';json=('{"documents":{"/_/*":"'+$url+'*","/_/*":"'+$url+'*"}}');code='SF-CI-SOURCELINK-AMBIGUOUS'}
+            )
+            foreach($case in $cases){
+                [IO.File]::WriteAllBytes($domain,(Edit-CompiledSourceLink $domainBytes $case.json))
+                Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} ('compiled mapping '+$case.name) $case.code
+            }
+            [IO.File]::WriteAllBytes($domain,(Edit-CompiledSourceLink $domainBytes '' Missing))
+            Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'missing record in one real PDB' 'SF-CI-SOURCELINK-RECORD'
+            [IO.File]::WriteAllBytes($domain,(Edit-CompiledSourceLink $domainBytes '' Duplicate))
+            Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'duplicate record in one real PDB' 'SF-CI-SOURCELINK-DUPLICATE'
+            $second=Join-Path $symbolRoot 'src/LogicGate.SiteFactory.Application/bin/Release/net10.0/LogicGate.SiteFactory.Application.pdb'
+            $secondBytes=[IO.File]::ReadAllBytes($second)
+            [IO.File]::WriteAllBytes($domain,(Edit-CompiledSourceLink $domainBytes '' Missing))
+            [IO.File]::WriteAllBytes($second,(Edit-CompiledSourceLink $secondBytes '' Duplicate))
+            Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'extra record cannot compensate another PDB without a record'
+            [IO.File]::WriteAllBytes($second,$secondBytes);[IO.File]::WriteAllBytes($domain,$domainBytes)
+            Check ((Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit).sourceLink -ceq 'VERIFIED') 'restored compiled mappings still pass'
+        }
         [IO.File]::WriteAllText($domain,'invalid portable PDB')
         Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'corrupt real PDB rejected'
         [IO.File]::WriteAllBytes($domain,$domainBytes)
@@ -66,7 +141,7 @@ if($CompiledRoot){
             try{
                 $reader=$provider.GetMetadataReader();$hashes=@(foreach($handle in $reader.Documents){
                     $document=$reader.GetDocument($handle)
-                    if($reader.GetString($document.Name) -cmatch '^/_/xunit\.v3\.core\.mtp-v1/[0-9.]+/_content/DefaultRunnerReporters\.cs$'){
+                    if($reader.GetString($document.Name) -cmatch '^/_(1)?/xunit\.v3\.core\.mtp-v1/[0-9.]+/_content/DefaultRunnerReporters\.cs$'){
                         [Convert]::ToHexString($reader.GetBlobBytes($document.Hash))
                     }
                 })
@@ -189,6 +264,41 @@ function Rows([string]$Assembly,[int]$Count,[string[]]$Names=@()){
     @(for($i=0;$i -lt $Count;$i++){$name=if($Names.Count){$Names[$i]}else{$Assembly+'.Fixture.Case'+$i};$qualified=$name.Split('(')[0];$dot=$qualified.LastIndexOf('.');@{id=[Guid]::NewGuid().ToString('D');execution=[Guid]::NewGuid().ToString('D');caseHash=(Get-PublicCiCaseHash $name);class=$qualified.Substring(0,$dot);method=$qualified.Substring($dot+1);start=$start.ToString('O');end=$finish.ToString('O');duration='00:00:01';outcome='Passed'}})
 }
 try{
+    # Verify scratch-only Git metadata without fabricating a commit or opening
+    # another repository. Only the two read-only Git queries are substituted.
+    $gitImplementation=${function:Invoke-PublicCiGit}
+    $fixtureHead=$commit;$fixtureOrigin='https://github.com/fixture/public.git'
+    $checkout=Join-Path $temporary 'verified-checkout';$metadataWork=Join-Path $temporary 'metadata-work'
+    [void][IO.Directory]::CreateDirectory((Join-Path $checkout '.git'))
+    $witness=Join-Path $checkout '.git/config';[IO.File]::WriteAllText($witness,'private-config-canary')
+    $witnessHash=(Get-FileHash -LiteralPath $witness).Hash
+    function Invoke-PublicCiGit([string]$Root,[string[]]$Arguments){
+        Check ($Root -ceq $checkout) 'Git provenance reads only the verified checkout'
+        switch -CaseSensitive ($Arguments -join ' '){
+            'rev-parse HEAD' {return $fixtureHead}
+            'remote get-url origin' {return $fixtureOrigin}
+            default {throw 'SF-CI-TEST unexpected Git mutation/query'}
+        }
+    }
+    try{
+        Initialize-PublicCiGitMetadata $checkout $metadataWork 'fixture/public' $commit
+        $metadata=Join-Path $metadataWork '.git'
+        $files=@(Get-ChildItem -LiteralPath $metadata -Recurse -File -Force)
+        Check ($files.Count -eq 2 -and (Assert-PublicPostgreSqlExact @($files.Name) @('HEAD','config'))) 'minimal Git metadata has no objects, history, index, hooks or credentials'
+        Check ([IO.File]::ReadAllText((Join-Path $metadata 'HEAD')) -ceq ($commit+"`n")) 'scratch HEAD is the executed SHA'
+        Check ([IO.File]::ReadAllText((Join-Path $metadata 'config')) -ceq ('[remote "origin"]'+"`n"+'url = https://github.com/fixture/public'+"`n")) 'scratch config contains only verified public identity'
+        Reject {Initialize-PublicCiGitMetadata $checkout $metadataWork 'fixture/public' $commit} 'existing metadata cannot be overwritten' 'SF-CI-ISOLATION'
+        Reject {Initialize-PublicCiGitMetadata $checkout $checkout 'fixture/public' $commit} 'checkout metadata cannot be modified' 'SF-CI-ISOLATION'
+        $fixtureHead='b'*40
+        Reject {Initialize-PublicCiGitMetadata $checkout (Join-Path $temporary 'wrong-sha') 'fixture/public' $commit} 'actual checkout SHA must equal campaign SHA' 'SF-CI-REVISION'
+        $fixtureHead=$commit
+        foreach($origin in @('https://github.com/fixture/private.git','https://credential-canary@github.com/fixture/public.git','ssh://git@github.com/fixture/public.git')){
+            $fixtureOrigin=$origin
+            Reject {Initialize-PublicCiGitMetadata $checkout (Join-Path $temporary 'wrong-origin') 'fixture/public' $commit} 'wrong or credential-bearing origin rejected' 'SF-CI-REPOSITORY'
+        }
+        Check ((Get-FileHash -LiteralPath $witness).Hash -ceq $witnessHash) 'original checkout config remains untouched'
+        Check (![IO.Path]::Exists((Join-Path $temporary 'wrong-sha')) -and ![IO.Path]::Exists((Join-Path $temporary 'wrong-origin'))) 'provenance failures create no metadata'
+    }finally{Set-Item Function:Invoke-PublicCiGit $gitImplementation}
     # Exercise the real report writer, closed phase setter, catch and finally without
     # running dotnet, providers or a campaign. Only the failing work is synthetic.
     $scriptPath=Join-Path $RepositoryRoot 'scripts/public-ci/Invoke-PublicCi.ps1'
@@ -201,7 +311,9 @@ try{
     $failureCode=@($functions|Where-Object Name -ceq 'Get-CiFailureCode')
     Check ($failureCode.Count -eq 1) 'one closed failure-code classifier'
     . ([scriptblock]::Create($failureCode[0].Extent.Text))
-    foreach($code in @('SF-CI-PDB-PATH','SF-CI-PDB-CHECKSUM','SF-CI-PDB-MISSING','SF-CI-PDB-ORIGIN','SF-CI-PDB-PROOF','SF-CI-CASE-IDENTITY','SF-CI-TRX')){
+    foreach($code in @('SF-CI-PDB-PATH','SF-CI-PDB-CHECKSUM','SF-CI-PDB-MISSING','SF-CI-PDB-ORIGIN','SF-CI-PDB-PROOF','SF-CI-CASE-IDENTITY','SF-CI-TRX',
+        'SF-CI-SOURCELINK-RECORD','SF-CI-SOURCELINK-DUPLICATE','SF-CI-SOURCELINK-FORMAT','SF-CI-SOURCELINK-EMPTY',
+        'SF-CI-SOURCELINK-REPOSITORY','SF-CI-SOURCELINK-REVISION','SF-CI-SOURCELINK-UNCOVERED','SF-CI-SOURCELINK-AMBIGUOUS','SF-CI-SOURCELINK-PATH')){
         try{throw $code}catch{$classified=Get-CiFailureCode $_}
         Check ($classified -ceq $code) 'exact owned failure code retained'
     }
