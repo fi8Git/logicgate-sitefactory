@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "sample-plan",
+  "client": "fictitious-documentation",
+  "product": "documentation",
+  "template": "documentation-minimal",
+  "plannedFiles": [
+    {
+      "id": "documentation-guide",
+      "relativePath": "guide.html",
+      "origin": {
+        "kind": "template",
+        "componentId": "documentation-minimal"
+      },
+      "strategy": "generated",
+      "action": "create"
+    },
+    {
+      "id": "documentation-index",
+      "relativePath": "index.html",
+      "origin": {
+        "kind": "template",
+        "componentId": "documentation-minimal"
+      },
+      "strategy": "generated",
+      "action": "create"
+    }
+  ],
+  "diagnostics": []
+}

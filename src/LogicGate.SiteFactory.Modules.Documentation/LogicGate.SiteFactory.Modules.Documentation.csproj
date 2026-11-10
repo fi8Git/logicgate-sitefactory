@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Markdig" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../LogicGate.SiteFactory.Application/LogicGate.SiteFactory.Application.csproj" />
+    <ProjectReference Include="../LogicGate.SiteFactory.Domain/LogicGate.SiteFactory.Domain.csproj" />
+    <ProjectReference Include="../LogicGate.SiteFactory.ModuleSdk/LogicGate.SiteFactory.ModuleSdk.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../templates/documentation-minimal/template.json"
+                      LogicalName="LogicGate.SiteFactory.Templates.Documentation.Manifest" />
+    <EmbeddedResource Include="../../templates/documentation-minimal/content/index.md.txt" WithCulture="false"
+                      LogicalName="LogicGate.SiteFactory.Templates.Documentation.Index" />
+    <EmbeddedResource Include="../../templates/documentation-minimal/content/guide.md.txt" WithCulture="false"
+                      LogicalName="LogicGate.SiteFactory.Templates.Documentation.Guide" />
+  </ItemGroup>
+</Project>

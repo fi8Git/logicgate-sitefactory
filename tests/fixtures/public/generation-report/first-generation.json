@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "scope": "reported-file-operations",
+  "status": "success",
+  "siteFactoryVersion": "0.1.0-dev",
+  "createdFiles": [
+    "metadata.txt"
+  ],
+  "modifiedFiles": [],
+  "unchangedFiles": [],
+  "preservedFiles": [],
+  "skippedFiles": [],
+  "protectedFiles": [],
+  "conflicts": [],
+  "failedFiles": [],
+  "operations": [
+    {
+      "path": "metadata.txt",
+      "strategy": "generated",
+      "plannedAction": "create",
+      "sourceKind": "generator",
+      "sourceComponent": "sitefactory",
+      "sourceVersion": "0.1.0-dev",
+      "destinationExistedAtInspection": false,
+      "previousHash": null,
+      "currentHash": null,
+      "proposedHash": "66A045B452102C59D840EC097D59D9467E13A3F34F6494E539FFD32C1BB35F18",
+      "result": "created",
+      "conflictCode": null
+    }
+  ],
+  "diagnostics": []
+}

@@ -1,0 +1,7 @@
+# Bienvenue
+
+Documentation de démonstration issue des sources Markdown du repository.
+
+## Navigation
+
+Utilisez les liens Accueil et Guide pour parcourir les deux pages.

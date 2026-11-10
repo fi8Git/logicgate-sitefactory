@@ -1,0 +1,17 @@
+schemaVersion: 1
+client:
+  slug: fictitious-documentation
+  displayName: Fictitious Documentation
+site:
+  product: documentation
+  template: documentation-minimal
+  defaultLocale: fr-FR
+  publicBaseUrl: https://example.test
+modules:
+  enabled: []
+deployment:
+  profile: docker-compose-vps
+git:
+  initializeLocalRepository: true
+  publishRemote: false
+unexpectedProperty: true

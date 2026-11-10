@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "siteFactoryVersion": "0.1.0-dev",
+  "configurationSchemaVersion": 1,
+  "product": "documentation",
+  "template": {
+    "id": "documentation-minimal",
+    "version": "0.1.0",
+    "manifestSchemaVersion": 2
+  },
+  "modules": []
+}

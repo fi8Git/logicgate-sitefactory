@@ -1,0 +1,3355 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "da1d813f55d990d1cd486951d9484413d6896646",
+  "sourceTree": "1e5f30104b8744214841e6034ae0bbb2df039b3d",
+  "allowlistSha256": "6503ed58d6f1271f63872be251536164192dbb248ddcc0e57009af57c262e9ae",
+  "fileCount": 478,
+  "files": [
+    {
+      "path": ".editorconfig",
+      "sha256": "da84e61f05dcc0a2abaf64c1b31f22df5639860ab38fe33e57f66515d200832e",
+      "length": 480,
+      "gitBlob": "787521857047eb6967904c51ae1141213b215cc0",
+      "gitMode": "100644"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "43c85e0c43b7131fa995ccd8182d9645902e7ccf1c8bc5dd1914dcfa0ec91a4a",
+      "length": 90,
+      "gitBlob": "f9cc445015c145be643f1f5c5aece211dc4b55a4",
+      "gitMode": "100644"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "feb7862ff8abd6dbc1c85665c68b7361d3fb86252498caf466763b03ad622590",
+      "length": 22541,
+      "gitBlob": "6631cef0181a57071a35d9dccaff8181c331e6a1",
+      "gitMode": "100644"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "a680833af0ec66474a8bf3db36944f624db4f9987fe234659b35d6d9cdd4bf36",
+      "length": 197,
+      "gitBlob": "9f92666f1ea8b145adb24ce391909af017f28394",
+      "gitMode": "100644"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "1f831d83a5659e5b0e8b442165019a11f3965e41d864f07956b1d985fc1b5038",
+      "length": 46276,
+      "gitBlob": "1ad262670be3e7b6a74342035fc99e7260832714",
+      "gitMode": "100644"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "af29da57f12aac8821c5eb1f11ca79c9ff3eed4b60870ce2f6429fb03a36ebf4",
+      "length": 9444,
+      "gitBlob": "0d51c2132f807ce6acb24b5abd71b0b23aec4627",
+      "gitMode": "100644"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "9aba24df20a1c3264099b951715586ab5819c353bd7fa3b26e6742b5aa439718",
+      "length": 51370,
+      "gitBlob": "99dc47d26695c9fed87d701195f1f3944d268094",
+      "gitMode": "100644"
+    },
+    {
+      "path": "Directory.Build.props",
+      "sha256": "48c0843969e52424560473b2e70ac03a0291d98649c6d135956d906d495ccf51",
+      "length": 650,
+      "gitBlob": "6e90258a427a7fedf6075abdf4e0dd6cd437241c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "Directory.Packages.props",
+      "sha256": "70c1462b2ed2c8f091c84a63561c845aaeea122e885c9f4cd0a1c83fba4be38f",
+      "length": 2306,
+      "gitBlob": "abfe90d17f98cdb423f4d644390654f9e3d1a927",
+      "gitMode": "100644"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "length": 11358,
+      "gitBlob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "NOTICE",
+      "sha256": "81b7fdc83ae6618e8b4e730b07db51f0fb61ea69436b51d4c26fd2723fbd2db4",
+      "length": 1158,
+      "gitBlob": "c3cfe11cb18950b2ddb437ce727e1d112cd3290b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "NuGet.config",
+      "sha256": "5a95e9e63413a867341bc52903803b7341234ef77e36c2697dd3315c002edcfc",
+      "length": 690,
+      "gitBlob": "a394b5f46869e3e6476f0daa4a80b7bfb4288446",
+      "gitMode": "100644"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8a16afc4a1425f1e4caf131d138de94de398299fde0b5a001d8eccefc6ddfe4b",
+      "length": 11890,
+      "gitBlob": "dd5f4e5be5923bb1bc878666f0e2681608242146",
+      "gitMode": "100644"
+    },
+    {
+      "path": "SiteFactory.slnx",
+      "sha256": "20af384a48230ada26df9def89281e1094c389346f4606d97908a95419ac62ae",
+      "length": 2697,
+      "gitBlob": "6121c5e1eb925240c3af7b5fa68d756cdbf65d32",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/02-architecture/09-module-architecture.md",
+      "sha256": "2c9209a4472bfb62b8a24e0f36c21f8894c56b55234e53017f0ba7b4fededdfc",
+      "length": 55105,
+      "gitBlob": "155777c92236aa7a7af767d457177b01dda0033e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/02-architecture/10-feature-flags-and-entitlements.md",
+      "sha256": "1a084533451a91ebc78296167ba04f60a5d2cb994bbe04472103750988f5a0da",
+      "length": 57449,
+      "gitBlob": "27fbdb176e81afa18ade7c3e561c7e31b4ee4ed7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/02-architecture/core-module-boundary.md",
+      "sha256": "dcb002c3777310ddc4bab23eda8c6b23703c5269f2d207f9f87dea2810be7353",
+      "length": 6513,
+      "gitBlob": "416dc4f59aae19de008c4b0dc236b2d3f9f02001",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/02-architecture/module-catalog.md",
+      "sha256": "0fee34ea45f6eef28ff8b8ccf0656dfa8e6472affa82e2cbc597ff24b03022bf",
+      "length": 4867,
+      "gitBlob": "f76d37406eeb2f16c03d6aba6f73f0b35fe8f58c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/02-architecture/module-sdk.md",
+      "sha256": "d6b5254b91f5b6b168e8b50c159cfbc1cb9a3ea1447bcb701e74bc3c4871d758",
+      "length": 6744,
+      "gitBlob": "3b6000f6418c6931a8ec4822b681c0be77dd626c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/13-generation-pipeline.md",
+      "sha256": "cca59fc95d5adb6c58541fe9cc5657b9b6adbc3267fb50fd3fd6314f9fe068c0",
+      "length": 64966,
+      "gitBlob": "a6d19788f082daee7bab939d48e49e6047f19c93",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/14-client-configuration-schema.md",
+      "sha256": "da0930d3b9464f981f2a52f058ccc667e406a49ca7c66e1ed216e6295bc1fb65",
+      "length": 70010,
+      "gitBlob": "155112c98d7ea45834736c09c3e89a5637a2a4df",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/15-cli-specification.md",
+      "sha256": "cfe27d71c828c424cae428c5e43c9c5522c857c31396955f9b848d9ae162c1cc",
+      "length": 63277,
+      "gitBlob": "c95cc9a16749fb7571398c55880d52cf758075da",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-application-skeleton-e2e.md",
+      "sha256": "f47c52f43234d70f506ff842f4bed261f28f02f14fa957401cde838b8cff10fb",
+      "length": 3476,
+      "gitBlob": "75baa1fb8ad13ffed2278c14a0b3edf2b25e9432",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-explicit-migrator.md",
+      "sha256": "ec19676e6924f98a82af0220bc67add833d98b9cd0f0053f22f66620e3aec2b1",
+      "length": 10132,
+      "gitBlob": "6065a7d010bcb022ee2119eed19f97e11ed7f8d3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-health-checks.md",
+      "sha256": "9e8afd8997fc5c768661354a76aa313ae31d6d04b6b4e62a2c3540e7e00772e1",
+      "length": 3555,
+      "gitBlob": "72525b14bfb26974293de0a9b5a6bc9310f594b0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-persistence-dependencies.md",
+      "sha256": "427fe8a3a0ce74b9491c9cace656d21cca5380364e87ba059a411cc1a75e7d0d",
+      "length": 3768,
+      "gitBlob": "e6e2a2ecd53b90af7876831f6606ce409d7b8216",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-postgresql-compatibility-probe.md",
+      "sha256": "04d8302e6703a3d282f36cdf64e99f7a3a97d21f8296e26a90d2d4c349188a27",
+      "length": 8361,
+      "gitBlob": "72a1d73c80e17fd0f042ef3a91e611f8bb687455",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-postgresql-runtime-configuration.md",
+      "sha256": "e3072865687ee870e2643eb27d571e97b9bd9fd007970ba248b4e45514c58bff",
+      "length": 7162,
+      "gitBlob": "bddf44ba3ad63edd690a753e98d8e14c2be660dc",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-runtime-configuration.md",
+      "sha256": "d5636a1386a2cc43468794c806215811e62807cbfffbff2c19f471b355657ecc",
+      "length": 4348,
+      "gitBlob": "fa12bb1361b9a858f3783a9ba048f04812c804bb",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-runtime-database-model.md",
+      "sha256": "11d079c276031fb1cc62634a7bf06ba9708998d511a81a7d2a41f4778245cc98",
+      "length": 6085,
+      "gitBlob": "0ffb8447819c2193a88aad9a7113634696fbb79f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-runtime-metadata-bootstrap.md",
+      "sha256": "55439d2effddaff6c3a34fbb8850e16fdbe18826f39e2e599ce547cf8e1b7b44",
+      "length": 7491,
+      "gitBlob": "7953b8b85d56d0f3c3463b975fd102fc41006e12",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-startup-validation.md",
+      "sha256": "641a8a360611118c6968d1a2493130e51757d93b603a4287caac47f542885a71",
+      "length": 5216,
+      "gitBlob": "62fda98eb755fac452b37db4bffd14747ef3b60c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-web-postgresql-readiness.md",
+      "sha256": "979da9ee1610071d3fa374162e7620ffd4b07d8ba377001126af6eb3ad709ffb",
+      "length": 8646,
+      "gitBlob": "7a756fd3644d931ac78351029770f25bc5756c35",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/generated-worker-postgresql-readiness.md",
+      "sha256": "3d81751d6b669f48707976ed9fea98f51eb3a8533b48ec42493c1a331f85cb5d",
+      "length": 5524,
+      "gitBlob": "c714f894004510a5f5e25a1c4a16d03a773ef2eb",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/initial-generation-cli.md",
+      "sha256": "6a804e2840f84289eda47ced997392d4aeb815bbffa64124663bfaceafcc1765",
+      "length": 4788,
+      "gitBlob": "9c267a997e40b6fe7cf590f3c19c33f7f6822e91",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/minimal-generated-dotnet-project.md",
+      "sha256": "c449a4e9cc9e4d113d394bcd6130b7fa9d735b8b0df9d86ad41e4b1f420cd365",
+      "length": 3731,
+      "gitBlob": "d39953b0dcb4176d445231e1284ba61e2cf2a255",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/regeneration-and-end-to-end-proof.md",
+      "sha256": "da062350e6a040bab3278ad995f85e21204f36c0d487b7f740e3a3773cb2730b",
+      "length": 4307,
+      "gitBlob": "9bc439f56c1cf88795cb9e5ed25e521ed3855fbf",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/03-generation/repository-documentation-end-to-end.md",
+      "sha256": "ca62c71623f87d99065c40ec6d5b00f8a8d1d56713c3cb06c10042ec955f67a3",
+      "length": 3872,
+      "gitBlob": "5560ce853e0f9edf3bb0d93cc9ebaceac73b67cd",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/04-quality-security/18-security-baseline.md",
+      "sha256": "340e930aa5d665f146096eb3e5c6c9816ce82a434a705e3a56d08a130e97eef4",
+      "length": 80239,
+      "gitBlob": "856116c7f4229b93bb3a3df1b582a381e316c29f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/04-quality-security/19-testing-strategy.md",
+      "sha256": "3ccc8d8a2199f52ef796f5a3b7c68dff3e137dcadf1cd3d3d0fcbfbca91bea09",
+      "length": 68070,
+      "gitBlob": "7b22a020184f018f0345f0be0331abad93b7a9f8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/04-quality-security/20-quality-gates-and-ci.md",
+      "sha256": "e739522d19ec3e847858640f9dd2c1fab6c7a4eea65778f443da5725b0f1c1d6",
+      "length": 67686,
+      "gitBlob": "ac5aa2daab0d84734882acd2c74c11a7fec05bdb",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/05-operations/21-observability-and-logging.md",
+      "sha256": "90818fca1642e5c469aff0120f30b7f76826bf34f97ad5cb056ad0b28191bd19",
+      "length": 67651,
+      "gitBlob": "628d072ecebf4cfa01b11f496fd4267aa3517077",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/05-operations/22-deployment-and-environments.md",
+      "sha256": "891469b751d3c9f150d8bdd80363e7d1fda391af7d563a884379ccab6d25e607",
+      "length": 68431,
+      "gitBlob": "9151f66e9ab5797a83091cf19528b6f107a446bf",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/05-operations/23-backup-and-restore.md",
+      "sha256": "d507a22823c2777ac71528bab5014c63a41b6d83d9ebd6d90b8197d31c44f36d",
+      "length": 67931,
+      "gitBlob": "348bdfe8e8446e50d76df52ff65c2465093a6a7c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/05-operations/24-operational-runbooks.md",
+      "sha256": "94b096f4e69c2e76d916dbbf7d0489b992259922336cd107c7fe1a1fba629ac7",
+      "length": 66670,
+      "gitBlob": "2dd04540f5c215ed9ff47b02ccee7eaf77c3be18",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/05-operations/25-upgrade-and-maintenance-strategy.md",
+      "sha256": "ff16f971375e0c1b33bf0832018d5caecf461bbb2d1015ae3f18375f5a11b97d",
+      "length": 64228,
+      "gitBlob": "927f32271ee776b0d12e4c566acaf836aec859e3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/05-operations/26-release-and-versioning.md",
+      "sha256": "9edf1fff24dae6f168bd8c7444a42aa54a725e243f99be2f4be9e323101c9ce0",
+      "length": 64028,
+      "gitBlob": "f4b8351325508f5d744d3421004949ea2208fe76",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/05-operations/27-client-handover-and-service-closure.md",
+      "sha256": "068e05a3b85c45641e71e03897e1bef4a03185d810ddc24d40506349c67dcb95",
+      "length": 68360,
+      "gitBlob": "6ada94f79161474ea252d4e1e5a000f965861a56",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/06-codex/28-codex-operating-guide.md",
+      "sha256": "8f0ea1e0dbecfec2778483e345e10e802e5aced7ff6e0df0451f008824ae515b",
+      "length": 57571,
+      "gitBlob": "69652ae39ac2780fd2edca16b86d8d979c9f6952",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/06-codex/29-codex-task-specification-template.md",
+      "sha256": "9f1c01e7589646aaf9215f3b6807ef10079f92821f278d48192c66d4cb54f3c5",
+      "length": 58150,
+      "gitBlob": "86ef77f768c2d60eb4198a45b2c9713ee2d5d103",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/06-codex/30-codex-review-template.md",
+      "sha256": "7c4e576e82bae9c6027aeceabdc07ce0eb7502e7172bb23d12e06e4f554962f4",
+      "length": 60057,
+      "gitBlob": "06b3e29e648536ca2eb100d674489de42e225a8b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/06-codex/31-codex-correction-template.md",
+      "sha256": "00e249d538f373723547c2200c0ba45e0dc764235b9b38fa857849f1c5f69701",
+      "length": 54554,
+      "gitBlob": "11901f2dfd5bb0253dac040cc1e6bad2fb70c890",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0000-adr-template.md",
+      "sha256": "80ae3b329b0c112a2a5ad4f025f0ef5993f7fefd7a93ed60a804b203e1e5d6f1",
+      "length": 47319,
+      "gitBlob": "a06a93d049c05816439ae3b1414692e9d026b206",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0001-one-repository-and-database-per-client.md",
+      "sha256": "5467ac02b214d1a09d0534c0a5ea93085c2f877c2d41967969a7f6c93fe8fd54",
+      "length": 45558,
+      "gitBlob": "231f5a03de0551ed0852cb82603c696bd23ac840",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0002-yaml-client-configuration.md",
+      "sha256": "3d47a11015d84fb8bc3f9a7ed6ea8041cb7cdc1d8b3e347cbde805a11de8e2da",
+      "length": 55581,
+      "gitBlob": "d3eb4ca96869adfc96628c02eb3467046438db43",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0003-postgresql-as-primary-database.md",
+      "sha256": "b0358cc4c0f8c79007251c5896d9bd024896a4cd0a39dadfedaf565713af0bf5",
+      "length": 59810,
+      "gitBlob": "670ffda71655834106170568ca11a30a05b6e1c2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0004-explicit-production-migrations.md",
+      "sha256": "6b4661aa7b56c87bdc06f7b2a2a7d246641d51d70c1561199a1f6d8e16b8b061",
+      "length": 54137,
+      "gitBlob": "ba10fedd0a6c54bd9d0d0295de965e15fb399751",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0005-file-generation-strategies.md",
+      "sha256": "0505f996cd54168daff85e9cb4ea8e5efd036a639443dd2de18dc9d4c45bae8e",
+      "length": 56013,
+      "gitBlob": "b8e185292b60460f760e703b00871e61cc13d068",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0006-feature-flags-and-entitlements-separation.md",
+      "sha256": "44ca9d09b37819f9b2bf22eac25067088868dca237ae6620ecbdb512adacca11",
+      "length": 64199,
+      "gitBlob": "6e37ef7eaf5768524d9af567765f31a12cf68298",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0007-module-composition-and-public-contracts.md",
+      "sha256": "8caf60572a19948c8fefd37f9469929384729ab49369429c0b864359d68599b5",
+      "length": 63465,
+      "gitBlob": "06082eb4be766d56e9b22e0b960ec335a1b8339f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0008-private-package-feed-and-supply-chain.md",
+      "sha256": "bba1e89088544ec3c500c700ab8a8f1735c3c9c3268e3001b2429deef407a34e",
+      "length": 74342,
+      "gitBlob": "dcd9c150c0199003d46d86c8068e6e9233561601",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0009-client-customizations-and-extension-points.md",
+      "sha256": "4fc5661635780e708a462f0cca6db3e0268dec38cc3d3eda3e70cb92230ebd39",
+      "length": 66563,
+      "gitBlob": "5d41070034a5c0410316b498ef5d1c9c88a92272",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0010-structured-observability-with-opentelemetry.md",
+      "sha256": "9cd005ddcda53fe395a0e5209802e844030c286cb00f500310478ddb428e2ce3",
+      "length": 69489,
+      "gitBlob": "4a26caa6352dbbe273e56a441945124b9e008fa1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0011-docker-compose-vps-deployment-profile.md",
+      "sha256": "ad2c90360b4352894c0a808efb2e60afd9ce9d1093db22ebc8046d285466d0a0",
+      "length": 74437,
+      "gitBlob": "4d0089b232401de619f81be9b96ed1297a2beb3c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0012-runtime-configuration-and-secrets.md",
+      "sha256": "603e6e59d1cb403c6db369d43c7532c00252d30c2235cd8b008ab67374a9fa28",
+      "length": 83053,
+      "gitBlob": "277b40239223e7da82b639eb390a4e387439c906",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0013-local-git-initialization-and-explicit-remote-publishing.md",
+      "sha256": "b9f94571f3e2b005fc7f164a065691c8facd980eeda053bc34afd5dfeaaaf3aa",
+      "length": 78757,
+      "gitBlob": "d3a04f55f42fc1a9eac047290bd8d206fe6b4207",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0014-explicit-client-upgrades-and-version-pinning.md",
+      "sha256": "225f2ccd99ec1a37c6f6e12928b16a6cccdfc978ddc9bebed123c4f3456d5c56",
+      "length": 82728,
+      "gitBlob": "0bb6bc6c6e30e5c2f368dad6cd25bd7e6be02143",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0015-deterministic-generation-and-optional-ai.md",
+      "sha256": "12dfe232e12329d56a77b887b7123256f8a5fd9884327ceeba1da932d7c649d3",
+      "length": 76120,
+      "gitBlob": "fc573826c971c7e03de8287cefa5c1ff8bef78b5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0016-content-and-media-storage-boundaries.md",
+      "sha256": "303d21ba6e24771c96b53fcfbbe21bd284175b251362084fe15ccdadd7914b8e",
+      "length": 85497,
+      "gitBlob": "a6e23978b1315fc547cdb3587db1fe5e610ee40e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0017-background-jobs-and-reliable-side-effects.md",
+      "sha256": "55f95ce2b6021d0e4078cfc26ebe0c807429c99e44ce7d0046727a12024c3d46",
+      "length": 84262,
+      "gitBlob": "0f8cbb4414ce422f066b01bb1ed54d9a25e15f99",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0018-public-form-abuse-protection-and-rate-limiting.md",
+      "sha256": "124f7b6d371a091a679c404e44d945430c2b449fe5612819c746ae4e0d500e8b",
+      "length": 86748,
+      "gitBlob": "98f3aca0ff07e402654280ff8d4dd6f0250f9f9a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0019-audit-trail-and-sensitive-administrative-actions.md",
+      "sha256": "9892b73d6b79e6c2dbe9327cea7a71182ce20c2ed7c2e1f41b306278d959d1f9",
+      "length": 90215,
+      "gitBlob": "1a717379d73bd3eb2725d3e91af2ebfdd6295d86",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0020-administrator-session-security-and-step-up-authentication.md",
+      "sha256": "cf441a12afc8b644232a8d7aa975152b11a0f235bf634314d8d553225b476a45",
+      "length": 88031,
+      "gitBlob": "bc8630728216f7c6e1681c0eff65b5b975749db8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0021-administrator-provisioning-invitations-and-account-recovery.md",
+      "sha256": "048374c3b2e90cfd7966795e9710df7c5f7a8d3ef34bfc804ed4a42cc40c2203",
+      "length": 93697,
+      "gitBlob": "3cdd04ac9254e57ec0fe063d0b433a9e1f90c620",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0022-browser-security-headers-and-content-security-policy.md",
+      "sha256": "18990c9e9f466a5aa0b70884401398e3d5f772722a7291d2c98bb8d5d1ba8f81",
+      "length": 92371,
+      "gitBlob": "5739e51472b5e40eb98891c0172669072cb7aed4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0023-data-retention-deletion-and-privacy-lifecycle.md",
+      "sha256": "868b7ff32734a32b10743ce0d55ca82aef0c87a602ceda2ef2ab6a3e2d006e95",
+      "length": 95122,
+      "gitBlob": "3eee61c865fc9b4df1b6f1f28cd73f938e70aeb0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0024-client-data-export-and-portability.md",
+      "sha256": "c4a4a3be828af0234a89936c2489fc9300343b4f0e4057bf2f272010ebf5064d",
+      "length": 89164,
+      "gitBlob": "6c90d91350438aad7256b6d4811b1f127719211a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0025-third-party-integrations-and-egress-control.md",
+      "sha256": "179e58645a6a5d3b04641836f672eaf9123865c045069865524e792ef2b85b47",
+      "length": 92938,
+      "gitBlob": "ef980cde7593dabd3e455470fbb90086aef87b25",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0026-container-image-build-and-runtime-hardening.md",
+      "sha256": "7766d99c1596efa5525dedbf8ff66faf67b7b5a37174883abd830dcda06f5155",
+      "length": 95347,
+      "gitBlob": "9e30b8065c6be8435d986273ba73575295be6715",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0027-database-roles-and-runtime-least-privilege.md",
+      "sha256": "2aeb3e5c4fd500f52c2cc4fece3d716d38c0c303ed6a60a33f524abb57b2d7cb",
+      "length": 90002,
+      "gitBlob": "07891de24383bba3dabebe5ba940c214276f102d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0028-database-transaction-boundaries-and-concurrency-control.md",
+      "sha256": "677b51b4aa0277a8d58961db169b68d662a50f8c5348a27cb3dee62c656119b1",
+      "length": 74972,
+      "gitBlob": "c51b8cc91d205f95c5da5c92b65b656a4c97b78e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0029-http-api-contracts-problem-details-and-idempotent-commands.md",
+      "sha256": "ed5ee9423ec4024ee2ce9cee6016c582036cbc5bbd4f0e52f6af185b2da6d1f7",
+      "length": 91392,
+      "gitBlob": "341b50fe24b02a585af65e3c63cedba881c4a1f6",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0030-cache-strategy-and-invalidation.md",
+      "sha256": "7c9118bde72480ef1cf544b9025b94c66d1f1294bc942ba68e5d96ab16787966",
+      "length": 90210,
+      "gitBlob": "227344073bbd2af755526dc30d633153dca5ade0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0031-application-startup-validation-and-runtime-compatibility.md",
+      "sha256": "b8e6c4c314eb142f6e81d6effeeb14774bf2b3c006c93e7019babb6ddb107524",
+      "length": 102228,
+      "gitBlob": "916848c5b9c27c685151096667dda3ddc42d2e1d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0032-deployment-rollout-maintenance-mode-and-rollback-safety.md",
+      "sha256": "a5490233962d48db0538aafe715b2c27223dff41aaf3eead564a030e5b0d9c57",
+      "length": 97312,
+      "gitBlob": "14d6a239bc6e211601f121117d76c81d44355bca",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md",
+      "sha256": "8275a322118e9638b2d3d686dae464d39cde3109cac30e57a60b52ee326c6ff2",
+      "length": 3959,
+      "gitBlob": "935cb16f031a525746668a9564b96739ba90ff3c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0034-apache-licence-choice-for-publish-site-factory.md",
+      "sha256": "4792ff807c86eedef6170d44dd9eb88b518295920a45f7a1b8056f29bebc09df",
+      "length": 3004,
+      "gitBlob": "4048e7719009a0760e7d67c672812c4ad7da62e8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0035-partage-public-component-via-nuget.md",
+      "sha256": "ab834902835966480cd1097c891376501e5214b5bab2667ac106ae7a47aaf5e1",
+      "length": 5743,
+      "gitBlob": "3f66413153e93f0b20be5f24c6edc825bd03bd1a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0036-versioner-sitefactory-and-its-modules-with-semver-and-explicit-compatibility.md",
+      "sha256": "4271b1990fae70385cedd637abeb38f8bccf63ba53cd8edc36838507c5338ba5",
+      "length": 4059,
+      "gitBlob": "81e753a44755a8f523713c132f0d2725b95b08ba",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0037-compose-modules-explicitly-without-dynamic-loading.md",
+      "sha256": "a4f6cac856f902d5fada8f59de94a01e4afc34f5b8211e68bf024e20e7bf3390",
+      "length": 3770,
+      "gitBlob": "d43111e1527542416223f54cb1af133a920ee3b7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0038-make-the-public-ci-autonomous-and-the-private-ci-consuming.md",
+      "sha256": "70abf5dacfc265dceb01ea6c31565172ab484a0c8bcf16754fc610352af40dc1",
+      "length": 3083,
+      "gitBlob": "c74b9a5053bb61c18f84aa6d25830b20e4015a81",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/0039-publish-sitefactory-from-a-new-sanitized-git-repository.md",
+      "sha256": "03f99ab05d3dde8e8326b94bdef5f428264aea0564a288e4cc8978618109040e",
+      "length": 3296,
+      "gitBlob": "4f2268eb4942f7fba908ec271883a20933f9dac9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "sha256": "952c14f8df2557d096c5f732c0efd44dc8384e7079a483fbece1e9b586d67ab9",
+      "length": 30590,
+      "gitBlob": "9d6422a0a5d86bfaca15631ed1f84842406c74aa",
+      "gitMode": "100644"
+    },
+    {
+      "path": "global.json",
+      "sha256": "ddd94efbaa73cbd137c7adb70c4ab3314abdb37055635f370211fa716a16682b",
+      "length": 111,
+      "gitBlob": "7c8e277cf07fce40a61edef6283ffc6d1ce13c89",
+      "gitMode": "100644"
+    },
+    {
+      "path": "scripts/public-ci/Invoke-PublicCi.ps1",
+      "sha256": "932e405ee63e512af3044c1c98563a59564bfa7245ca7b0e78609a5b1740b2a8",
+      "length": 17484,
+      "gitBlob": "4a29c80847a412d3189dabfa429a8cfc3cc1223f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "scripts/public-ci/PublicCiProof.ps1",
+      "sha256": "a620f1174af3e56c290d79cb4e1302ef349ac5210d32d873f434bafa1aef4a48",
+      "length": 36287,
+      "gitBlob": "920b45701cd1128634f8991e1be715ee5505a6f3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/AssemblyMarker.cs",
+      "sha256": "4914870e81821b6472203281b884f849f4bf5117244b101e024304563ca15f3e",
+      "length": 85,
+      "gitBlob": "6a0b90a258778321b701b86780479213a2bac0c7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/ClientConfigurationV1.cs",
+      "sha256": "b5cbb364177f990a21e03f159a30851ac6e3718ccb7a4e9c19813f910e722bab",
+      "length": 1167,
+      "gitBlob": "b85797564c335fa23f8d03c9b636d1b99983470b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/ClientConfigurationV1Validator.cs",
+      "sha256": "8006d8c5f5d554e07cfd9f259669a771f37679ec21f1489ff51d3d1973dda56c",
+      "length": 7516,
+      "gitBlob": "c28d725c6df0f50dec4993256dd2f6b2a014cbde",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/ClientIdentityConfiguration.cs",
+      "sha256": "9f6e795d28f9e5785886853d161395016ed35c42f8306a0b2ffb5bce426f9963",
+      "length": 432,
+      "gitBlob": "3384314f8249ea2ba944a39f8eb0f69cb0ed9b80",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/ConfigurationDiagnostic.cs",
+      "sha256": "054dc7adf2ec1bf576db698081550338094e94d91672cced6dd5ff4be96d8305",
+      "length": 1070,
+      "gitBlob": "0e760cca0e77ab15f17609e5ce3cd2675c4e8a22",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/ConfigurationLoadResult.cs",
+      "sha256": "7008af8b472408f8b46cc45579e254e4115f7357483fe34c28415d0e39ca741d",
+      "length": 1204,
+      "gitBlob": "75bdcd304a6f59d323c79a1047a63e0913a6bd9f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/ConfigurationValidationResult.cs",
+      "sha256": "5b8c19d90e1c4c473b562b1699da0be0b54779d00f21121a1ba155783af6548e",
+      "length": 1267,
+      "gitBlob": "f622d17a1d4861dc031393f346bceb0a9d83334e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/DeploymentConfiguration.cs",
+      "sha256": "ef1c82e9165b7f7052e8b4fb1fd04d8750f0fc99a1865cc397412976ef3e6f5e",
+      "length": 287,
+      "gitBlob": "0ee35e50ca3eab9db1a46fd55bbdfca4a4114e37",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/DiagnosticCode.cs",
+      "sha256": "68bb0998763bb95c91555ed7003bb4a86a3ce90d29f94e2c786a4f3863826f82",
+      "length": 418,
+      "gitBlob": "7cd5a3bf829c7464cf1c247c109e7074efabf815",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/DiagnosticSeverity.cs",
+      "sha256": "f4a6992b9cc6c6e9225b0a67289b3e062deb60be0a56a5c110d53dc1713f262b",
+      "length": 148,
+      "gitBlob": "3e092a3d2d31acb5ec2ec1e1f8f00018d89ac90e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/GitConfiguration.cs",
+      "sha256": "7e9bb6d59cf20efde2f6fb123fc0912966e5e8199637dc39d33291436efabea2",
+      "length": 495,
+      "gitBlob": "5799cf6b054d2c681a4fbe2193eaca9b7516d377",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/IConfigurationSelectionValidator.cs",
+      "sha256": "b461987a5f5235594b720079e0650120815df339a3278c1de87b07708c3fa495",
+      "length": 314,
+      "gitBlob": "0e3ae163382c36b1511e925794949f093db0b6e7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/ModulesConfiguration.cs",
+      "sha256": "64e9f83887126e6584064c3b1d69c403af0c6b15906b5853e11dfaf7b94edb4c",
+      "length": 643,
+      "gitBlob": "0636ff145448c9eb4ff7ba27cb694cb5f84e7252",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Configuration/SiteConfiguration.cs",
+      "sha256": "4a4ed2843e933c7c16eb79b2be76b558851fd01a47f71b9b0e9972e292f6c5b3",
+      "length": 831,
+      "gitBlob": "dbf8431ac788a9b2104ec564299c8496d856c185",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/ClientFileDecision.cs",
+      "sha256": "5a02b05c527ffd7d0ed8b7b2e9c9292e0d2a3e1bdadfb68ecf66031f1f7d208e",
+      "length": 241,
+      "gitBlob": "5adcd7194675a5f70d5218e64acc30edb25723e4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/ClientFileStrategy.cs",
+      "sha256": "ed3a952625c9d53db9cf910f874f89711a4a927fa2b2a9c2565669f7c150859b",
+      "length": 1319,
+      "gitBlob": "08c7e88e30a0888336b2d9a4025f83e01e44709a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/FileGenerationObservation.cs",
+      "sha256": "36a2663d16fb0539418f508c1135167fb8bec7114411b934b851a77eb370c1bc",
+      "length": 1586,
+      "gitBlob": "dca2512ff3187ae2210979f74f7133402f0dc71f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/FileGenerationResult.cs",
+      "sha256": "cd047841bffcc8b4211c21d884fc01770124202a1ff5ad6707f68d7dd29e55f1",
+      "length": 1680,
+      "gitBlob": "5c967be47a441f3eab7c785a23b43c6e57278418",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/FileGenerationStatus.cs",
+      "sha256": "f4925382f171a9c8e6ddb06805662addc6b61590bf102ce9d22c6484c5976242",
+      "length": 307,
+      "gitBlob": "aad30790dcc9f4ed146b25b61c7741cc835fb8ad",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/FileGenerationStrategy.cs",
+      "sha256": "80006e03e54214e889c476e7d00760857a7d5223f6063a1575a063ce40a1380f",
+      "length": 802,
+      "gitBlob": "b4a2c6c31955dfbf9735c26bf3d311585492b3da",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/FileGenerationStrategyGuard.cs",
+      "sha256": "dff935d43a31a4e5bf162239e4e45539f8c92e99d9abfea88aaaf94c67f42714",
+      "length": 1520,
+      "gitBlob": "eee2f9981761e74ecfb89c374bd6751120427681",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/FileGenerationStrategyRules.cs",
+      "sha256": "9ff9b613e0a1a74eedbeb6475bd9ef65e7065f6c8c52c8f81c2274ad3082b162",
+      "length": 1586,
+      "gitBlob": "e2fcbcbe5b56755511cc654e389891c17d7a6745",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GeneratedContentHash.cs",
+      "sha256": "ba9eca35822d7c59a3d3c2b358d391fe34d27a3e89825ec3fc68eb6b2f310d8d",
+      "length": 693,
+      "gitBlob": "2299c58beed4b0b8bc94e3b1690c33d276129986",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GeneratedFileDecision.cs",
+      "sha256": "bfc9f5fd1193a0d4f45d032e1ae828381c20952e0e9d43335eab265ce305fa7e",
+      "length": 279,
+      "gitBlob": "9348ca8e323b855f1c23382edeb12822891edd82",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GeneratedFileStrategy.cs",
+      "sha256": "c34e866be70f441bef158bcb37638f7eb499694973d2b752ec33ddd182bca393",
+      "length": 1763,
+      "gitBlob": "c50b5f2b421557bf3deaa6520571ffe8d72de9ae",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationComposition.cs",
+      "sha256": "32bec8d68512598a9dafe5005ea6898d91c52ee6ba3a5f50b36876302777afac",
+      "length": 4341,
+      "gitBlob": "a74c1d9199ed0fdd84648a664a65e8ea2c623e67",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationContribution.cs",
+      "sha256": "5a734a446152591b0fbb4553780434c296aef04eb23fc6f795e75c700db6d83b",
+      "length": 1200,
+      "gitBlob": "29f7c87523732eed61cda00bdc013c540607368c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationExecutionError.cs",
+      "sha256": "2eaef835670d74458ac6be29415094b14df9713da0a64cee3686bb12915a058e",
+      "length": 606,
+      "gitBlob": "02f3d41d8a44b7334d4f36899db9e80afcba393e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationExecutionRequest.cs",
+      "sha256": "ac648446c8632852d01b2a4cf69d00bedfb309461783bf5425102e572213c2b7",
+      "length": 1624,
+      "gitBlob": "4d586d78791b011444806cf6921a7b6f0f1536ee",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationExecutionResult.cs",
+      "sha256": "2f91c8843cead697c88f92364fc76dadb6b592d63873f48184aee595bb26b250",
+      "length": 2271,
+      "gitBlob": "70cd277957bc20de79bc9dd3a1ceb086daf18908",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationExecutionStatus.cs",
+      "sha256": "4f214dd8881af98f323df34b557c36a19efc94b17eb8a5bd9bb3673c0db374c9",
+      "length": 238,
+      "gitBlob": "cb13fff732ae74e3e6c919914e3aa8da0274dba9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationPlan.cs",
+      "sha256": "cf157a7de3f9d8f5a9209e7024d4fa09eb711fa82bf9ab31b2dcfb1cc4fd5453",
+      "length": 2932,
+      "gitBlob": "5d9e2827e843fc3035b2be037068b9dc43f3ad90",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationPlanBuilder.cs",
+      "sha256": "c446dfbdf495489ede966ea5ab3c76bc2a1bd78e73e69f35d6b5cfa7a8c45b44",
+      "length": 3221,
+      "gitBlob": "49f6280d425b9012b445b8162253a3555e5693e2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationPlanDiagnostic.cs",
+      "sha256": "977f5ff9ab91f8125564b4c1bfb2ddba6e40be19b78b58d27db5e14236589695",
+      "length": 1085,
+      "gitBlob": "4d37dd12ebe4965dc03e4b865f9c494aa68f3a77",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationPlanId.cs",
+      "sha256": "fb2cc1f3029677bf61c999c7920dc5fc4e5f00bb1bcd1552193c60899aa74bab",
+      "length": 423,
+      "gitBlob": "3667947d375df2d32ff9d5fef9b9a08c556c8e60",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationPlanPathValidator.cs",
+      "sha256": "6fa8d140047c1fdc7eeb3572256a81bd74b18f1131e2302035b9c7b29debb5ec",
+      "length": 4801,
+      "gitBlob": "21efe2f89c0941747f151c1768820ded4e62e31b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationReport.cs",
+      "sha256": "9c8e56c7244426d2f1a70b1beec9cd0952c15aac9810e72fd59d73b3cfae585a",
+      "length": 1905,
+      "gitBlob": "b36c38e8159441841fdebe24941dddbe56e23941",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationReportDiagnostic.cs",
+      "sha256": "4b4eda6ece1bafb77a8a17769fb6a11a3d12539330a0884e2602404b831d69e0",
+      "length": 2871,
+      "gitBlob": "724fecc73060166dab77dfc2bd22f242c5fe55a7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/GenerationReportOperation.cs",
+      "sha256": "21a8906f760126d3b7413192c1b9e0b2551258b94bcc3b8d29f7d5b44fb0718c",
+      "length": 2047,
+      "gitBlob": "74a12d535bdff6fa08e0a3741208686396b15d5b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/IGenerationExecutor.cs",
+      "sha256": "9c3797a9660515b562422ada9b958ed98849afe67e16ba4efbecbfd830f64429",
+      "length": 490,
+      "gitBlob": "7b489926da99c2ea0967b99633fc31c006b16ea2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/LogicalFilePath.cs",
+      "sha256": "468604300d0a3884a3c2a8d98da13984fe5db5ddebdb287ffab0698236c0b6a0",
+      "length": 862,
+      "gitBlob": "b5fed784ee2f6a133e6b009010e74c19eed86ac8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/PlannedFile.cs",
+      "sha256": "fcfe7dd99896692191bdd0532755e29e6233f3fd59f2dcaf747925804525eef0",
+      "length": 1449,
+      "gitBlob": "aa7e55704ce93b3477265ebe8c074a258cf43c75",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/PlannedFileAction.cs",
+      "sha256": "4d63a88757c68ea28b4630ae368d285c182db13b655446eaadd977ee32c4adaf",
+      "length": 253,
+      "gitBlob": "085ea4cc963b015031f035e5b528c4fb55b6b388",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/PlannedFileId.cs",
+      "sha256": "092a78a4b80816124c30ff44ae77424585975af5dd08ed91398c5ef050088b22",
+      "length": 423,
+      "gitBlob": "42803b06e98249611939bb4a45677974f95108bb",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/PlannedFileOrigin.cs",
+      "sha256": "6285373a3f95cca8b86a9925a98ccf4cc0d93021c6415e851b7f3cc718e1af14",
+      "length": 976,
+      "gitBlob": "3833e2d0504bdcdb3ad2ca565d12ffba48ad17a3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/PlannedFileOriginKind.cs",
+      "sha256": "d68ad5a65faeb2d316197b131ef32ed47fcea784c22781f8bf3e0558cbedc1b6",
+      "length": 226,
+      "gitBlob": "943f2522ed2c2cffd06e0016883bc1e26974a04d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Generation/SiteFactoryLock.cs",
+      "sha256": "88fd8da3fbdaa2c5269772f8390effc06687064d23d362851969d5ab82bcf831",
+      "length": 2412,
+      "gitBlob": "c42a2c84beae132f93c52211d02462abf4f5187e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/LogicGate.SiteFactory.Application.csproj",
+      "sha256": "40a381a89fe5a81738f0174987db9c7395bb231ce4e5c25ad19312b906409b4a",
+      "length": 286,
+      "gitBlob": "2c0a8cad25acbe72ba261e6c9945e46d9ca042ba",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Modules/IModuleCatalog.cs",
+      "sha256": "71f82ce0d0212413d054a6c3697dcbee2c00d054cca436693c742e19b504756a",
+      "length": 637,
+      "gitBlob": "8d362b7953706e6da6e2a74ac3ec60ce2a47fa2e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Modules/ModuleCatalog.cs",
+      "sha256": "1c15a95941d1e48a1c900349acd9331166d08cfc55eb934101e225fbe616fb8f",
+      "length": 3622,
+      "gitBlob": "61b5e79a027c96224567f87c929ffb47c108af30",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Modules/ModuleDiagnostics.cs",
+      "sha256": "cadf8e51e07e20a80ebd3f645f15cbad5aab6740f58a88c4ae2163a80cd33ef4",
+      "length": 1536,
+      "gitBlob": "6319607415483afc5810a1a14ec3a00aa6630b7a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Modules/ModuleRegistration.cs",
+      "sha256": "2266966768601f89d97dde9afbfc4c9cb79cbe8c21bec8649a1b51a21eeb1a42",
+      "length": 421,
+      "gitBlob": "b0e14a00049f0c1a5fea1097e1b8c5c11cc3035d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Modules/ModuleResolutionResult.cs",
+      "sha256": "2cc6cd7f91c948687efdee51c7e68d9159de2ff9ddf89605868d39f3019bac26",
+      "length": 1271,
+      "gitBlob": "30911696632f901b0473bb99c7d9500d92929944",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Repositories/ILocalRepositoryReader.cs",
+      "sha256": "6c633fbf103133304c98d3023bc61ec4f5e5036167ef278a1e376640ee1f4414",
+      "length": 983,
+      "gitBlob": "edb85cf61ec7dfcb2f76cd609ef8c8a932182fcd",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/ITemplateCatalog.cs",
+      "sha256": "2ef80cab607a3814998b9bf53f84c5d09b5acf235a5e1cff88ef76d42f19a16c",
+      "length": 413,
+      "gitBlob": "f2ff9996927d6b130660328470781dd39585c536",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/ITemplateContentProvider.cs",
+      "sha256": "e059411caa943138fcec70efcf95ad276de74ab61ff1fcbd7a52857b20071973",
+      "length": 526,
+      "gitBlob": "de4ed9031c33129708e79b24f5d73b3647b7f62f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/ITemplateManifestReader.cs",
+      "sha256": "b3a50c000212a2e55b46c14fe75170aed88da26deb30b7203bfee7779326aa0a",
+      "length": 270,
+      "gitBlob": "fc31aee52a2c254eb9c6ced8a7383597f904914c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/TemplateCatalogReadResult.cs",
+      "sha256": "34ecd22121dab46c78c916bf07a02d53cbd6dad7d98db7619c989d729f91edae",
+      "length": 1592,
+      "gitBlob": "55cc11e4e9465a3bc41691d8fdfd9dbc1a31633a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/TemplateDiagnostics.cs",
+      "sha256": "41e0761b9d65982fd2dc9512b94155abbdfdd0f6f650ea8375d8f34b90279d18",
+      "length": 1159,
+      "gitBlob": "050c98ebf8159736afef8879f280949395dfaa3c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/TemplateFile.cs",
+      "sha256": "0bee6a056217d926566cf260d42da4191e31c29ddbd4f2b1c8b433855ae447b4",
+      "length": 966,
+      "gitBlob": "48ed908574ef4536804dc582a67e7caba4347fd8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/TemplateManifest.cs",
+      "sha256": "e15b3c115ad8eabdd7e456f8e53a0c350917aa96d6c113493ea8120f2a66d7bf",
+      "length": 2028,
+      "gitBlob": "94968553ad8e8dfacd846cb7adbd89c4c63d9f95",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/TemplateManifestValidation.cs",
+      "sha256": "774edd472d91ddece028c2c405ccca7c6ba1cd0363f8beb90bcabcfbfc4f0a47",
+      "length": 688,
+      "gitBlob": "a161b2409f9d80f6d82fa3380556c1bc870cdae3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/TemplateResolutionResult.cs",
+      "sha256": "ad960d96c2a898f2c1f0f09dee7b13f77692f1c7930f306a1c27bb6203d28615",
+      "length": 1236,
+      "gitBlob": "f605ba3436272e4c01b2f16850a5da2e4574c4ed",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/Templates/TemplateResolver.cs",
+      "sha256": "cbc720f4a9afcfdffea74435aa00bf07f886e68586dcacfcd404f89a2088d1ea",
+      "length": 2586,
+      "gitBlob": "f4ba810d89446059968f69ee84b3570b9f2fc324",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Application/packages.lock.json",
+      "sha256": "569b42b93313cc56eb139ab0dcdac13c38fb266994e9027bd64482505bb391e0",
+      "length": 219,
+      "gitBlob": "d1c52fa0d619a3aa3afce9741b1531029e6f56c5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/AssemblyMarker.cs",
+      "sha256": "4c11f201bcc1b63afb98cf0491177b869d08306dfdbe99626b2b8b3fe1bb88b4",
+      "length": 77,
+      "gitBlob": "2ca9037f996b6bc41af84de959baf53481f41f1b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/CliExitCode.cs",
+      "sha256": "701100e7671e99a984c5793a39a4bf4b85c6a80dd93cf3a7e0d61657b7a5368a",
+      "length": 594,
+      "gitBlob": "71069e5ec1246fec4ce5d57bd77a0c51f53a897e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/Commands/ConfigurationCommandInput.cs",
+      "sha256": "d771ce0b110e157ea50c8b384fd66ded831157e49f6f760c31ae331b5756b341",
+      "length": 1694,
+      "gitBlob": "cb9cbe8f9baddbb131a7268c06156bc6d53a98a1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/Commands/Generate/GenerateCommand.cs",
+      "sha256": "5c1b1796c04f1dee7f6d2b8f82dfebee99da7b5e572d9cc8b6687a169d5e971b",
+      "length": 4088,
+      "gitBlob": "96c31b853ac8f8c6e69f1229bb071bd17fa3ff0b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/Commands/Plan/PlanCommand.cs",
+      "sha256": "fb5b587ea5fa6a8e383dc78b81d807dd9310d1afb0ad5d460f818c3ee2da468d",
+      "length": 2797,
+      "gitBlob": "0d7f73492c661f308d8e1a54fd826dfbb86f42b9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/Commands/Validate/ValidateCommand.cs",
+      "sha256": "dd7559a3a4d3b8ac58414142916c8cf25be05487022fb42cf1a67219b182b9b5",
+      "length": 1585,
+      "gitBlob": "764f732a1d6b7ce175dce25bb31e852eeb219dee",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/LogicGate.SiteFactory.Cli.csproj",
+      "sha256": "7ed4791c3fdba5bb277232b05c9d748e34e89be0cccedaeb26b6fe4a1f2f914c",
+      "length": 656,
+      "gitBlob": "bb1707f023035eaf3f5d553eccda02d145ad01da",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/Program.cs",
+      "sha256": "3c686f13fa835fe5a5d271daee6c271657f3e120ac0f3ecbc2ffc0747373f9c6",
+      "length": 559,
+      "gitBlob": "15355cf6e694ea9ab1facda16a64222811e5e0cf",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/SiteFactoryCli.cs",
+      "sha256": "deab38accd7bb7067ac5fff86eee6aec7508306ccff4ee9f27debcc72b0b1e75",
+      "length": 12227,
+      "gitBlob": "db8ff55304c388fab7eb1554e6ff6d9af0642075",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Cli/packages.lock.json",
+      "sha256": "d2a66cbeb3933080e1dfab40d186b0d8962e0f47322d6233601b18a33f373d64",
+      "length": 1570,
+      "gitBlob": "fbafdd23870a98a63645061c7b2dfc864d649161",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/AssemblyMarker.cs",
+      "sha256": "d18f8d0796faeebefe0806ff62b4e443b0948df679d9d8afff89d027bd60e2fe",
+      "length": 80,
+      "gitBlob": "fb9eebd06ff4185dd55af4559f44f6ade8eac357",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/ClientSlug.cs",
+      "sha256": "d7601ec0831cc1aa4763df2a91aa58a3e0ac34db0701f95f760342a5ee101f2b",
+      "length": 384,
+      "gitBlob": "21d47fd1803b6e18f138ab93d367039fde8f8774",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/LogicGate.SiteFactory.Domain.csproj",
+      "sha256": "8d654c44b7bebb6b31a9f2f606927f45b5072193adc4eef8cce3f3cf3b278df3",
+      "length": 36,
+      "gitBlob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/ProductId.cs",
+      "sha256": "0ba12463ca57573a81f1456a7e627a25c9a007a1c66b13beb7836a399f3efb91",
+      "length": 368,
+      "gitBlob": "13b56040fab9acba66b9089a1bf3c14d3b706dc8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/SiteFactoryVersion.cs",
+      "sha256": "bfa7f17039240bd60826b3adb9b53cbae8ad9760dfeaf5d66777297520c8fea3",
+      "length": 1204,
+      "gitBlob": "b46e0e99b405ca714ad6565ecf14de8daab3e050",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/TemplateId.cs",
+      "sha256": "04d7c9ccc2414f3061e0b532eef5a524b22d927c95d14a249929417c5f60897d",
+      "length": 380,
+      "gitBlob": "bf4795bf3da3dc528294c6dbb7870161a3974951",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/TemplateVersion.cs",
+      "sha256": "93ab85fdcf470d719b7d024c630c81e273d8288b01fe9a11b47066267de71a66",
+      "length": 753,
+      "gitBlob": "98d8fb2938b82757e31f58feb13eaf6e135e827f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Domain/packages.lock.json",
+      "sha256": "03eeadc5ef377c17f787ab65f41fb4c8a9c936bb7f7f4171111fdeec8a81cb46",
+      "length": 61,
+      "gitBlob": "6afd6786b95a8c85febce85cf6219643ee860872",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Configuration/PostgreSqlConfigurationReader.cs",
+      "sha256": "0dd3d8cb98929e98b865ca12de2cc7e780af82731017a1adb33cf5640f3a9675",
+      "length": 6008,
+      "gitBlob": "99a4f34718d5665ab450c791f05b7ac41fb86115",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Configuration/PostgreSqlRuntimeConfiguration.cs",
+      "sha256": "3c48662057871670b6490351d26109b5e21e6b7e84f0c5353380eb9e7a80e8b7",
+      "length": 1692,
+      "gitBlob": "1cde2480cac76efabac3e558e9b8e0ceba1dba5e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/LogicGate.SiteFactory.Infrastructure.PostgreSql.csproj",
+      "sha256": "94603d4c0aa886d05e82bcf916289571d84056ab57f89fe99913f16e719bddb1",
+      "length": 818,
+      "gitBlob": "df48593cb5f04309399ef9da35133ab7b94a856a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/DatabaseIdentity.cs",
+      "sha256": "f147c6c9924f4fa5d803f1b95173a8041c2970a86bd6d7d086e53b56ab019700",
+      "length": 582,
+      "gitBlob": "154c9c748102566037e25b193b564ed2fddc7605",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/DatabaseIdentityConfiguration.cs",
+      "sha256": "85b481063a87e7dbcf3827d8c8c25c0556b96aa20e1a7cb7d95cd0a231fb8e7f",
+      "length": 2770,
+      "gitBlob": "2bff955dbc143285ecd0502963d57052cb4a56f6",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/Migrations/20260923093309_CreateRuntimeMetadata.Designer.cs",
+      "sha256": "a23533f4ab2549c8596fefc570b155df8d57234553108b16dc2680d6bc5da1e9",
+      "length": 6569,
+      "gitBlob": "aba1c6955e31407ab3238b3021f79fad8fda3d16",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/Migrations/20260923093309_CreateRuntimeMetadata.cs",
+      "sha256": "aa7ddbb87005817d8064ec02ae47644119dea280debe01871c6175eacd3f35fd",
+      "length": 4838,
+      "gitBlob": "6e788d89ab00158f8fe133b44f8cb93a0810feba",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/Migrations/RuntimeDbContextModelSnapshot.cs",
+      "sha256": "df1b0af8961966894fd34db915a88ebce85e7996a9653f6c0a56c1cb2fca250b",
+      "length": 6456,
+      "gitBlob": "fd8fc04961f155aaa5d8d0fe5103210caab0988a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/PostgreSqlDatabaseReader.cs",
+      "sha256": "f1c171344c01e96ed53c244a82b2c1a0d7731d919d7029f0a4c95bbe39b2c4ce",
+      "length": 11589,
+      "gitBlob": "5bcafc20e3982385271299a44fe3a1ee802ae5e9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/RuntimeDbContext.cs",
+      "sha256": "42443911558f586fe900cdf11960fd9bf69527457a476c1b269fd232beb09821",
+      "length": 849,
+      "gitBlob": "143a7291518c11d468450bb1afc420a80aec6670",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/RuntimeDbContextFactory.cs",
+      "sha256": "888e65f1d114faa09cd899586445fee48948e02c04c800ebe51f696cd2b878df",
+      "length": 1558,
+      "gitBlob": "bfa91104b76f8ac37bcfa6ef3df51e05a69b86b2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/SchemaState.cs",
+      "sha256": "a87e583bbe530d35079bc467752ffd1321f908ac8319604462bdc6f62afef9e9",
+      "length": 566,
+      "gitBlob": "a8e0fe788208765e9e295ad2f6db0312eb43efac",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Persistence/SchemaStateConfiguration.cs",
+      "sha256": "e86932f4ac45cd347c91b8c87f96bdbf2ebd4234352e4b1bb0ece1fafda295a8",
+      "length": 2391,
+      "gitBlob": "6ac25629b7a2598fa597e72e30520c2461c6e57c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Runtime/PostgreSqlStartupValidation.cs",
+      "sha256": "8469acded524a1a8d1e0f2c810bc6237cab3f5a5f07acade0e30f38700a3b5f9",
+      "length": 2593,
+      "gitBlob": "bac228ad2ee1989bc0114deca42fbe51e14fc6ce",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Runtime/WebDatabaseReadiness.cs",
+      "sha256": "21de88da9f082fd8a397a856491866ea7d1fb38db0c9636a231d3dfd62abaf93",
+      "length": 7888,
+      "gitBlob": "2063d9cf1e833617c6ecf0bf1a4ff99a4d33ee00",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/Runtime/WorkerDatabaseStartupValidator.cs",
+      "sha256": "fc120516c3eeb4defeea76e483831329cf135258013877615a0422bde6b4e5aa",
+      "length": 3333,
+      "gitBlob": "6f7c49132180bf79613a81688f3115d81258f1ac",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure.PostgreSql/packages.lock.json",
+      "sha256": "a0141903b68bef5ff9fdf355806910c3dfef521b86417ba4bcd35521161d632b",
+      "length": 7905,
+      "gitBlob": "b467465b11233a62a3901973289d90ba3538bd21",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/AssemblyMarker.cs",
+      "sha256": "dc984a450ae72833ff449eb1cec20955dd9e72b7a310f1666f1651969a8ec33d",
+      "length": 88,
+      "gitBlob": "fd3ce9414097fac81e72ae3137659eded86a3d18",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Configuration/ClientConfigurationYamlReader.cs",
+      "sha256": "a54c62aef0c4ad0b6a82b1aaacee9560bd16a4225515880ade59b79ffcfaedfe",
+      "length": 6273,
+      "gitBlob": "73c8bb1f15651b21e20ac9919c85528d71e5d192",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Configuration/ConfigurationYamlException.cs",
+      "sha256": "cde153596a94f3767cb2cd1949eaecb8350c9ffcf2c7a574fbce3dbc747d525b",
+      "length": 517,
+      "gitBlob": "5a920f41042e8a59cdd44fc50b4c1ebf40c0ce43",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Configuration/RestrictedYamlParser.cs",
+      "sha256": "9dd5f21e953b5fe2fb04637667bb13cce0537b6e0d62c7dbc3413da11b7a5c97",
+      "length": 3924,
+      "gitBlob": "7367b78e77c4fcbe55cb7e68345edb53bc5b515c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Configuration/YamlConfigurationLoader.cs",
+      "sha256": "702f570bd687a39a529fc14d690bc6021711e671a77ac98882b846427f55a4de",
+      "length": 3994,
+      "gitBlob": "b1bd8e92ec34548e1b019d877f020161b42d6226",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/AtomicFileWriteMode.cs",
+      "sha256": "adc4842c45b939fd0e2668b1c33f974e13c4c57790ec9ef848e8d109cd68f6ea",
+      "length": 132,
+      "gitBlob": "6f5c2b1303addb782ff7344b449fe4fe56b5b188",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/AtomicFileWriteResult.cs",
+      "sha256": "fd2d6590bb688afaafcfc421bbe6c590ea9336ba12e573f3ad7118b6fa8bec9e",
+      "length": 469,
+      "gitBlob": "eac11ceb9801c262b913b681b2d34136ebfb0cf9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/AtomicFileWriter.cs",
+      "sha256": "4335f04060dee2be3fa0d9bb165c52bbefeed44d11e58d8536f1bf90d7dd3603",
+      "length": 3736,
+      "gitBlob": "96a8463e22c9586e612e49fab947bb4be1776bf4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/ClientFileApplier.cs",
+      "sha256": "2ee888b4bac7b9f724752155a8c92dd16b80466956ccaf73be0a0167e742eb7a",
+      "length": 5213,
+      "gitBlob": "f2640b8ee80ff5b90b4c68f370ed7aeb59618826",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/FileSystem/AtomicFileSnapshot.cs",
+      "sha256": "9e1fc4558f1644720b95509a7c0f0a76bf0149aea7159f0b0a55816e80f50020",
+      "length": 761,
+      "gitBlob": "acfe2673ebf5e84d0e12ec15789540d997cb006c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/FileSystem/AtomicWriteSession.cs",
+      "sha256": "920507cd07feef71f54358ddad2c6033a90f09b0f07c3584fadc0c5957b7530a",
+      "length": 4870,
+      "gitBlob": "488f64d6831956de565140b6cbef389398a9bf79",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/FileSystem/LinuxAtomicWriteSession.cs",
+      "sha256": "5df4f2ac2cab5c9156321c080c1a20b282fdb0e15e976b61a66ec538a82c457c",
+      "length": 11653,
+      "gitBlob": "8f540016f0fd5a9686276eed1ed0a2ea8bf3efb3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/FileSystem/LinuxFileSystem.cs",
+      "sha256": "4af096a71bfacb77d4b307b9c669a752d25ef3db279aef8a689c3059f1369c94",
+      "length": 5330,
+      "gitBlob": "4c8c880092b487ac616b182ccd109a92c9d4db36",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/FileSystem/WindowsAtomicWriteSession.cs",
+      "sha256": "a5d4cb79dbd1921e6b4725a9d8cc992e175ee229327c57d0333b8771b351c0bf",
+      "length": 6748,
+      "gitBlob": "c9fc036ba43eea4d3c54e06bef01943e8177bdf1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/FileSystem/WindowsFileSystem.cs",
+      "sha256": "740d5dcca120b498c6a967099107215cbc4db59050eee9b3d68ed77e8b6dd88e",
+      "length": 10530,
+      "gitBlob": "671c9993f187edc0dbf0e17be731f1527d8c5e8a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/GeneratedFileApplier.cs",
+      "sha256": "7593688c9d4709abaaff40359e701ba6416f2a75c270076897f8bbc4ab97ee40",
+      "length": 6209,
+      "gitBlob": "af3878eb3271d9f4e351ab6661634db97e32d033",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/GeneratedFileContent.cs",
+      "sha256": "682e1bde675ce45bd5a383216fd132ffdbcc1195398e1fc09b0b8623cb10e417",
+      "length": 827,
+      "gitBlob": "95e10354d7102c579c9f1e28943102d0acfe583d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/GenerationPlanJsonSerializer.cs",
+      "sha256": "5915aa6623bea39592a069df2badb9b3401693de28cb9f221dbab98b70fafdbc",
+      "length": 4373,
+      "gitBlob": "c4d0850ebbb9bde33da6795c1ca1b695c2ca32f7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/GenerationReportJsonSerializer.cs",
+      "sha256": "b33c85bdababc2f05c6cead56491df01e27668bd592f63bc64afb648ae9185e1",
+      "length": 6163,
+      "gitBlob": "4ebd8eb17442430901cc5b7bdbda296807da827d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/GenerationReportWriter.cs",
+      "sha256": "ca038ede61ad252948cf3deaf8ebf6ae4be5736002a42bc13a35114e26ce7c3b",
+      "length": 2437,
+      "gitBlob": "bc3e03f97ea50bd2853468e34c32d16d5b592528",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/GenerationRoot.cs",
+      "sha256": "80881ba98bb5f93fa4e136645dcd1149d91815a8871ec89e144dcb012c1f80fc",
+      "length": 7223,
+      "gitBlob": "c469900298fb4d4b7c73f8d6045d1b72931265b9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/GenerationState.cs",
+      "sha256": "d4a6e1f5a7a243dc612f19afc14be5896c7630a777e35f648125ef5e3c5c69d5",
+      "length": 9903,
+      "gitBlob": "9ac2dd767e8e3edac6d3090c51adc0527b19eb62",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/IAtomicFileWriter.cs",
+      "sha256": "ee41c93330fe9b777353931a99749fbadb3912534930381cc06a04bb7d82373c",
+      "length": 1181,
+      "gitBlob": "f1fcc87af1ac88cfe2dcb2269858c7f53d408763",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/InitialGenerationExecutor.cs",
+      "sha256": "e47ddfdd16346dd77501666e3ce9d2ff8b115b52abd853db4331840e08876f67",
+      "length": 15759,
+      "gitBlob": "1481d41361f5cdb119184ff44eda8feb0018e5e2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/InitialGenerationPreparation.cs",
+      "sha256": "d3b271c2f6f4fbaa20a240cec089bd1ebb944e4edb835edd52a3960bf0b8ca66",
+      "length": 1094,
+      "gitBlob": "6f6487d5274d2dfc1f5932171d747a0839800c21",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/RegenerationInspection.cs",
+      "sha256": "dbab9329878bdd76f2af850ef05aebcd2763c4eadaed9f86f8ec82a95ef23746",
+      "length": 4529,
+      "gitBlob": "fa1f1c7ca7a1aecbea020479b7b5bf5b14788681",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/SiteFactoryLockJsonSerializer.cs",
+      "sha256": "7e27b862cbb0eea6e31f00b95ff5ebf3d658531fd0875aa59f118996a72c57e5",
+      "length": 1899,
+      "gitBlob": "3801262d4f6f97bfde02f6d6ba7c82fdbb4394cf",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Generation/SiteFactoryLockWriter.cs",
+      "sha256": "dbdd615a5eeecd5b635e1845fb0ef73dd62d77b3e4cbb20429c707841345c850",
+      "length": 2782,
+      "gitBlob": "8ecaeec38dea10e55c92758866903154f6d93b95",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/LogicGate.SiteFactory.Infrastructure.csproj",
+      "sha256": "192e4e2b46a1a689e81fc35d9ed99087922549b7f00ce948d4d6cc15856e0690",
+      "length": 631,
+      "gitBlob": "3404ed6fda0fe98f16090b2d19a2c3628e05cff3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Repositories/LocalGitRepositoryReader.cs",
+      "sha256": "28d529e508bcdd3221ee40f742a90373eacfa61d424f83b7a55331e2c2982c07",
+      "length": 6329,
+      "gitBlob": "675c8b07e84a26ea82372952234805716b1707e9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/Templates/TemplateManifestJsonReader.cs",
+      "sha256": "01519f063afb6e6a982f7d5d09b62e5023aa23c0c92b181fcf0edc8794107e46",
+      "length": 4830,
+      "gitBlob": "35438c7885f9877e287325d303ad9f72502e7560",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Infrastructure/packages.lock.json",
+      "sha256": "b897373735d2b43a74cbb221a0566721ab5a2014caeac1ffe51bc0a5ad677c5d",
+      "length": 692,
+      "gitBlob": "6de98abcad00e716d971fb636fdf35ebee4722c8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Migrator/LogicGate.SiteFactory.Migrator.csproj",
+      "sha256": "f9a5658e85694432cd8e22eeddefa2c8e520e565020b39b37c650d7a71ddeb35",
+      "length": 321,
+      "gitBlob": "4116a52aff28f4cd916d1acb8856d85dc53379e8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Migrator/MigrationCommand.cs",
+      "sha256": "4f7e460d9db9224732a78e9b0be95f34ed06aa4fa51f1e524320f29253833ebc",
+      "length": 9125,
+      "gitBlob": "640c62a7d33289ae9b52502d13fd10c2f362ce1f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Migrator/Program.cs",
+      "sha256": "2ac62e83f13ab01c87e08e14ac0b22da79dbdf895bc6aaa06f3ce45d617b91f5",
+      "length": 368,
+      "gitBlob": "fa3c01b69eeca386d63745aeb305e79fdc13a90b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Migrator/RuntimeMetadataBootstrap.cs",
+      "sha256": "7e586c40c6b3ee884fef237262fb146d7e4afdd571257d42c686311059fa35e5",
+      "length": 7295,
+      "gitBlob": "fe3e980b5543ba2a5afa8026b68454b161265d2e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Migrator/packages.lock.json",
+      "sha256": "8ac1909ce00a66e7fde870d91dd59457de1d022d6966da68dbdf852e6b769548",
+      "length": 8486,
+      "gitBlob": "0434a121161a16ceb51d6ff26569643964bf3221",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.ModuleSdk/ISiteFactoryModule.cs",
+      "sha256": "55ee4efecf3653ece36e675521dcc74ae68080694f781c40ad13108ae5f884fa",
+      "length": 344,
+      "gitBlob": "077a42af21860e3ac3db8e33f15eebf10ac46b92",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.ModuleSdk/LogicGate.SiteFactory.ModuleSdk.csproj",
+      "sha256": "8d654c44b7bebb6b31a9f2f606927f45b5072193adc4eef8cce3f3cf3b278df3",
+      "length": 36,
+      "gitBlob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.ModuleSdk/ModuleCapability.cs",
+      "sha256": "66ab96ff96b20e34aa79fb3f7cd2b0387b78b6baef1bcfb1e3b04c7f83c6f1b3",
+      "length": 814,
+      "gitBlob": "2d45750fca2815289ff1f3b3e86e1719c1c639d0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.ModuleSdk/ModuleDescriptor.cs",
+      "sha256": "4aec8a6242d6829bee9f59092fb96c2d16f16cf8ecf77957ee042780925269cc",
+      "length": 1501,
+      "gitBlob": "e195fabd10d989d1d2a608685dbf58aafea1aef8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.ModuleSdk/ModuleId.cs",
+      "sha256": "8c1a0973a1cd8a0b81d1c23f3f1388d9157ab9494126b843916304359ef63b4c",
+      "length": 1061,
+      "gitBlob": "1552b7e78dfb628f090ddf0451272943241a4154",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.ModuleSdk/ModuleVersion.cs",
+      "sha256": "6df55124e41f6c35323181804be061518850877632b6baa9bafee6ec759b733a",
+      "length": 1363,
+      "gitBlob": "e50789ec7809f10435ae11210927a7bf159f9c2c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.ModuleSdk/packages.lock.json",
+      "sha256": "03eeadc5ef377c17f787ab65f41fb4c8a9c936bb7f7f4171111fdeec8a81cb46",
+      "length": 61,
+      "gitBlob": "6afd6786b95a8c85febce85cf6219643ee860872",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/DocumentationModule.cs",
+      "sha256": "f2814199ddda54d21e7f187df632c7dba94f7428dccc55f4dc2c8c93c4a03f66",
+      "length": 5815,
+      "gitBlob": "a6eb56760548a63b63101e94ff42c4eacab25a35",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/LogicGate.SiteFactory.Modules.Documentation.csproj",
+      "sha256": "a9093abf5d10f96b2423fac32581ee39f469d258d64de1a24f6b1f646ca307e6",
+      "length": 1082,
+      "gitBlob": "bfdc0ba03af35c38b3f6609fae5b17f6d684830d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Model/DocumentationModelBuilder.cs",
+      "sha256": "fef0b7d7063735d7a57acb5e004bc39c3489dc56651c5e5d5c9c542c4b3e06e4",
+      "length": 5672,
+      "gitBlob": "7fb4573385db2b39ce496fc5bc5f10afcb1476d3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Model/DocumentationModelLoader.cs",
+      "sha256": "4f3d163094a3bce4bb02e81241597a17df203998ae334ab09cc2346b5093aa40",
+      "length": 2258,
+      "gitBlob": "9b970da8de207122729973be0104d4f4ff2f7bb9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Model/DocumentationSite.cs",
+      "sha256": "909a4e51a76209bbe5e49ae92a8ddcc984d9200473aa7ec307947488f02e6546",
+      "length": 3242,
+      "gitBlob": "f011ef7663d0f6d41cb7ef2f60a214d0e64393a0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Model/DocumentationSourcePath.cs",
+      "sha256": "92823133a0d9cef330a09eb39e590ce3d30661966cd1debb170f783c44abc19c",
+      "length": 3657,
+      "gitBlob": "7e43d932d816d5f303841f008b87524cc6c7d354",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Model/MarkdownOutline.cs",
+      "sha256": "802eb5a643a8c2e5b4392e5ca6ce183ba81bd69dc21097c964f4598e866e235f",
+      "length": 5507,
+      "gitBlob": "979377b124c3498c131c93a565a4ca20dd7ce6ee",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Rendering/DocumentationHtmlRenderer.cs",
+      "sha256": "d65b3d33bf2ef3477ce0b8792f5b968b2c4981687365bf6dafb7000e0cd4ffa8",
+      "length": 5838,
+      "gitBlob": "b48237d89fdd8f9c20f84f15121ffb6e2b952bf7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Rendering/DocumentationSiteTemplate.cs",
+      "sha256": "4e186a1e6d067e01eb77f23780d4a01b284d2fe51e65d8b2d5f9295dcf78159d",
+      "length": 5037,
+      "gitBlob": "9ea9b0d4709573eeeef333c6b26c0f0253778f71",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Scanning/DocumentationScanResult.cs",
+      "sha256": "a4ae59ff4c85ae5bb8d2473e04a1fe765b56d819abc7f2510b808c2735310706",
+      "length": 1010,
+      "gitBlob": "67b679ac8dde6e3f09e43e38cdaf491aa640d773",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/Scanning/RepositoryDocumentationScanner.cs",
+      "sha256": "586f1bb720f3c5283d75ce2c48dc1a9a64da488bf729b996bb070b822759cf60",
+      "length": 6502,
+      "gitBlob": "3fe23eba914351adb5beb70db73c6cd220535182",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Modules.Documentation/packages.lock.json",
+      "sha256": "7861a49d8837f6b8f1d3f41467814da8081bd65c945da3f0c2a530b2b81cecdc",
+      "length": 687,
+      "gitBlob": "78ba5c74c3867775cccee2b033d831cc6c365aa0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.AspNetCore/LogicGate.SiteFactory.Runtime.AspNetCore.csproj",
+      "sha256": "76c65aaf8c66fca9803ea833ee0e6d235f5fadd644bc73559e56f4d2636c28d9",
+      "length": 257,
+      "gitBlob": "b2f20fee22494416e6ab3360e1d9505124b4baad",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.AspNetCore/RuntimeHealthEndpoints.cs",
+      "sha256": "e8f0d0893d719294b7d5ad27ebbfe39474cf92cb6a89b1a87e7814c0ee9c2f45",
+      "length": 7888,
+      "gitBlob": "f0d65f1686a0c90dcf13339bba9b61806d0731b2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.AspNetCore/packages.lock.json",
+      "sha256": "1f9836b19cbbd112e13077758f6730e2a1a30dc210e02550bbb34a4e0f51d881",
+      "length": 583,
+      "gitBlob": "77409c983f0adab2529923778090f030a010b58d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Contracts/LogicGate.SiteFactory.Runtime.Contracts.csproj",
+      "sha256": "8d654c44b7bebb6b31a9f2f606927f45b5072193adc4eef8cce3f3cf3b278df3",
+      "length": 36,
+      "gitBlob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Contracts/RuntimeConfiguration.cs",
+      "sha256": "7c127b9fff16e92322addf5f3c577c8e7de8e36e990fb43ac29495b4226ba857",
+      "length": 3640,
+      "gitBlob": "c843a980709222b8f49fa871a5210857f7c00608",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Contracts/RuntimeIdentity.cs",
+      "sha256": "d4c0ee1bdca1416dfb25a68e2fe05bd77babd4434a0db1f927d260cdd3f2ce67",
+      "length": 3201,
+      "gitBlob": "d83e5faa23a221b3b27eb346149ff92750c94e50",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Contracts/StartupValidation.cs",
+      "sha256": "ea1b64271ce1d8bd7a4a8ff16a08734669396e6c857e56f4ca3a3b138a12409d",
+      "length": 2820,
+      "gitBlob": "d58a39d2d2c48589d9d8c8fd224ca5dd7312c637",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Contracts/packages.lock.json",
+      "sha256": "03eeadc5ef377c17f787ab65f41fb4c8a9c936bb7f7f4171111fdeec8a81cb46",
+      "length": 61,
+      "gitBlob": "6afd6786b95a8c85febce85cf6219643ee860872",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Hosting/IRuntimeReadinessRefresh.cs",
+      "sha256": "43cd980aed5bf034605a31b8062aca176554278f4f196fcf939a061cbdf32fa0",
+      "length": 277,
+      "gitBlob": "f5fcfd045caefd8534ff547a418c3de30e4737a0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Hosting/IRuntimeStartupReadiness.cs",
+      "sha256": "e4b8cc7ba75eb8e8bac28edd5831858953abb4bab1aa2895fdb4317be4cc6f84",
+      "length": 480,
+      "gitBlob": "a63cf2a27c6c6c6d917ca89c595f739887dadd2d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Hosting/LogicGate.SiteFactory.Runtime.Hosting.csproj",
+      "sha256": "2146288a4f62cebe969f1be61b82488586f1e58a9145b3ed284dc75313b21250",
+      "length": 630,
+      "gitBlob": "ae14ae9babdb13e02a07d87567c58ef490aba68e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Hosting/RuntimeConfigurationReader.cs",
+      "sha256": "49b74cd085288660587aa8ec332ce80ea39901f3e7ca0a3fe4eb0baa38ed1f48",
+      "length": 2707,
+      "gitBlob": "764d6db1b3838092b5e43de1f8b5a9815f96559f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Hosting/RuntimeConfigurationStartupValidation.cs",
+      "sha256": "036c7cb19e3da59fd04d555f6931a68eef19c98564cd5e0404d9a2b46c8c2b3a",
+      "length": 1354,
+      "gitBlob": "dcc9693c0c4c9cfe2458059e4c4fe8cfceed20b5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Hosting/RuntimeStartupService.cs",
+      "sha256": "0a339f8dac483e591c35d7d06521476dcd9acfe00c16d37dcac658413c5068ee",
+      "length": 4726,
+      "gitBlob": "7d6cf24f45a3469f7664f30da40db8ab298c7d88",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime.Hosting/packages.lock.json",
+      "sha256": "1d90c267b7d6699591403a793c36ce3109a9fc14cc44df34eaa7d041db996ed0",
+      "length": 3392,
+      "gitBlob": "d671556a3b42d8aeea91b2b708205e458fa50ad1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime/Database/DatabaseCompatibility.cs",
+      "sha256": "5c4e2848ce83411f610411f5b99761cb980a1b6380ab0199be1ca018b6e6551f",
+      "length": 8509,
+      "gitBlob": "64589c25896caa9af3ce0bd033a359f284a7f6d9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime/LogicGate.SiteFactory.Runtime.csproj",
+      "sha256": "e940942427d3da2e2bad1e3401867020c0744f1fe221883b72bc6e01b2144413",
+      "length": 199,
+      "gitBlob": "69f021cf504daefda21f20cdf564b7df63ae013c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime/RuntimeStartupValidator.cs",
+      "sha256": "c10f84a7582554fa38da60bb4493accf0e0c7706f9f7f4c8cbfd6ecca48ddaf6",
+      "length": 2231,
+      "gitBlob": "85187878d7653c4b0d1009ea8b14ca4b186e6038",
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/LogicGate.SiteFactory.Runtime/packages.lock.json",
+      "sha256": "a122d5b4cbaafc7747f82370892de089fece871528d6a0fddfc8f6e37494d430",
+      "length": 151,
+      "gitBlob": "70143375099857a2df899a4897defafad4dd3075",
+      "gitMode": "100644"
+    },
+    {
+      "path": "templates/documentation-minimal/content/guide.md.txt",
+      "sha256": "47602341a0723f40a5850224ff246be47f6870812b4363a9b5d29b5a725c97b1",
+      "length": 218,
+      "gitBlob": "0bc75c70958f81263c29751aa325f938d9ac7165",
+      "gitMode": "100644"
+    },
+    {
+      "path": "templates/documentation-minimal/content/index.md.txt",
+      "sha256": "957e9734ebae61e67993038b8d93a8ddb466aa40619d681968e6d5cf661503c1",
+      "length": 170,
+      "gitBlob": "24be71b9b03a92c48a6ff252256974653eaeef88",
+      "gitMode": "100644"
+    },
+    {
+      "path": "templates/documentation-minimal/template.json",
+      "sha256": "6f2b690e20bf7cd85686b704a3eb8ab21af3c3c8589ded40f4444549245b3c6f",
+      "length": 447,
+      "gitBlob": "fe05b0548f4829e24b6db9bc4cdf45393ebf47ae",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/AssemblyMarkerTests.cs",
+      "sha256": "b4836293445619bff317e30b67a3db0eedd7b2311ef2e50914f09ace3e7f87a5",
+      "length": 499,
+      "gitBlob": "b3bd18e7b5d4bdb102aeeeb80b00b0dd05888856",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Configuration/ClientConfigurationV1Tests.cs",
+      "sha256": "be9d5482972e1b8a696c49f59a644721b8e0d8434b1bc79c1c93f8faabae285b",
+      "length": 4665,
+      "gitBlob": "2542a4268f93205d64726c99928db5993c6a0dce",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Configuration/ClientConfigurationV1ValidatorTests.cs",
+      "sha256": "2969bdc495ca2808cde43d75229d1eb92dbc06dc8ae308c19f9966ac33e6e2f0",
+      "length": 18973,
+      "gitBlob": "e916b957720115ce41b321f931fa335e4828d544",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationDiagnosticTests.cs",
+      "sha256": "50d5f4ea0aadcab2e79825edd8a16961028cad0182d20dfee1388c63aa505c32",
+      "length": 3066,
+      "gitBlob": "f4566d84a148748ac2a48e02c7fda5fde9eea781",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationLoadResultTests.cs",
+      "sha256": "f940b20c1bc2799bc870360b1e413586ffa3dec56ce353a847ab9f131552298a",
+      "length": 1342,
+      "gitBlob": "0f9d5daf984cc6690b776c8a9c1ae628f57d7856",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationValidationResultTests.cs",
+      "sha256": "77f248619f11d2c9ee93f7a723b7f64537514c2773da432627ea513de93a2a3b",
+      "length": 3972,
+      "gitBlob": "2259287b50e697c8ff6afda13e347fd2adc2f36f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Configuration/DiagnosticCodeTests.cs",
+      "sha256": "d03b89ac8021296c86c75fbfb95126118f3d6ff19ed122b1b531e942bcb2e0d7",
+      "length": 1017,
+      "gitBlob": "1888bce7827f8573dba6382239760295a522a397",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Configuration/ModulesConfigurationTests.cs",
+      "sha256": "861671db2be7cc41b6b6929e7161f28df5d3a801a32703abba821c9b8d49d6d3",
+      "length": 2204,
+      "gitBlob": "08ecaf2b9495fc29cf8c18a339403243570a0d22",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/CoreModuleBoundaryTests.cs",
+      "sha256": "bf7a401c2c789070379dc82927020c3e6ec00ff205950e84a535aa7164a9e4d1",
+      "length": 10569,
+      "gitBlob": "9453df33e9ff6257e18234ab001e6661b654d3c5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/ClientFileStrategyTests.cs",
+      "sha256": "5c8fc28da7ff87cc105734ab692953001986f23721c5a2487fa804f547024d57",
+      "length": 3999,
+      "gitBlob": "d5383750f6e229eb87a203536ecfffefddbbd637",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/FileGenerationStrategyGuardTests.cs",
+      "sha256": "f67dd31c73b5310eacc00d0be715565213d88f7335b617ed3fe72ec9935e4707",
+      "length": 4839,
+      "gitBlob": "0fa8f3ad6de7bb7cfef5ec106cdf989e2b167d44",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/FileGenerationStrategyRulesTests.cs",
+      "sha256": "4d7da17f202246fff858f1acbba9c5d1785a59334586aaa66826b29c3938c943",
+      "length": 5754,
+      "gitBlob": "019c2f853f9a18a06f8f43485cb8a49f5a6e6648",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GeneratedFileStrategyTests.cs",
+      "sha256": "b052463ca5fc5ea5c5957240f7e9141e529ef9e077b09fcfba7930a0fce96b6b",
+      "length": 4521,
+      "gitBlob": "b0d62eb14f4152deb7bfbd4e30b325648ea0592f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationCompositionTests.cs",
+      "sha256": "f6d72d620947278acf0f1651562272857dd99207ef219b391d9bb3ee3bb2a466",
+      "length": 11141,
+      "gitBlob": "033805294d14ea1c0ad9ae00322ccf8568c7ca24",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationExecutionContractsTests.cs",
+      "sha256": "9cf02d503b038902da11cb108c0df3f45939c782749e18849704b303b9af31f0",
+      "length": 12373,
+      "gitBlob": "a48427d70c4a37148feb8db222df6fe9bee7ccc8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanBuilderPathSafetyTests.cs",
+      "sha256": "13591ee55fb384cb388229f72f6a29744a35faa80413e517a3744f98b477827a",
+      "length": 2776,
+      "gitBlob": "9b45a81e31ceb199d2b3d223342c535eec729402",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanBuilderTests.cs",
+      "sha256": "22cc78163ed74ec92d5218e36210064436b3e69763e1ebfc5d387e5ff91995b9",
+      "length": 12159,
+      "gitBlob": "eb391f2a34aa2626d7239906eba06babd2ea5f05",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanDiagnosticTests.cs",
+      "sha256": "96535544f084f0d88dd162daa58c6a49b9ded5ddfdb1b0822f168c5ab3f9b1ba",
+      "length": 2037,
+      "gitBlob": "d6c471279628867d5cd3094e6bd923d5d0d5e122",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanIdTests.cs",
+      "sha256": "fe12eeb1e1032e6669e3b57c738d367a014ea5fe7c671560c78c819b042de5d6",
+      "length": 1188,
+      "gitBlob": "9ac8c9dd91e43b10ded4f9ecb09b93e80d165c77",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanPathValidatorTests.cs",
+      "sha256": "55966b7d4b98f494dd9df552d87c78ffe4ac5df87dd5d47036d09d4aa2787ca4",
+      "length": 10633,
+      "gitBlob": "e24556feb92131f82e8c392b55974be633a7a2ad",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanTests.cs",
+      "sha256": "2d9b7bce531b4e1ea50145484290c815303e44667a27b287fcc1559d253f9a2b",
+      "length": 10655,
+      "gitBlob": "78671d31a8e8d23c04d09839164f5e434e4f55dc",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationReportTests.cs",
+      "sha256": "2c8d93044c2a7d75c348737972e0b57ae45c0f96c8c44271905fb46d3dcfabea",
+      "length": 8531,
+      "gitBlob": "d629ee32623598d17caa67283e4957bbdb1dbe15",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileIdTests.cs",
+      "sha256": "30eae2aa48f2f6b441126ab1cbd98e07fb39caa80993eed014c97717e232f3f4",
+      "length": 1252,
+      "gitBlob": "cfac2f2c805c8e621c50b575f187c962fc08ce7e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileOriginTests.cs",
+      "sha256": "733a3f1d0d1a5e21dd65f60bdccde1466f862a0fa312960a9e8b6b1e2a77c0a1",
+      "length": 2380,
+      "gitBlob": "3f58ad7692f1f4f49e92199a00faedd61a21aa74",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileTests.cs",
+      "sha256": "01ee726d6f465ff74c945f6be5e0eedb85b670f7d662c2118bfefa49f961fa3f",
+      "length": 6594,
+      "gitBlob": "7ba22fd84985b317330fbe2d9d333de5751bc6ac",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Generation/SiteFactoryLockTests.cs",
+      "sha256": "2880a014d219de7578c6f5e0aeafc8eef9434782f58af3bcbf4ab5bbafcae7b4",
+      "length": 5475,
+      "gitBlob": "1785456ffdb85b2472d17a865400cdfaafb6266f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/LogicGate.SiteFactory.Application.Tests.csproj",
+      "sha256": "71e2aaa08a2f0de6129c6c67dbe2cb2ecc233fa492386da8964f99a5f9f3af53",
+      "length": 3167,
+      "gitBlob": "8fa45cc2dd82b467adcec2c39c66ddbc9fca8e43",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Modules/ModuleCatalogTests.cs",
+      "sha256": "08e40b4765fdad6e51939f16cd2cb0c793a2955e35b19884713bd7698374cbe4",
+      "length": 14725,
+      "gitBlob": "a3f00645d4a7040493ced9988d176f877605928e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/ProjectReferenceArchitectureTests.cs",
+      "sha256": "08ae288b93d145db57702e5b1448774c5f870339cd6bd76d848115a2bdb59d76",
+      "length": 8103,
+      "gitBlob": "8b4870fb2f7f2566af88a370d08df0ffe4fd961f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/PublicRepositorySnapshot.cs",
+      "sha256": "82cd95de0969a8e2dfe322c6393c09ab4f7a301682c301a90d60efbbce04632d",
+      "length": 3619,
+      "gitBlob": "ffbd06adce0f920867715826e8da1f948620fa49",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateFileTests.cs",
+      "sha256": "16ac7767e93e382330110f9f1ac27dab3c38296164393921c2f1e0179acf5eb4",
+      "length": 3577,
+      "gitBlob": "7ba9ff9815e72b977037a3c9292707f2bd324aaa",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateManifestTests.cs",
+      "sha256": "dd5c65b3ecbdb93c51cc7dd2c64d2af1b077788b4ffc937d0c471be867dc5d08",
+      "length": 6246,
+      "gitBlob": "8f61403f931ba7f8392ba6029e95125835d3a1c3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateResolverTests.cs",
+      "sha256": "71c417aace05d3c09110befdb0e10fcc9ed9303d7bbc302d33ce75dd93d18b79",
+      "length": 10464,
+      "gitBlob": "2cc078b8724c79bf2fa3df03177c82f89dc318da",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateResultTests.cs",
+      "sha256": "76413ad79304b4c178f6c19d1190541bc59051fc3e3cf5770ee9e21f8910409c",
+      "length": 2775,
+      "gitBlob": "4f84692f2bed865f399b436c1297f35b7ad08b18",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Application.Tests/packages.lock.json",
+      "sha256": "20d5e3b57c50a736ef74ba1522919ee4fe264081e6668c9a1c59a4aa2e6009ba",
+      "length": 6742,
+      "gitBlob": "0b256af873a8a6be4dc818cc02fbf94600b9bd3a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/CliProcessRunner.cs",
+      "sha256": "f0a07123c5d8de9b3ce9b8ad59665b25260ba7d36b13570708868e4ebb44d2ea",
+      "length": 2805,
+      "gitBlob": "fe5c68c943b675fea4ab6fc61e123bc584dcf054",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/CliProcessRunnerTests.cs",
+      "sha256": "318b2c26c582a68dd42952905dc36f0051f964f2521784209917ef2dae18ce96",
+      "length": 6231,
+      "gitBlob": "c2b3e8ba9399e3330e7d30c4bcca1cb4d0e6d9fe",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/ConfigurationEndToEndTests.cs",
+      "sha256": "6cfaf6ded80172373f53b3e052c672fa1a206156676cfbd49d7bd4677afb8626",
+      "length": 5388,
+      "gitBlob": "8c70e2d5b2f48121366443968225fd6d61041d72",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/GenerateCommandTests.cs",
+      "sha256": "f03ee4d4fbbbaeeb97bf851709c3a5496da80c0baddef5aa4e77445eee9c63bd",
+      "length": 17906,
+      "gitBlob": "9e4985c3593b7b46659ff4b4e188dad8f459e3a3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/GenerationPlanEndToEndTests.cs",
+      "sha256": "2be89091723a61161ce6ae548d2f7df00af3afec895259f6db2f8bc10ad94ffd",
+      "length": 8305,
+      "gitBlob": "315343d8a413cdf7af248a22173e4671489dc15c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/LogicGate.SiteFactory.Cli.Tests.csproj",
+      "sha256": "c9a17ac42c5d70ec71bb6ad2afbe7eb2ae984739067ce0293a9135d5a529d937",
+      "length": 7256,
+      "gitBlob": "0ea523ec9cab3fa2b444307a509f07414167146f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/OwnedProcessRunner.cs",
+      "sha256": "baf3bd15baff3a17fa76a5214f7fa2d76187273d56c216a33d759e995d48eaa0",
+      "length": 7154,
+      "gitBlob": "2642a969f51ece12b82c1661d08c3ede21fe0718",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/OwnedProcessScope.cs",
+      "sha256": "fd2e00a2cec3806301eec4d528c5e91c191c2c3b6e34c7e34c67cdfe1a8d5684",
+      "length": 8159,
+      "gitBlob": "e91dcbcfd594a3bbd2c7a558a0dabd65375132d4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/PROCESS-CLEANUP.md",
+      "sha256": "1ad20a66bd087962673f0340e05ec6a643f58e9109922d79bbaac75bc87ef389",
+      "length": 3644,
+      "gitBlob": "85efad9d0497a15abff181ec82e36ef1c6e236f8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/PlanCommandTests.cs",
+      "sha256": "ac4a1ef8bbac3cfcf9d0040f1c8791c9ffb4dc6dbd16d8ba8f1ed3e7341e1f59",
+      "length": 24514,
+      "gitBlob": "a284fb3062ae0ffa57aa51f63c383597305cbf5a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/PublicPlanCliBuild.cs",
+      "sha256": "09954d49fd7014aa12783a61cc5800a606f6ba010b82f2f1363824fc1985f52b",
+      "length": 6309,
+      "gitBlob": "bc3adedaa47c483b1216de03e4df3ef45a1ec675",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/SiteFactoryCliTests.cs",
+      "sha256": "1c6db1ef99617c58f52f9252d46a8df1cb7dd5c310862696fca71cae82ed090a",
+      "length": 4256,
+      "gitBlob": "dc88b0a09a4a4f02bf0c09623105fb8378011ec5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/TestProcessEntryPoint.cs",
+      "sha256": "e07d4cbc25d99b74fca4494a46e0cea6afdfe212a2c4fc193789e547982a9aaa",
+      "length": 2421,
+      "gitBlob": "85ae9485a9d372b0198949626f2c296588de2cb7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/ValidateCommandTests.cs",
+      "sha256": "16541f955188326651653cb84dc34a3673b5d7daa5b5e64d099d878966a4c9f0",
+      "length": 22582,
+      "gitBlob": "e88a1ce9d3faf915bbcba4a8f671d2a73e851569",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Cli.Tests/packages.lock.json",
+      "sha256": "35f64e54060f7bbe9c73c2eb48acd98868769beb7b7e8e8c5e1d571b0a631ba0",
+      "length": 25171,
+      "gitBlob": "5c2622fd2486773ebede6fba4e7fbcf984aff677",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Domain.Tests/AssemblyMarkerTests.cs",
+      "sha256": "05308c29a88a04f40188e6f62bb8fc91c6967820569eded5c4d23ffa7ffb10fc",
+      "length": 474,
+      "gitBlob": "b5ecd32422268edc4bbbc56afdc8716c950df84d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Domain.Tests/IdentifierTests.cs",
+      "sha256": "f580991e31ece2e33557b4c0184b36503a5c3df9d4ec79e24e0f5792fdb2f130",
+      "length": 2134,
+      "gitBlob": "b0f19a74611f1761ee01efbcd3656e8a2c1db0f7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Domain.Tests/LogicGate.SiteFactory.Domain.Tests.csproj",
+      "sha256": "35b84e0757298e46a36a35880a7401b3a28ff68d8855b33e2ebbf8968cade01f",
+      "length": 671,
+      "gitBlob": "d12147519da28f6d5fdfbf3f7937524e6ae6aef2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Domain.Tests/SiteFactoryVersionTests.cs",
+      "sha256": "c959df0c724f9aaa897def16b26527b7afacfb40b998992245bc1c4775c7aa53",
+      "length": 2051,
+      "gitBlob": "af0ed6c8a6d73c72b9b2f3ccc79a716a436f3af2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Domain.Tests/TemplateVersionTests.cs",
+      "sha256": "d5a13adac45a4b48675098227c13029f4508c435cb5b10752801e944a0b8efa6",
+      "length": 1896,
+      "gitBlob": "a3f1b6c60895403a94f9b583fa70a45d9f2c27e1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Domain.Tests/packages.lock.json",
+      "sha256": "05979db554f12ed1c0ca8fd35dc65daf9806bdebadf7ed89e4f02dc1914eda56",
+      "length": 6426,
+      "gitBlob": "d55321a6ebdc340c194b2334c6a622566cf139d7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/DatabaseCompatibilityIntegrationBridge.cs",
+      "sha256": "c7b4335c290fd1d39c1cc1fb16fbabeb9fea8699a9852da5e88078c33fdc5194",
+      "length": 1483,
+      "gitBlob": "ece8f4ca307e97adfa6e1d228d177a0902d14e34",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/DependencyBoundaryTests.cs",
+      "sha256": "b8610563c9601528ead98f080c8ed202f4146d65616a5019fe8be6a5b44ddd7e",
+      "length": 52861,
+      "gitBlob": "76e13e7be1b411996b0a04195a25573ad0b45720",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.csproj",
+      "sha256": "81746ffcfe15c04be26f1e5d4124e78fabf3d3e9b26fcb7afc95303a7faf90bf",
+      "length": 2241,
+      "gitBlob": "db26cce3707c51e37a3c37fad2a5576f6dafc23e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/MigratorProcessRunner.cs",
+      "sha256": "66746ccedc2b8724ca6d5aee171afb43ebf3c9c54f0e26e16d939f8db06a0be3",
+      "length": 9556,
+      "gitBlob": "71edd3c360431ea69461b35643e7fe5ede8c6350",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/MigratorProcessRunnerTests.cs",
+      "sha256": "59d70f5a2b00001de4dad170ecf309e605564e977a7968fd47a28385648a9835",
+      "length": 6869,
+      "gitBlob": "61b63a1fadd345b7d303c5d7ee3fb55759a3a000",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlBootstrapTests.cs",
+      "sha256": "eaaa720f2d284ed89e2a66bc0695bdab738e7d4104671f1b936d264394edd587",
+      "length": 17198,
+      "gitBlob": "3e748c3ed64797ec4da9357f0d2feb3b7f72282c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlCatalogSnapshot.cs",
+      "sha256": "4d1aae294e95a6e92d72673dbc76453926a1eff8382256e78eaddbd9a1fa99e1",
+      "length": 4579,
+      "gitBlob": "2707ffed83b62885c42ae6f0c5df9101fba914e7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlCatalogSnapshotTests.cs",
+      "sha256": "950a0fd6ff78934a15d2c271053a681516f678d14e8abee51be327ce711f724c",
+      "length": 2692,
+      "gitBlob": "8151a457805c5fbe67eb292a4899667cde2b2329",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlCompatibilityTests.cs",
+      "sha256": "27ec27ebf3441180a993c24d9edc4cf9a34b2930c907ade4bd30d0f6eca5301d",
+      "length": 25794,
+      "gitBlob": "9f5d0c2fdb0d3a898823d09aba17539b1d1c511f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlDatabaseReaderSearchPathTests.cs",
+      "sha256": "105d3e21e376700cbd791179a18f5a0398933de0694203bc11a9ca2a250c814c",
+      "length": 7324,
+      "gitBlob": "73c2954806db58aadc33817f0bb6ef4117bce865",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlHarnessDiagnostics.ps1",
+      "sha256": "46b1335aa480f3396a8d45bd0d18ca4ff20da95eba80032b7068e3e3522dc113",
+      "length": 3494,
+      "gitBlob": "e54c89d1a50b2683be0b9d0afd3a6b104899385b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlHarnessDiagnosticsTests.cs",
+      "sha256": "201eaaaead2084afb7d51683b94994617e452686b28325a269d0e8e3061e6e6d",
+      "length": 16526,
+      "gitBlob": "2719fde9c4adc0f9a31c9561d8ac0b04ac547e62",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlHarnessExecutionTests.cs",
+      "sha256": "ef806465f602c34da0fa3f523015a7d77298599825e83714cad150a2f9d1f571",
+      "length": 51985,
+      "gitBlob": "bc99f23c8a81687a565182bcfcaf41aeb67f097a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlHarnessProcess.cs",
+      "sha256": "722615ac89998e1e76b73d39a43845519a970d3acc88bed322b812edc74f2dbd",
+      "length": 6396,
+      "gitBlob": "e9e10fac9aa5debc3b91b74a73e4293cb72d630d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlIntegrationTests.cs",
+      "sha256": "74024c52982da36ff9550b6ddf47115a50afccb8180ebd418d754d040bd4ec89",
+      "length": 7308,
+      "gitBlob": "41486adaf59997edbb35bc1ec99a07d33d09b5d1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlMigrationTests.cs",
+      "sha256": "afea7a959b5cac432b417356d009ba86234da9341dacd3a8b3a48617f5df50ee",
+      "length": 22117,
+      "gitBlob": "825edb9c13629173de3c3e8e302b4fd4b518cc79",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlMigratorRoleGraphTests.cs",
+      "sha256": "6021702422e9ab86fb5a6de0b4dbcb0bd5f6f0a837b156d40772002da1f07ec9",
+      "length": 13022,
+      "gitBlob": "5b10d97e12dee4b2324348bacb64836098e526e9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlMigratorSearchPathCases.cs",
+      "sha256": "4688db52224c69d8713bba3ee2a2ea28d40df1cd1b92fd1bd4586870fc06eb7c",
+      "length": 12053,
+      "gitBlob": "645afdcf7da9640faf64ca54ef53a7839ec9b749",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlPermissionMatrixTests.cs",
+      "sha256": "1c584e6a5f460a338c0e75013a24d0040a2ee85af460487e57b40bc28325e3cf",
+      "length": 12563,
+      "gitBlob": "e5c556e86cf2448b0616cca4fb87e6aa451ff4d2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlProofTests.cs",
+      "sha256": "b191345d3c909faf6033c28d4073e23380704ebad96619b0547c8d9a1c41f3d5",
+      "length": 53104,
+      "gitBlob": "6a9b9c9356f20d125ad7c4064207b4db01d9a54f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlRoleBaseline.cs",
+      "sha256": "aceb59c534e419a5edcde0860b401c3b05b84474103d1b79d3358cbd9791723e",
+      "length": 3974,
+      "gitBlob": "2e782a21f500ce8975e65d4dcddeea6540e2081a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlRoleBaselineTests.cs",
+      "sha256": "f7d1449abdd40e3c596a6b8013a66b72ac019f92dcc22a365b740aa72c076fbc",
+      "length": 1422,
+      "gitBlob": "27caefc97d41e61d695ba66f23bb91e74dbd55e2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlRoleFixture.cs",
+      "sha256": "205226bf6b4a65b84631d3b7a3f05c84f71a65cc2acf506a47107f6922a943b7",
+      "length": 7633,
+      "gitBlob": "763595c0d4bb469111988750676c168ca33f30d9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlRoleTests.cs",
+      "sha256": "2b090415dc9494e88fde5b4e5e421edaf2c973517923386e9d6ceab48bedef2d",
+      "length": 29747,
+      "gitBlob": "f17d0a8b7b4d1541960cfdbacca525778db2de19",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlSchemaPrivilegeCases.cs",
+      "sha256": "dd56c1e80ad7e764cab453d1e87b7ad3231cbbe741fbef8bbedebe64c97dcb16",
+      "length": 4011,
+      "gitBlob": "6c74cf6a223b120f246909abe525c4696c8e7406",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlTestConfiguration.cs",
+      "sha256": "2d1828afd131752c50813884ad6881ff0e0f15c841e94104e0966c4ba573c41b",
+      "length": 3955,
+      "gitBlob": "b3da4af7d1e2cd3c60e48fe801d4254a7f075fad",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlTestConfigurationTests.cs",
+      "sha256": "5d7281bca912fcf9be9655061c7c6261b9ed07d9ef1d00533cffd3302d285e4a",
+      "length": 6214,
+      "gitBlob": "a03b2c536ac6233c368a0dadc6a7398cbf308b32",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlTestDatabase.cs",
+      "sha256": "ab5f81762f0033ad439f2e6bf86e92ceaae4b82d648420885ebec27830687c4a",
+      "length": 5399,
+      "gitBlob": "9d8395495749a544f6be85a2d7c5472102ef3f92",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlTestGate.cs",
+      "sha256": "1798e74c6c391fda732d86f331606d4f91c939c60b93e7753212c34dcfac5fca",
+      "length": 6687,
+      "gitBlob": "716ab3dd2968770ad85cde23416a799f8a53c44a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlTestGateTests.cs",
+      "sha256": "33bd1b2d158000faa34ee94dac6371f271f0274743af9a74bb080b9c8de29d43",
+      "length": 12060,
+      "gitBlob": "006c192a25bf2362ac5c7d0b926127b9144c57ff",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSql/PostgreSqlTestMetrics.cs",
+      "sha256": "fea23904a77e7f3b37337070bb380aff449825b080f199b857d05e41692b9ca4",
+      "length": 3009,
+      "gitBlob": "aaa7de011dec02e13233642e937a4a143561d8a4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSqlConfigurationTests.cs",
+      "sha256": "31bedf1923202fe495d4050850aa5968f9713d629aa2a8a042ee824f0136945f",
+      "length": 21560,
+      "gitBlob": "d44a68fd0a26e8a3ccaa65009d62ed45e33446bb",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSqlDatabaseReaderTests.cs",
+      "sha256": "5c1dab0c2268e24fddd6c81b4791c2c20aaea275bfcb7ad3b33528d362f169d4",
+      "length": 2721,
+      "gitBlob": "00db871ad1753b42daf24c88bf24c969ae2a6645",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSqlSecretFixture.cs",
+      "sha256": "c907bc587e44a71191b83423645f2552843347f000af7d87306f576be1f202f0",
+      "length": 4112,
+      "gitBlob": "3472de760ee23ff015f904f22facc230d7a3d063",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/PostgreSqlStartupValidationTests.cs",
+      "sha256": "4f25ebb2c70d115b87be9b7fc41aa4ffe1a2088523d99a57dbf7e9ee50e88456",
+      "length": 11236,
+      "gitBlob": "6c741118e7d71ca19f4c447ea7be1b2732564603",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/RuntimeDatabaseModelTests.cs",
+      "sha256": "0a7d39879a1db981db7c110a2fd145102ea50a4b08a000861caae1ae21472514",
+      "length": 13011,
+      "gitBlob": "532a5a74f0ed48dc1724880739824df28164e82a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/RuntimeDbContextFactoryTests.cs",
+      "sha256": "d1b83242c2414cf5cf3d9dfe2f1e4760ae5b9376ee5ec6cac51edd93284d4007",
+      "length": 9175,
+      "gitBlob": "8235127180d4c29faf2644e919c0ceac11133677",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/RuntimeMigrationTests.cs",
+      "sha256": "c2ec42a3cc3ba7264cd11ca988dcb1b182884969720a0c0bd32b9ff10b819019",
+      "length": 11119,
+      "gitBlob": "6f40c4001bf6e074fdedfe8dfeb1a900d90adec7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/WebDatabaseReadinessAdapterTests.cs",
+      "sha256": "d8d0e9cc57538779d53d78351513dd04c9704504a3d6af0a4e2345bc3de85f6c",
+      "length": 32664,
+      "gitBlob": "5475bed1100a418adf604ed8bb1be36e272263d5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/WorkerDatabaseStartupValidatorTests.cs",
+      "sha256": "6f0174ed6c17092941a3d2ca4ed0df8f73cf0ef2a73a1322eac4802d6981812a",
+      "length": 11250,
+      "gitBlob": "73b7be4f2b2810d6999a647ab0d066b7063b9457",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/packages.lock.json",
+      "sha256": "6c47c753561bc0dfb8a67cd0bf0396939ffff5222a15da47f7e2d9d980e901e8",
+      "length": 15431,
+      "gitBlob": "1a2e0dae1c4dd922b65bb46c150f3e8025e092c4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/AssemblyMarkerTests.cs",
+      "sha256": "70708ca08ad568a0813e67c1ed2fdede21d382981b8d5065c4d5794c2b3c3541",
+      "length": 514,
+      "gitBlob": "caf61c0365eed02a117f0ecd5b3254805d2206f7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Configuration/RestrictedYamlParserTests.cs",
+      "sha256": "41dc2a637ed133dac2038f9b8bcb30e99808af8ccf669433067e9276a434fd06",
+      "length": 2284,
+      "gitBlob": "193be16bb7302c59b0bd83c0c7757030c2d704b5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Configuration/YamlConfigurationLoaderTests.cs",
+      "sha256": "f88084a07251b5ea37267f6c9d538191607291b86dd1bb86e7d0c18c2cfb78c1",
+      "length": 22386,
+      "gitBlob": "ac3c6408e4887b31327e8a6f07fe1674c1488438",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/AtomicFileWriterTests.cs",
+      "sha256": "b6484ee78a8f79da9d9384fdeaca92057febf41d8a36c56ec98e4ccf8947f441",
+      "length": 20406,
+      "gitBlob": "af2aa12f3a3d5bdcb8faa56157f496afdc698c42",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/ClientFileApplierTests.cs",
+      "sha256": "55db152c21d1d60d5bf28898119dfa894c40f4b5f2bf6ee579bf331b461e4a95",
+      "length": 19663,
+      "gitBlob": "e44530dbf2a9522b2bf4fbd3e9dfc87cd12cd482",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/DirectoryLinkFixture.cs",
+      "sha256": "7f92f43f89cbf0c5428f1797fc046b22500d023a59476bba8711f92d790d9b54",
+      "length": 2913,
+      "gitBlob": "2fe143c26a1edbe1cadc564f95b45fd57c04fa63",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/FileGenerationStrategyGuardTests.cs",
+      "sha256": "a55773737b77ab627b09df938298c5621fafa19ed4b4c3368a8ec8a7decca691",
+      "length": 6476,
+      "gitBlob": "4fb3856689d332044d6e1f26a36cad3531bb0fac",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/GeneratedFileApplierTests.cs",
+      "sha256": "2fe91fed13ccd57b52365cbc0c96fa125c12a6f5be95d8c9f409730ed60e8a1a",
+      "length": 22063,
+      "gitBlob": "b753a47b2a5b92586d3a6f0b7b07df5a122dd8f0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/GenerationPlanJsonSerializerTests.cs",
+      "sha256": "28bad914a697883e01b1bf889d5492bde246b9ed0d6d574d77e6be34a55b665a",
+      "length": 15376,
+      "gitBlob": "812d040a74d1a76f2135dca4e5bc0d47f49a0acd",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/GenerationReportTests.cs",
+      "sha256": "b11d8c6d6350f73e597c51ca5eb6cab9e7c9ed71bc7af8778cd9929a0832f293",
+      "length": 27940,
+      "gitBlob": "3a98b87079db2f814dee44737d79396684a1cb9f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/GenerationRootTests.cs",
+      "sha256": "e9d4cb4e3f9718c8b6784816adb9962c6dbf3d3c56cfef6367bb9b48d917e8d7",
+      "length": 13128,
+      "gitBlob": "5a30c66fdef527873600fd766fd3fb0e1ac773c0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/GenerationStateTests.cs",
+      "sha256": "817201149050fdc76913590a77195669691fded00a94246dfd4204f9579db186",
+      "length": 6349,
+      "gitBlob": "f8764c399c307f229e28e5b0d0445b3d3ff79b3d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/InitialGenerationExecutorTests.cs",
+      "sha256": "a5770d72a3dd06b78009b8560116789bc30d82e97a0436ec51b5ff97ae371380",
+      "length": 23390,
+      "gitBlob": "6f1b5ff505c92250151c60c4888349f2337d1163",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/RegenerationTests.cs",
+      "sha256": "bbe02c1ce6d501c90a7e02d6611cf6d72a21f953d432d573e053bd31f52d5cda",
+      "length": 15572,
+      "gitBlob": "3dfde9a57334e4ec613e1a9eecfa83aeba44ad99",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Generation/SiteFactoryLockTests.cs",
+      "sha256": "431684dbcd6a61fb727c6cd73a812339a950c16ea18098b4f81c9b05a9b87dee",
+      "length": 19443,
+      "gitBlob": "f5c494cb6131858aedd7b5e413a19a0880b7062a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/LogicGate.SiteFactory.Infrastructure.Tests.csproj",
+      "sha256": "39393052d6007d7252e06ca954d42aa5a5445e9661318490e8d7e8b9a4633ba0",
+      "length": 2019,
+      "gitBlob": "07f78db6e2a13c8b76312192187057ac0dc12ec7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/NuGetPackageSourceMappingTests.cs",
+      "sha256": "69ac0a22740324a109fc3d07ad4cf03e565a8bd81b7e4fe5d9796d3fde18e95d",
+      "length": 3909,
+      "gitBlob": "f049d3b435bb6dda15c7db0b5729563c144b5d3b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Repositories/RepositoryDocumentationScannerTests.EndToEnd.cs",
+      "sha256": "9975b31d5372461882f6f25217a1a7ed7146390b6dc994182740588b3fe70dda",
+      "length": 18418,
+      "gitBlob": "8392b31e35039ec7cce834753f8bb8c3b2e1bcac",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Repositories/RepositoryDocumentationScannerTests.Generation.cs",
+      "sha256": "edda22cadd8f479faeaa41fc5908b4b1646469332c10023f42f604b52de00c6e",
+      "length": 26035,
+      "gitBlob": "fb44ecf289fc3cba8259949368a649b04c034cb9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Repositories/RepositoryDocumentationScannerTests.cs",
+      "sha256": "a1bee7b404ca6cfabcc3683a01fdb0a8c616a8465f96bf07ba0d22d5986b1bfe",
+      "length": 19758,
+      "gitBlob": "a0194c3704e86d8ae4427f3bf942b964b9fec735",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/DocumentationModelTests.cs",
+      "sha256": "a907d95ea9e5d63b19c0297b92877af80cfa00e201970f60e4dca28a53e95824",
+      "length": 13778,
+      "gitBlob": "d3308d85230d4635e672042d3c4619fd5d771a4e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/DocumentationModuleTests.cs",
+      "sha256": "5eb14ad1f5d27c1aa71906a3c3e6f71423584868853392cec8eddb34df410677",
+      "length": 11672,
+      "gitBlob": "a81465047d480d55043067fd1db638ee0ace87e7",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/GenerationPlanPathSafetyPipelineTests.cs",
+      "sha256": "0afd6b6f3d03eda8c56e93364fb6403a8ef1b9920e164eac441d87223d7f93d8",
+      "length": 6334,
+      "gitBlob": "43f4eb142c1103ba57fcc41b55460f507c4e2160",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/TemplateManifestJsonReaderTests.cs",
+      "sha256": "52b514c2fa70f990f87db1356c370ee7f529cca3a7b3fb3b35203e381a71c5bb",
+      "length": 6591,
+      "gitBlob": "3470adf0727da86ed8b7334ae3890f8a2e11ad0a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Infrastructure.Tests/packages.lock.json",
+      "sha256": "f4631cd01cb8223c2a771027fd4a775c097732cc9b1d351c083a87f7aa44c5e3",
+      "length": 7855,
+      "gitBlob": "f7f51b0cd498b948616545fcb48356e6f5786a11",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.ModuleSdk.Tests/DependencyBoundaryTests.cs",
+      "sha256": "aac212c42386378ad6cabf8351b0a52d017639b1115636eb8e91224af27f40b4",
+      "length": 4031,
+      "gitBlob": "3f01db9545fe3c3f60e7c2d36ee5b9665b930d2f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.ModuleSdk.Tests/LogicGate.SiteFactory.ModuleSdk.Tests.csproj",
+      "sha256": "40058016b8e09f0c9ea6829a5bade095313f157cc4afdd05d5c2f3b88bb4057d",
+      "length": 677,
+      "gitBlob": "e14c607536365129cddfceeef93bb5e4bc549079",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.ModuleSdk.Tests/ModuleDescriptorTests.cs",
+      "sha256": "7ae207fa33713468bb57759f72cb876d5d6651587eb3d1fc0eb12e053e96e230",
+      "length": 3947,
+      "gitBlob": "c67dd2760739c55206fc49631bdb712b2ccc0d5b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.ModuleSdk.Tests/ModuleIdentifierTests.cs",
+      "sha256": "4b2ad86f8a667cd262d6f3846e66572950e598f6475692e84ae3e7bbf14e1238",
+      "length": 2857,
+      "gitBlob": "daaa01669180823ba65479e00e97da1a81764d3e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.ModuleSdk.Tests/ModuleVersionTests.cs",
+      "sha256": "fc16507ab82e05ee09d023b83ec1217b36ec4756c0c5e283bfc1c1eef38471ee",
+      "length": 1999,
+      "gitBlob": "be7edb21e0a72d19a28baac6d060ab094c819dd4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.ModuleSdk.Tests/packages.lock.json",
+      "sha256": "02d9691f5a444e40169048e0e485da08dc714c9549d962543c5b215501cfa3ad",
+      "length": 6429,
+      "gitBlob": "5ff89d29e082a0102f62a9a8c137de9f599a9c21",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/DependencyBoundaryTests.cs",
+      "sha256": "8b46438895abd1bff95e2bb032dd053f9ad28380b5153fa0ae92107f169cb115",
+      "length": 11185,
+      "gitBlob": "644bd8e06cc95deec9f75cbe8338f8072cbf1e7f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests.csproj",
+      "sha256": "84f2a7aa85d16e8e1491115cb6e5b80902ef90f5d71b3a1d40d8b4538778b686",
+      "length": 1015,
+      "gitBlob": "c046953658bb86a77442ab9fc30ebb5d892a974c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/RuntimeHealthEndpointsTests.cs",
+      "sha256": "193062f522835aa97e77a9516d73bdd2076d4488874c5f66c311b23af9627faf",
+      "length": 9551,
+      "gitBlob": "e92b5fce42fd1f7c70b8cca76869c74bed430caf",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/RuntimeReadinessGateTests.cs",
+      "sha256": "64bea11931c4ab1ac7cba32e3ccd71704c08d3f9462e96bcfb66faed9aed15ae",
+      "length": 5433,
+      "gitBlob": "f488238df76041c619d6fa16310bd195192cbbf9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/TestHttpFixture.cs",
+      "sha256": "a2e64d4154c90182263df110af990a0733bcb4f945e7f28181f1ce96d1d77cfa",
+      "length": 7118,
+      "gitBlob": "2a244d0f74fe73fe7c64ae22d0a5f14b545d3ea8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/packages.lock.json",
+      "sha256": "03ff87453ebd87e3ac925e4cf4d1392140891d1df266ca8689ea83587d64a544",
+      "length": 7060,
+      "gitBlob": "b9ac34780531f4ce63fe358642324a4e6d220d9d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/DependencyBoundaryTests.cs",
+      "sha256": "025f084029bca40edde66783aa091556ef2852b89b744fdd250e2958f53d40e4",
+      "length": 13007,
+      "gitBlob": "4862772e70d28fe14d15a53ddb300d5f191110ee",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/LogicGate.SiteFactory.Runtime.Contracts.Tests.csproj",
+      "sha256": "9441468c9bdf49e3f8062660529c548b0713ca88b3039764770238de849e294d",
+      "length": 1177,
+      "gitBlob": "7d1c9607d2fe7a65a6321d09aa299072c6ee2414",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/RuntimeConfigurationTests.cs",
+      "sha256": "ac40a433b91c29d87ec624caf627c1cb308a86058793f7e9c382e49fa94662a3",
+      "length": 8610,
+      "gitBlob": "17cf828bf8ee5fd88ac40753e685a15c1c9ef2ee",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/RuntimeIdentityTests.cs",
+      "sha256": "63862d0f7ee3af6b0d40f4cc0f1369598086ea1b30751322eda604bf0fb89757",
+      "length": 4993,
+      "gitBlob": "16653fa9e14eb2d0af13461b4c30518d08e6dd21",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/StartupValidationContractsTests.cs",
+      "sha256": "e3bc4e5248c4edd53286ef6d9a11cc555cabb157aac6759a7722a04e77e55638",
+      "length": 6178,
+      "gitBlob": "fa544c2db413506dbf9ed63e5b615a3c1774f018",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/packages.lock.json",
+      "sha256": "b1b65e2263524788c6cdcca0b4abc578071eb6e78190ffa9deaddef41dce2adb",
+      "length": 6437,
+      "gitBlob": "a7759dad5eb6e3a731d6270d9979b415485e9ed4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/DependencyBoundaryTests.cs",
+      "sha256": "9820c3b1a76ce47740bdffe2fefdf72397f39cfacc5131eda6fbe4c223f4ecb3",
+      "length": 20414,
+      "gitBlob": "289e258d416c0b6268bbaa0ff47f620def0f73f9",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/LogicGate.SiteFactory.Runtime.Hosting.Tests.csproj",
+      "sha256": "f847f53ee7461c8044e7a39714837804e27b02251d9ccd3b6588a1bdb146b179",
+      "length": 935,
+      "gitBlob": "74ac15bf326ad4888b5085d3fa646c5d01aaf51e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/RuntimeConfigurationBindingTests.cs",
+      "sha256": "46a9547cfe7ff817339ae4f30e7c5c4dfabf96c26847a0fc35334ea555adeb90",
+      "length": 15707,
+      "gitBlob": "e6ec77b47965541d9de58a44cf85ebace316b793",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/RuntimeConfigurationHostTests.cs",
+      "sha256": "e9fcbeafa2fe9822b9e14d375297a92cfae5a4ca955f478d29d600184ca88324",
+      "length": 5813,
+      "gitBlob": "69cd3ccba36c411f9d041c096028cb0b7aba3755",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/RuntimeStartupLifecycleTests.cs",
+      "sha256": "537053f227c47d30af9f6c316e9028cf2e0945f1d7ec6919ba5cb08c630f545a",
+      "length": 28253,
+      "gitBlob": "fef4df6525193fddda33cf203c2eabf570934ed1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/TestHosts.cs",
+      "sha256": "c5249648413a3bf7570768799df20ef72a0765eb0f4969b7ae928f92e3caca40",
+      "length": 3342,
+      "gitBlob": "901ec97890310d022be13532e4fdf8aa0e015d70",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/packages.lock.json",
+      "sha256": "f1746b9e39fb798173c11a2a4eb4eada5591348318f053012c9500f3f0d54ad2",
+      "length": 20999,
+      "gitBlob": "4bb8c6687396b08e28792934d5869bcaa358ff4a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/DependencyBoundaryTests.cs",
+      "sha256": "3af3460b42acfdce7c3bcfab84665844926b9f0d55ef71ee4bfa33cae7ac55a4",
+      "length": 15301,
+      "gitBlob": "93819791b5aba8eded24bb4d9cc7be552c692546",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.csproj",
+      "sha256": "3c7e7db3b31234f38e41eda71796aa161a5bcf9fb60dadfa07b0428154b42adf",
+      "length": 2330,
+      "gitBlob": "c8474581ca3c5ce295a4fb5da3991d986e6928f2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/MigratorConfigurationTests.cs",
+      "sha256": "2a2df561a4a234516707665aaf1058f26efebb4cad92a8bc3e81def46162fd4d",
+      "length": 1111,
+      "gitBlob": "38e955fcc4c4fdc47e8641bec96a8800e2bbfebf",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/OfflineDatabaseFixture.cs",
+      "sha256": "c5fc25abfd2f9030853d5bb8b09f68808f4f0f272506a2d483d8a4756931aa24",
+      "length": 5404,
+      "gitBlob": "c7f260c3a413b4d0b45ff8501167af54dee7dd44",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/PostgreSql/PostgreSqlHostSnapshot.cs",
+      "sha256": "61f39c8f1e34489629f15f8ac2a4fd54186b04287d3cb16633b50145acefedb3",
+      "length": 4689,
+      "gitBlob": "2bc1ff4f5155ffd3be393f65a55972035a03787d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/PostgreSql/PostgreSqlWebConcurrencyTests.cs",
+      "sha256": "e550578e4174bcccb0e3a5bcd395f5a1948579ecd3f4cbb157385cf432c8eada",
+      "length": 28171,
+      "gitBlob": "3e9e82aa78f747ccc9c06fb5a84867851fef2013",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/PostgreSql/PostgreSqlWebReadinessTests.cs",
+      "sha256": "91c7d52e39b0678d841c8cd52af50952d324c4603c7b0d502cfafccba688537f",
+      "length": 5726,
+      "gitBlob": "f1574e59f58db146737f5f838d8c487acb71ad94",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/PostgreSql/PostgreSqlWorkerReadinessTests.cs",
+      "sha256": "f1c0b143026f75c2511252175846d67383c03fb6913592dd4c151f20d25f4be8",
+      "length": 8596,
+      "gitBlob": "4911df247325aceae44133632bfa287d10e9a6aa",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/PostgreSql/RealPostgreSqlHostFixture.cs",
+      "sha256": "661007e1081d7dc30807daa0e68f5c61038cf05e29629580d75a4845c77fb5b5",
+      "length": 10109,
+      "gitBlob": "68729169628af1b388e580af1766a155702383a6",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/PostgreSqlHostConfigurationTests.cs",
+      "sha256": "69354b352560547fa905535cdef1c5dddaf34bf7016ec28719c5f77323cdf61a",
+      "length": 6214,
+      "gitBlob": "9732369231a822f4e32e2370084009b72f2b0f68",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/RuntimeHealthTests.cs",
+      "sha256": "de4359d4014ac0c317a1f6717ca07b455c1876fe66dffa92adbbd55804c03c97",
+      "length": 9643,
+      "gitBlob": "cefdbd345de701cf0c4d84a8ea934d23e0ae930d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/TestHosts.cs",
+      "sha256": "d635d165dc1f69c6e86eed119ef32e8cd99e58d003b0f9b8adcd7f44ed1ec116",
+      "length": 14037,
+      "gitBlob": "f0b85ac07721144ec545012db3ceb77cbe3f1e61",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/WebDatabaseReadinessTests.cs",
+      "sha256": "10d68fcaa1f10f175d7368c10f0e89fb7ec645573b02e4b30e29feb232235744",
+      "length": 31130,
+      "gitBlob": "484b5904dcbfbccaa94f2f6c08a7feaca306a0e5",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/WorkerDatabaseReadinessTests.cs",
+      "sha256": "8d05001a8649f912298ad914ff54222f0fd1e0c52f799bfa47a47a646cfcfd4a",
+      "length": 11006,
+      "gitBlob": "b8609e5addd436099f84773fb11cabf56b75672e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/packages.lock.json",
+      "sha256": "ff0d807f92650a7991f3f2e1472b2928343aff190df299691ef8c382f61d06ae",
+      "length": 9690,
+      "gitBlob": "0ba7f428916c0368abbc8652322ca3b9e29a96d3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Tests/DatabaseCompatibilityTests.cs",
+      "sha256": "cf8526f348ffc29570996105a7291597665e70bc466bc41af90a557281b51c67",
+      "length": 13453,
+      "gitBlob": "fcb91762ec32cd6e8338055d0de6282a45b9aff8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Tests/DependencyBoundaryTests.cs",
+      "sha256": "e53e5d2fd0cb0662cd159bf9f54b52b054bb852a4230ca20143ca8a70c4acab4",
+      "length": 9001,
+      "gitBlob": "011d77ebd0138f65eceb86bb0e77de7505529d6e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Tests/LogicGate.SiteFactory.Runtime.Tests.csproj",
+      "sha256": "4c63fee7fd9da201f77dde52069863e5f645747f073656b72ecf3a31d2537cfb",
+      "length": 673,
+      "gitBlob": "0481a4f00343604631468944fc6a4a6a499ca96a",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Tests/RuntimeStartupValidatorTests.cs",
+      "sha256": "ffa57a43806138e7a2b1bc7406aaf6ac4b060b08cd1d0e1dba7f729f6277f52a",
+      "length": 12992,
+      "gitBlob": "16404d445321c8d9ca1d3c6a27836ff71ce87ceb",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/LogicGate.SiteFactory.Runtime.Tests/packages.lock.json",
+      "sha256": "214d91debcf9d13ee22cc2363c84379ca440a1a748941062b0d1e7acd2ad5020",
+      "length": 6619,
+      "gitBlob": "a81d8d3dc557628591a8f32d86265be21329349f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/Public/Invoke-PostgreSqlTests.ps1",
+      "sha256": "9b9ff96720034b8cd38c616b54484bed0e551fe748a251571736b05ef2491e07",
+      "length": 22166,
+      "gitBlob": "9106d6d76bcdb6e672055b73b58d6d18c163a3d4",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/Public/PostgreSqlProof.ps1",
+      "sha256": "1ff7968cfe9ba7db27906a7d0181743ef3158b5f82dfa1f90b5c09880a06b0ef",
+      "length": 65395,
+      "gitBlob": "4dec29160b13d80350464e8acc2a61e2f3b85e0f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/Public/shards.json",
+      "sha256": "cd54000742ce32b3822c356096c1e47cb437b85df853dea01e97507dd6118e76",
+      "length": 14302,
+      "gitBlob": "9d2027a437f8281f149c99cc9cc7455e82f1971d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/README.md",
+      "sha256": "cf6abba9cf83721b7580d3940ef20e5c98bce495dc84037400d81fa732fbf3c2",
+      "length": 9096,
+      "gitBlob": "e6988d7032b62d5ff1005b5fb475f89d3cc93bd2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/catalog-resolution-regression.md",
+      "sha256": "7b1d3dd14b636a0cba09d5d3fc37e5471f06a8959d9fe305a84e4420e0914eca",
+      "length": 5348,
+      "gitBlob": "e879df7c6556de15bd2729c326d0a77adbe0b2b1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/ci-runtime-stabilization.md",
+      "sha256": "631a135f30611c07f7966288ae821013242611bb18c8455de5aff0b9bbd4d950",
+      "length": 5254,
+      "gitBlob": "7de7b0e6c2ca8681fb6e4fbe03852105d45ff55e",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/foundation-e2e.md",
+      "sha256": "e01564c81e73cbef1c848a004fe9be6f4b932033c59d47e54b6dec8c423de0e4",
+      "length": 5884,
+      "gitBlob": "c4b000f6854da10dce6e62c916fd37c6c64f62c8",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/migrations.md",
+      "sha256": "f21d853fe76cf05f91b5586be778acfbc40bc2d00b60e9e24c0826d3446be4c5",
+      "length": 5663,
+      "gitBlob": "3cd041fabd93a905b5ed7d1a513579841ddb2e82",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/migrator-role-graph-regression.md",
+      "sha256": "aab2910e15f8ad9ce9e29e21959908f294a01999c1e07aa490979d4d7b2a6e0b",
+      "length": 4600,
+      "gitBlob": "e20f7766af1fcd0e02d868a9613ce02ed0e3193d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/permissions-and-errors.md",
+      "sha256": "488b27224e4c2a0b551c3ca494c0d9e244a6d0b481f4d3a06c9b266bdd5826ab",
+      "length": 5470,
+      "gitBlob": "9795b2474411ace05c92f852dfa5f07f3ffc5b37",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/roles.md",
+      "sha256": "eb018fc598649f0f58c80a009d1cf2761ae7b9fe1ff13736d88f98465337098e",
+      "length": 4852,
+      "gitBlob": "1d750f105db501e2bee6b96bc0df7657a28ca683",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PostgreSql/schema-privilege-regression.md",
+      "sha256": "631e077ef689da927486716de8d01f390329199bec8b409fb23fe51767e6f47b",
+      "length": 3790,
+      "gitBlob": "7c9db982c4fce127267beb61409ab851134a6507",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/PublicCi/Test-PublicCi.ps1",
+      "sha256": "fc348097bfb8052c955fcf252f9ed1bdc2d9da1da47d0c5040cff251400ce1ef",
+      "length": 50789,
+      "gitBlob": "01e286bf90783f854086472786dda05bb9230eb2",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/PublicGenerationFixture.cs",
+      "sha256": "3938814b076f7dd91f6e1a8e05a87dc01e4043bdfaf3410fbf3773840dbdc5a0",
+      "length": 2896,
+      "gitBlob": "09ea6718f10659b2efe512c4579c254196b9ccbd",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/configuration/README.md",
+      "sha256": "46d7b94283da41860086e744ba7787ab2877e140ff02e3c9812ce866f913c4ea",
+      "length": 343,
+      "gitBlob": "18e3f296d9a915ed9e56e3c35b7fef6739b730c0",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/configuration/invalid-product/client.sitefactory.yml",
+      "sha256": "f1a592c5318c8ce5ff62ead32f6f02e4fc8e84b27549a9d3523e72952a464c8e",
+      "length": 353,
+      "gitBlob": "2af5a408d4d0bdcf84b833ce9e2624600b69a9a6",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/configuration/invalid-public-url/client.sitefactory.yml",
+      "sha256": "43668ce6e19bf12e652eb731a812e6b1bdb053fca9422812c8070e7d3d46e371",
+      "length": 340,
+      "gitBlob": "3638ef8deb76dd5d1d380de86e9168653a962b26",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/configuration/invalid-schema-version/client.sitefactory.yml",
+      "sha256": "4f435b767af2260942cbb3d5714d39ee1a68ef511e0ab19c03418f8b42560fa3",
+      "length": 351,
+      "gitBlob": "66a73e715806fc79d5b318ed06fcf154b91b7423",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/configuration/invalid-unknown-property/client.sitefactory.yml",
+      "sha256": "9ec11ef27d229b272b486b2cc840a367e889e69e6c3686c346711c6db78d12e2",
+      "length": 376,
+      "gitBlob": "2e3934ba075a0f0e6821b29022d153ea505f2a57",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/configuration/valid-minimal/client.sitefactory.yml",
+      "sha256": "fbd3052602544b3ca7ec7a0c3f733174e44d8523d7caee1a13663c8af5cd6325",
+      "length": 351,
+      "gitBlob": "4835817bb1973d7c56e84fdc488b430cc3f7578b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/README.md",
+      "sha256": "e656a0da45e970158a1877601712c8308240111d1c164ed9aeb6f7ac38920af6",
+      "length": 504,
+      "gitBlob": "f09016e7c16e6411c8691840a9e848015f9044cf",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/file-collision/template.json",
+      "sha256": "a16ad0be3c409585b8c25b1237f9b046bdfdccc59539a71efc5ccacc148118d6",
+      "length": 426,
+      "gitBlob": "c7cb18f8e0b084e462de50751312d2a726e202bb",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/git-internal-path/template.json",
+      "sha256": "bc55c985a33c6adc044cbc69707a3fb2b5986a551b9907d50624fa90d823bcbd",
+      "length": 444,
+      "gitBlob": "618d2d80698050a9e53979e1df4c4463e1e19512",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/invalid-configuration/client.sitefactory.yml",
+      "sha256": "9314c3cafc20e1d18fb8aa491acef232ec9d18f5c32d8bf05b445db281003f0a",
+      "length": 337,
+      "gitBlob": "f61881bce4dd869efaa19616997c207067fdb5b3",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/invalid-yaml/client.sitefactory.yml",
+      "sha256": "feb314d25090b2ed61328d1a6d77e32a2db97110012eb89c35edb2ea70ad61bc",
+      "length": 22,
+      "gitBlob": "89c6fbd675657daa3bace05ea7d30eb19725683d",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/path-traversal/template.json",
+      "sha256": "61dcd861616c5e563888264ec6d978a00f19f11d088eb7c5ee1c8c41f58892a2",
+      "length": 302,
+      "gitBlob": "21e990154ce62ff42d0fc225de0a210972c7bd8c",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/physical-path-limit/template.json",
+      "sha256": "04cd0726816203b171dd7a1b3f48b1400a75f6f9b44010319c70947a0f072034",
+      "length": 987,
+      "gitBlob": "cea1d691ca619f7ec575665df32b6eff2b7c1a03",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/reordered-template/template.json",
+      "sha256": "3a477fd0f183822825ca360ac6fbb3e064448f723154c27a30c50ad79b071acc",
+      "length": 455,
+      "gitBlob": "955518cb03679a2d63977bca98cfafc99ab40753",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/unknown-template/client.sitefactory.yml",
+      "sha256": "41cb0e30b8244b25fc656e192039fe43cac8b7986d36289deb6edca773f4d04b",
+      "length": 346,
+      "gitBlob": "6615ec7d6e66e8c2ffca7667e79d3a6c7629af97",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/valid-minimal/client.sitefactory.yml",
+      "sha256": "fbd3052602544b3ca7ec7a0c3f733174e44d8523d7caee1a13663c8af5cd6325",
+      "length": 351,
+      "gitBlob": "4835817bb1973d7c56e84fdc488b430cc3f7578b",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/end-to-end/valid-minimal/expected-plan.json",
+      "sha256": "729210da905501d1e56e707f212bcd20c8e91cb033bdc5854288e2eda48b6450",
+      "length": 740,
+      "gitBlob": "c6d4417aa72c296ff4bd92daa2fd1b55e4f622bc",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-plan/valid-minimal/generation-plan.json",
+      "sha256": "24abace9d4a73c2dc6f7310065bf6db19ca343ec69230854c7ec3d6174b741b7",
+      "length": 686,
+      "gitBlob": "5dd821d0098fc62e441a2c71e6446d4613335529",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-report/README.md",
+      "sha256": "90c1501e28c9ceac6a44dca67e4491504b6f64de06455ce7b8877010ebf3b68c",
+      "length": 303,
+      "gitBlob": "84d02ad9f3b3fb558596995942f667c6d26f1b59",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/generation-report/first-generation.json",
+      "sha256": "493ae9336807ccb49cae46872f9de3ee8efc1b37f416d574a02f30cf6ce253ff",
+      "length": 830,
+      "gitBlob": "e0950d84a294421c35336258d5f737acbdc5867f",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/sitefactory-lock/README.md",
+      "sha256": "b3ec36a7452f5664a2c62916c5813d066905fccd721a89883ee6ec13258742fc",
+      "length": 215,
+      "gitBlob": "48f4bc6874fb511df13c33175a4e2716e3dbe9b1",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/fixtures/public/sitefactory-lock/valid-minimal/sitefactory.lock.json",
+      "sha256": "d5893267b00af7055e4c386dedb34cdd2c6918ecdee03a8b66732c23fcfbdbd5",
+      "length": 255,
+      "gitBlob": "7da9b92a25bcf93e04752d42aeeb91bf9c8dda18",
+      "gitMode": "100644"
+    },
+    {
+      "path": "tests/readiness-concurrency-regression.md",
+      "sha256": "6962e22beb7bb7ed1ba95a3ac07f70078fa4270dd545b9cec203ba9ad99f3eb2",
+      "length": 6249,
+      "gitBlob": "9b7f523d501c3b895ffcaf544018fb6baa743a18",
+      "gitMode": "100644"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "templateId": "documentation-minimal",
+  "templateVersion": "0.1.0",
+  "supportedProductIds": [
+    "documentation"
+  ],
+  "files": [
+    {
+      "id": "first",
+      "relativePath": "README.md",
+      "source": "pages/index",
+      "strategy": "generated"
+    },
+    {
+      "id": "second",
+      "relativePath": "readme.md",
+      "source": "pages/index",
+      "strategy": "generated"
+    }
+  ]
+}

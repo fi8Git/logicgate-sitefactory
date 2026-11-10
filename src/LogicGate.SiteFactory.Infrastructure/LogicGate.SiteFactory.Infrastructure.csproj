@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Required only by source-generated native interop for confined atomic file operations. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" />
+    <InternalsVisibleTo Include="LogicGate.SiteFactory.Infrastructure.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../LogicGate.SiteFactory.Application/LogicGate.SiteFactory.Application.csproj" />
+    <ProjectReference Include="../LogicGate.SiteFactory.Domain/LogicGate.SiteFactory.Domain.csproj" />
+  </ItemGroup>
+</Project>

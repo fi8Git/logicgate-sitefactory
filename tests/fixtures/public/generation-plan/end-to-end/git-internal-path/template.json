@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "templateId": "documentation-minimal",
+  "templateVersion": "0.1.0",
+  "supportedProductIds": [
+    "documentation"
+  ],
+  "files": [
+    {
+      "id": "first",
+      "relativePath": ".git/config",
+      "source": "pages/index",
+      "strategy": "generated"
+    },
+    {
+      "id": "second",
+      "relativePath": "foo/.Git/hooks/pre-commit",
+      "source": "pages/index",
+      "strategy": "generated"
+    }
+  ]
+}

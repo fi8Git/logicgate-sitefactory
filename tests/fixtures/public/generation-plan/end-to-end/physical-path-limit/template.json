@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 2,
+  "templateId": "documentation-minimal",
+  "templateVersion": "0.1.0",
+  "supportedProductIds": [
+    "documentation"
+  ],
+  "files": [
+    {
+      "id": "first-file",
+      "relativePath": "first/README.md",
+      "source": "pages/index",
+      "strategy": "generated"
+    },
+    {
+      "id": "second-file",
+      "relativePath": "second/README.md",
+      "source": "pages/index",
+      "strategy": "generated"
+    },
+    {
+      "id": "third-file",
+      "relativePath": "third/README.md",
+      "source": "pages/index",
+      "strategy": "generated"
+    },
+    {
+      "id": "last-invalid",
+      "relativePath": "zz-last/deep/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "source": "pages/index",
+      "strategy": "generated"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+LogicGate SiteFactory
+Copyright 2026 LogicGate (SASU)
+
+Licensed under the Apache License, Version 2.0.
+
+Semantic Versioning 2.0.0 (SemVer)
+--------------------------------
+
+Specification originally authored by Tom Preston-Werner.
+Source: https://semver.org/spec/v2.0.0.html
+License: Creative Commons Attribution 3.0 Unported.
+https://creativecommons.org/licenses/by/3.0/
+
+For attribution purposes, the version-validation expressions used in
+SiteFactoryVersion.cs and ModuleVersion.cs are conservatively treated as
+adaptations of the expression recommended by the SemVer specification.
+This attribution policy does not establish their historical origin.
+
+Observable implementation adaptations include .NET regular-expression syntax,
+absolute anchors (\A and \z), explicit ASCII digits, expression factoring in
+ModuleVersion.cs, and GeneratedRegex with RegexOptions.NonBacktracking.
+
+The original SemVer material retains its applicable Creative Commons
+Attribution 3.0 Unported terms. The Apache-2.0 statement above applies to
+original SiteFactory material and does not relicense the original SemVer
+material. No endorsement by the original author is implied.

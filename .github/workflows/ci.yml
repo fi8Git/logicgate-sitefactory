@@ -1,0 +1,363 @@
+name: Public CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  scope:
+    name: Select public proof scope
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.route.outputs.run }}
+    steps:
+      - name: Checkout public routing tools only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/public-ci/
+            /tests/PostgreSql/Public/
+      - name: Avoid duplicate automatic proof in mixed repository
+        id: route
+        env:
+          CI_REPOSITORY_PRIVATE: ${{ github.event.repository.private }}
+        run: ./scripts/public-ci/Invoke-PublicCi.ps1 -Mode Route
+
+  public:
+    name: Public offline / ${{ matrix.platform }}
+    needs: scope
+    if: needs.scope.outputs.run == 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: Windows
+          - os: ubuntu-latest
+            platform: Linux
+    steps:
+      - name: Checkout public sources only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /SiteFactory.slnx
+            /global.json
+            /Directory.Build.props
+            /Directory.Packages.props
+            /NuGet.config
+            /.editorconfig
+            /.gitignore
+            /.gitattributes
+            /.github/workflows/ci.yml
+            /scripts/public-ci/
+            /tests/PublicCi/Test-PublicCi.ps1
+            /tests/PostgreSql/Public/
+            /tests/fixtures/public/
+            /templates/documentation-minimal/
+            /src/LogicGate.SiteFactory.Application/
+            /src/LogicGate.SiteFactory.Cli/
+            !/src/LogicGate.SiteFactory.Cli/BuiltInComposition.cs
+            /src/LogicGate.SiteFactory.Domain/
+            /src/LogicGate.SiteFactory.Infrastructure/
+            /src/LogicGate.SiteFactory.Infrastructure.PostgreSql/
+            /src/LogicGate.SiteFactory.Migrator/
+            /src/LogicGate.SiteFactory.ModuleSdk/
+            /src/LogicGate.SiteFactory.Modules.Documentation/
+            /src/LogicGate.SiteFactory.Runtime/
+            /src/LogicGate.SiteFactory.Runtime.AspNetCore/
+            /src/LogicGate.SiteFactory.Runtime.Contracts/
+            /src/LogicGate.SiteFactory.Runtime.Hosting/
+            /tests/LogicGate.SiteFactory.Application.Tests/AssemblyMarkerTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ClientConfigurationV1Tests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ClientConfigurationV1ValidatorTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationDiagnosticTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationLoadResultTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationValidationResultTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/DiagnosticCodeTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ModulesConfigurationTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/CoreModuleBoundaryTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/ClientFileStrategyTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/FileGenerationStrategyGuardTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/FileGenerationStrategyRulesTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GeneratedFileStrategyTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationCompositionTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationExecutionContractsTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanBuilderPathSafetyTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanBuilderTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanDiagnosticTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanIdTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanPathValidatorTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationReportTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileIdTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileOriginTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/SiteFactoryLockTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/LogicGate.SiteFactory.Application.Tests.csproj
+            /tests/LogicGate.SiteFactory.Application.Tests/Modules/ModuleCatalogTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/packages.lock.json
+            /tests/LogicGate.SiteFactory.Application.Tests/ProjectReferenceArchitectureTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/PublicRepositorySnapshot.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateFileTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateManifestTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateResolverTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateResultTests.cs
+            /tests/LogicGate.SiteFactory.Cli.Tests/
+            !/tests/LogicGate.SiteFactory.Cli.Tests/BusinessCliProcessRunner.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedDotnetProjectTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedGitIgnoreTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedProjectContract.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedProjectEndToEndTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSkeletonTestReport.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSkeletonTestReportTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSolutionTopology.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSolutionTopologyTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/IsolatedPlanCliBuild.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/ModuleCompositionTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/GeneratedPostgreSqlHosts.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlBootstrapTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlCatalogSnapshot.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlCatalogSnapshotTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlCompatibilityTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlFoundationEndToEndTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlHarnessDiagnosticsTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlIntegrationTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlMigrationTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlMigratorRoleGraphTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlMigratorSearchPathCases.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlPermissionMatrixTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleBaseline.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleBaselineTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleFixture.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlSchemaPrivilegeCases.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestConfiguration.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestConfigurationTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestDatabase.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestMetrics.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlWebReadinessTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlWorkerReadinessTests.cs
+            /tests/LogicGate.SiteFactory.Domain.Tests/
+            /tests/LogicGate.SiteFactory.Infrastructure.Tests/
+            !/tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/EmbeddedTemplateCatalogTests.cs
+            !/tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/GenerationPlanPipelineTests.cs
+            !/tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/PmeModuleTests.cs
+            /tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/
+            /tests/LogicGate.SiteFactory.ModuleSdk.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.Tests/
+      - name: Verify exact public checkout
+        run: ./scripts/public-ci/Invoke-PublicCi.ps1 -Mode Checkout
+      - name: Install declared SDK
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+          cache: false
+      - name: Prove eleven public offline suites
+        env:
+          PUBLIC_REPOSITORY: ${{ github.event.repository.private == false && github.repository || '' }}
+        run: ./scripts/public-ci/Invoke-PublicCi.ps1 -Mode Offline -ExpectedCommit $env:GITHUB_SHA -PublicRepository $env:PUBLIC_REPOSITORY -ProofDirectory (Join-Path $env:RUNNER_TEMP 'public-proof')
+      - name: Retain controlled proof including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: public-ci-${{ matrix.platform }}
+          path: ${{ runner.temp }}/public-proof/
+          if-no-files-found: error
+          retention-days: 7
+
+  postgresql:
+    name: Public PostgreSQL REQUIRED / Linux
+    needs: scope
+    if: needs.scope.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    # Five sequential 360s shards plus auxiliary/build/cleanup budgets; not 360s globally.
+    timeout-minutes: 120
+    steps:
+      - name: Checkout public sources only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /SiteFactory.slnx
+            /global.json
+            /Directory.Build.props
+            /Directory.Packages.props
+            /NuGet.config
+            /.editorconfig
+            /.gitignore
+            /.gitattributes
+            /.github/workflows/ci.yml
+            /scripts/public-ci/
+            /tests/PublicCi/Test-PublicCi.ps1
+            /tests/PostgreSql/Public/
+            /tests/fixtures/public/
+            /templates/documentation-minimal/
+            /src/LogicGate.SiteFactory.Application/
+            /src/LogicGate.SiteFactory.Cli/
+            !/src/LogicGate.SiteFactory.Cli/BuiltInComposition.cs
+            /src/LogicGate.SiteFactory.Domain/
+            /src/LogicGate.SiteFactory.Infrastructure/
+            /src/LogicGate.SiteFactory.Infrastructure.PostgreSql/
+            /src/LogicGate.SiteFactory.Migrator/
+            /src/LogicGate.SiteFactory.ModuleSdk/
+            /src/LogicGate.SiteFactory.Modules.Documentation/
+            /src/LogicGate.SiteFactory.Runtime/
+            /src/LogicGate.SiteFactory.Runtime.AspNetCore/
+            /src/LogicGate.SiteFactory.Runtime.Contracts/
+            /src/LogicGate.SiteFactory.Runtime.Hosting/
+            /tests/LogicGate.SiteFactory.Application.Tests/AssemblyMarkerTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ClientConfigurationV1Tests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ClientConfigurationV1ValidatorTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationDiagnosticTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationLoadResultTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ConfigurationValidationResultTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/DiagnosticCodeTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Configuration/ModulesConfigurationTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/CoreModuleBoundaryTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/ClientFileStrategyTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/FileGenerationStrategyGuardTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/FileGenerationStrategyRulesTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GeneratedFileStrategyTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationCompositionTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationExecutionContractsTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanBuilderPathSafetyTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanBuilderTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanDiagnosticTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanIdTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanPathValidatorTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationPlanTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/GenerationReportTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileIdTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileOriginTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/PlannedFileTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Generation/SiteFactoryLockTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/LogicGate.SiteFactory.Application.Tests.csproj
+            /tests/LogicGate.SiteFactory.Application.Tests/Modules/ModuleCatalogTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/packages.lock.json
+            /tests/LogicGate.SiteFactory.Application.Tests/ProjectReferenceArchitectureTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/PublicRepositorySnapshot.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateFileTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateManifestTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateResolverTests.cs
+            /tests/LogicGate.SiteFactory.Application.Tests/Templates/TemplateResultTests.cs
+            /tests/LogicGate.SiteFactory.Cli.Tests/
+            !/tests/LogicGate.SiteFactory.Cli.Tests/BusinessCliProcessRunner.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedDotnetProjectTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedGitIgnoreTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedProjectContract.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedProjectEndToEndTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSkeletonTestReport.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSkeletonTestReportTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSolutionTopology.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/GeneratedSolutionTopologyTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/IsolatedPlanCliBuild.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/ModuleCompositionTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/GeneratedPostgreSqlHosts.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlBootstrapTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlCatalogSnapshot.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlCatalogSnapshotTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlCompatibilityTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlFoundationEndToEndTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlHarnessDiagnosticsTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlIntegrationTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlMigrationTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlMigratorRoleGraphTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlMigratorSearchPathCases.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlPermissionMatrixTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleBaseline.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleBaselineTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleFixture.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlRoleTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlSchemaPrivilegeCases.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestConfiguration.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestConfigurationTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestDatabase.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlTestMetrics.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlWebReadinessTests.cs
+            !/tests/LogicGate.SiteFactory.Cli.Tests/PostgreSql/PostgreSqlWorkerReadinessTests.cs
+            /tests/LogicGate.SiteFactory.Domain.Tests/
+            /tests/LogicGate.SiteFactory.Infrastructure.Tests/
+            !/tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/EmbeddedTemplateCatalogTests.cs
+            !/tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/GenerationPlanPipelineTests.cs
+            !/tests/LogicGate.SiteFactory.Infrastructure.Tests/Templates/PmeModuleTests.cs
+            /tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/
+            /tests/LogicGate.SiteFactory.ModuleSdk.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/
+            /tests/LogicGate.SiteFactory.Runtime.Tests/
+      - name: Verify exact public checkout
+        run: ./scripts/public-ci/Invoke-PublicCi.ps1 -Mode Checkout
+      - name: Install declared SDK
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+          cache: false
+      - name: P04 real PostgreSQL five-shard proof
+        env:
+          PUBLIC_REPOSITORY: ${{ github.event.repository.private == false && github.repository || '' }}
+        run: ./scripts/public-ci/Invoke-PublicCi.ps1 -Mode PostgreSql -ExpectedCommit $env:GITHUB_SHA -PublicRepository $env:PUBLIC_REPOSITORY -ProofDirectory (Join-Path $env:RUNNER_TEMP 'public-proof')
+      - name: Retain controlled PostgreSQL proof including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: public-ci-PostgreSql
+          path: ${{ runner.temp }}/public-proof/
+          if-no-files-found: error
+          retention-days: 7
+
+  proof:
+    name: Require complete public proof
+    needs: [scope, public, postgresql]
+    if: always() && needs.scope.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout public verification tools only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/public-ci/
+            /tests/PostgreSql/Public/
+      - name: Download this run's controlled proofs
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: public-ci-*
+          path: ${{ runner.temp }}/public-proofs/
+          merge-multiple: false
+      - name: Verify every job, case, TRX, shard and cleanup
+        env:
+          CI_NEEDS: ${{ toJson(needs) }}
+        run: ./scripts/public-ci/Invoke-PublicCi.ps1 -Mode Aggregate -ExpectedCommit $env:GITHUB_SHA -NeedsJson $env:CI_NEEDS -ProofDirectory (Join-Path $env:RUNNER_TEMP 'public-proofs')

@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/LogicGate.SiteFactory.Application/LogicGate.SiteFactory.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Closed public source inventory; sector-specific tests are compiled by their own project. -->
+    <Compile Include="AssemblyMarkerTests.cs" />
+    <Compile Include="CoreModuleBoundaryTests.cs" />
+    <Compile Include="ProjectReferenceArchitectureTests.cs" />
+    <Compile Include="PublicRepositorySnapshot.cs" />
+    <Compile Include="Configuration/ClientConfigurationV1Tests.cs" />
+    <Compile Include="Configuration/ClientConfigurationV1ValidatorTests.cs" />
+    <Compile Include="Configuration/ConfigurationDiagnosticTests.cs" />
+    <Compile Include="Configuration/ConfigurationLoadResultTests.cs" />
+    <Compile Include="Configuration/ConfigurationValidationResultTests.cs" />
+    <Compile Include="Configuration/DiagnosticCodeTests.cs" />
+    <Compile Include="Configuration/ModulesConfigurationTests.cs" />
+    <Compile Include="Generation/ClientFileStrategyTests.cs" />
+    <Compile Include="Generation/FileGenerationStrategyGuardTests.cs" />
+    <Compile Include="Generation/FileGenerationStrategyRulesTests.cs" />
+    <Compile Include="Generation/GeneratedFileStrategyTests.cs" />
+    <Compile Include="Generation/GenerationCompositionTests.cs" />
+    <Compile Include="Generation/GenerationExecutionContractsTests.cs" />
+    <Compile Include="Generation/GenerationPlanBuilderPathSafetyTests.cs" />
+    <Compile Include="Generation/GenerationPlanBuilderTests.cs" />
+    <Compile Include="Generation/GenerationPlanDiagnosticTests.cs" />
+    <Compile Include="Generation/GenerationPlanIdTests.cs" />
+    <Compile Include="Generation/GenerationPlanPathValidatorTests.cs" />
+    <Compile Include="Generation/GenerationPlanTests.cs" />
+    <Compile Include="Generation/GenerationReportTests.cs" />
+    <Compile Include="Generation/PlannedFileIdTests.cs" />
+    <Compile Include="Generation/PlannedFileOriginTests.cs" />
+    <Compile Include="Generation/PlannedFileTests.cs" />
+    <Compile Include="Generation/SiteFactoryLockTests.cs" />
+    <Compile Include="Modules/ModuleCatalogTests.cs" />
+    <Compile Include="Templates/TemplateFileTests.cs" />
+    <Compile Include="Templates/TemplateManifestTests.cs" />
+    <Compile Include="Templates/TemplateResolverTests.cs" />
+    <Compile Include="Templates/TemplateResultTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../fixtures/public/PublicGenerationFixture.cs" Link="Fixtures/PublicGenerationFixture.cs" />
+  </ItemGroup>
+</Project>

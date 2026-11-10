@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="LogicGate.SiteFactory.Cli.Tests" />
+    <Compile Remove="BuiltInComposition.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../LogicGate.SiteFactory.Application/LogicGate.SiteFactory.Application.csproj" />
+    <ProjectReference Include="../LogicGate.SiteFactory.Infrastructure/LogicGate.SiteFactory.Infrastructure.csproj" />
+    <ProjectReference Include="../LogicGate.SiteFactory.Modules.Documentation/LogicGate.SiteFactory.Modules.Documentation.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../LogicGate.SiteFactory.Domain/LogicGate.SiteFactory.Domain.csproj" />
+    <ProjectReference Include="../LogicGate.SiteFactory.ModuleSdk/LogicGate.SiteFactory.ModuleSdk.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "assemblies": [
+    {
+      "name": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "project": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.csproj",
+      "expectedCount": 20
+    },
+    {
+      "name": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests",
+      "project": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.csproj",
+      "expectedCount": 3
+    }
+  ],
+  "expectedTests": [
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigrationTests.ExtractedMigratorAppliesOnceWithItsOwnLoginAndRejectsRuntimeCredentials",
+      "lot": "G04",
+      "shard": "g04"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigrationTests.ExtractedMigratorPhysicallyClosesElevatedSessionsInsideTheLiveTestHost",
+      "lot": "G04",
+      "shard": "g04"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigratorRoleGraphTests.ExtractedMigratorRejectsAnyRoleGraphOutsideItsSingleOwnerEdge",
+      "lot": "G04",
+      "shard": "g04"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigratorSearchPathCases.ExtractedMigratorRejectsHostileSearchPathBeforeApplyAndBootstrapMutation",
+      "lot": "G04",
+      "shard": "g04"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlBootstrapTests.ExtractedBootstrapIsTransactionalIdempotentAndRefusesMismatchesAndRuntimeWrites",
+      "lot": "G04",
+      "shard": "g04"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlCompatibilityTests.ExtractedReaderAndProbeDistinguishCompatibilityFailuresWithoutChangingPostgreSql",
+      "lot": "G05",
+      "shard": "g05"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlCompatibilityTests.ExtractedReaderRejectsCreateOnNonSystemPgSchemasForWebAndWorker",
+      "lot": "G05",
+      "shard": "g05"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlDatabaseReaderSearchPathTests.ExtractedReaderPreservesObservationsAndRefusalsOnHostileSearchPaths",
+      "lot": "G05",
+      "shard": "g05"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.RoleAttributesAndMembershipAreLeastPrivilege",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.MigratorRequiresExplicitOwnerAndResetsItsIdentity",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.WebCanReadButCannotChangeRuntimeSchema",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.WorkerCanReadButCannotChangeRuntimeSchema",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.PublicPrivilegesAndDatabaseIsolationAreExplicit",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.FutureOwnerObjectsReceiveOnlyExpectedDefaultPrivileges",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.ControlledSearchPathIgnoresPublicHomonyms",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.RoleCleanupSurvivesFailureAndCancellation",
+      "lot": "P01",
+      "shard": "p01"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlCatalogSnapshotTests.CatalogSnapshotExcludesOnlyLiteralSystemSchemaPrefixes",
+      "lot": "P02",
+      "shard": "p02"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlIntegrationTests.RealPostgreSqlPersistsDataEnforcesConstraintsAndIsolatesDatabases",
+      "lot": "P02",
+      "shard": "p02"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlIntegrationTests.CancellationDoesNotPreventCleanupOrCreateAnotherDatabase",
+      "lot": "P02",
+      "shard": "p02"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlPermissionMatrixTests.GeneratedMetadataPermissionsAreEnforcedByPostgreSqlForEveryLogin",
+      "lot": "P02",
+      "shard": "p02"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.PostgreSql.PostgreSqlWebReadinessTests.RealWebReadinessUsesPostgreSqlWithoutWritingAndKeepsLivenessIndependent",
+      "lot": "P03",
+      "shard": "p03"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.PostgreSql.PostgreSqlWorkerReadinessTests.RealWorkerValidatesItsOwnDatabaseBeforeStartingAndRemainsIdleWithoutWrites",
+      "lot": "P03",
+      "shard": "p03"
+    },
+    {
+      "assembly": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests",
+      "fullyQualifiedName": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.PostgreSql.PostgreSqlWebConcurrencyTests.RealWebReadinessHasNoFalseFailuresUnderConcurrentTraffic",
+      "lot": "P03",
+      "shard": "p03"
+    }
+  ],
+  "shards": [
+    {
+      "name": "g04",
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "project": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.csproj",
+      "lot": "G04",
+      "expectedCount": 5,
+      "filter": "Category=PostgreSql&(FullyQualifiedName=LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigrationTests.ExtractedMigratorAppliesOnceWithItsOwnLoginAndRejectsRuntimeCredentials|FullyQualifiedName=LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigrationTests.ExtractedMigratorPhysicallyClosesElevatedSessionsInsideTheLiveTestHost|FullyQualifiedName=LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigratorRoleGraphTests.ExtractedMigratorRejectsAnyRoleGraphOutsideItsSingleOwnerEdge|FullyQualifiedName=LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigratorSearchPathCases.ExtractedMigratorRejectsHostileSearchPathBeforeApplyAndBootstrapMutation|FullyQualifiedName=LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlBootstrapTests.ExtractedBootstrapIsTransactionalIdempotentAndRefusesMismatchesAndRuntimeWrites)",
+      "expectedTests": [
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigrationTests.ExtractedMigratorAppliesOnceWithItsOwnLoginAndRejectsRuntimeCredentials",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigrationTests.ExtractedMigratorPhysicallyClosesElevatedSessionsInsideTheLiveTestHost",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigratorRoleGraphTests.ExtractedMigratorRejectsAnyRoleGraphOutsideItsSingleOwnerEdge",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlMigratorSearchPathCases.ExtractedMigratorRejectsHostileSearchPathBeforeApplyAndBootstrapMutation",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlBootstrapTests.ExtractedBootstrapIsTransactionalIdempotentAndRefusesMismatchesAndRuntimeWrites"
+      ]
+    },
+    {
+      "name": "g05",
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "project": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.csproj",
+      "lot": "G05",
+      "expectedCount": 3,
+      "filter": "Category=PostgreSql&ExtractionLot=G05",
+      "expectedTests": [
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlCompatibilityTests.ExtractedReaderAndProbeDistinguishCompatibilityFailuresWithoutChangingPostgreSql",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlCompatibilityTests.ExtractedReaderRejectsCreateOnNonSystemPgSchemasForWebAndWorker",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlDatabaseReaderSearchPathTests.ExtractedReaderPreservesObservationsAndRefusalsOnHostileSearchPaths"
+      ]
+    },
+    {
+      "name": "p01",
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "project": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.csproj",
+      "lot": "P01",
+      "expectedCount": 8,
+      "filter": "Category=PostgreSql&ExtractionLot=P01",
+      "expectedTests": [
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.RoleAttributesAndMembershipAreLeastPrivilege",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.MigratorRequiresExplicitOwnerAndResetsItsIdentity",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.WebCanReadButCannotChangeRuntimeSchema",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.WorkerCanReadButCannotChangeRuntimeSchema",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.PublicPrivilegesAndDatabaseIsolationAreExplicit",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.FutureOwnerObjectsReceiveOnlyExpectedDefaultPrivileges",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.ControlledSearchPathIgnoresPublicHomonyms",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlRoleTests.RoleCleanupSurvivesFailureAndCancellation"
+      ]
+    },
+    {
+      "name": "p02",
+      "assembly": "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests",
+      "project": "tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.csproj",
+      "lot": "P02",
+      "expectedCount": 4,
+      "filter": "Category=PostgreSql&ExtractionLot=P02",
+      "expectedTests": [
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlCatalogSnapshotTests.CatalogSnapshotExcludesOnlyLiteralSystemSchemaPrefixes",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlIntegrationTests.RealPostgreSqlPersistsDataEnforcesConstraintsAndIsolatesDatabases",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlIntegrationTests.CancellationDoesNotPreventCleanupOrCreateAnotherDatabase",
+        "LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.PostgreSql.PostgreSqlPermissionMatrixTests.GeneratedMetadataPermissionsAreEnforcedByPostgreSqlForEveryLogin"
+      ]
+    },
+    {
+      "name": "p03",
+      "assembly": "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests",
+      "project": "tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.csproj",
+      "lot": "P03",
+      "expectedCount": 3,
+      "filter": "Category=PostgreSql&ExtractionLot=P03",
+      "expectedTests": [
+        "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.PostgreSql.PostgreSqlWebReadinessTests.RealWebReadinessUsesPostgreSqlWithoutWritingAndKeepsLivenessIndependent",
+        "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.PostgreSql.PostgreSqlWorkerReadinessTests.RealWorkerValidatesItsOwnDatabaseBeforeStartingAndRemainsIdleWithoutWrites",
+        "LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.PostgreSql.PostgreSqlWebConcurrencyTests.RealWebReadinessHasNoFalseFailuresUnderConcurrentTraffic"
+      ]
+    }
+  ]
+}

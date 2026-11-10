@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LogicGate.SiteFactory.Application/LogicGate.SiteFactory.Application.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Cli/LogicGate.SiteFactory.Cli.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Domain/LogicGate.SiteFactory.Domain.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Infrastructure/LogicGate.SiteFactory.Infrastructure.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Infrastructure.PostgreSql/LogicGate.SiteFactory.Infrastructure.PostgreSql.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Migrator/LogicGate.SiteFactory.Migrator.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.ModuleSdk/LogicGate.SiteFactory.ModuleSdk.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Modules.Documentation/LogicGate.SiteFactory.Modules.Documentation.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Runtime.Contracts/LogicGate.SiteFactory.Runtime.Contracts.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Runtime.AspNetCore/LogicGate.SiteFactory.Runtime.AspNetCore.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Runtime.Hosting/LogicGate.SiteFactory.Runtime.Hosting.csproj" />
+    <Project Path="src/LogicGate.SiteFactory.Runtime/LogicGate.SiteFactory.Runtime.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LogicGate.SiteFactory.Application.Tests/LogicGate.SiteFactory.Application.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Cli.Tests/LogicGate.SiteFactory.Cli.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Domain.Tests/LogicGate.SiteFactory.Domain.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Infrastructure.Tests/LogicGate.SiteFactory.Infrastructure.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.ModuleSdk.Tests/LogicGate.SiteFactory.ModuleSdk.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Runtime.Contracts.Tests/LogicGate.SiteFactory.Runtime.Contracts.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests/LogicGate.SiteFactory.Runtime.AspNetCore.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Runtime.Hosting.Tests/LogicGate.SiteFactory.Runtime.Hosting.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests/LogicGate.SiteFactory.Runtime.PostgreSql.Hosts.Tests.csproj" />
+    <Project Path="tests/LogicGate.SiteFactory.Runtime.Tests/LogicGate.SiteFactory.Runtime.Tests.csproj" />
+  </Folder>
+</Solution>

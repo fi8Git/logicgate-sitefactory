@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "templateId": "documentation-minimal",
+  "templateVersion": "0.1.0",
+  "supportedProductIds": [
+    "documentation"
+  ],
+  "files": [
+    {
+      "id": "outside",
+      "relativePath": "../outside.txt",
+      "source": "pages/index",
+      "strategy": "generated"
+    }
+  ]
+}

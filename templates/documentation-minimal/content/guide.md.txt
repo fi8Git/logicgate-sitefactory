@@ -1,0 +1,8 @@
+# Guide
+
+Ces pages fictives constituent un point de départ minimal.
+
+## Format
+
+Les titres et les paragraphes sont présentés sans contenu actif.
+Le HTML brut comme <em> reste du texte, pas une instruction de rendu.

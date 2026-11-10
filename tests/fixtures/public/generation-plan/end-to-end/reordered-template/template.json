@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "templateId": "documentation-minimal",
+  "templateVersion": "0.1.0",
+  "supportedProductIds": [
+    "documentation"
+  ],
+  "files": [
+    {
+      "id": "documentation-index",
+      "relativePath": "index.html",
+      "source": "pages/index",
+      "strategy": "generated"
+    },
+    {
+      "id": "documentation-guide",
+      "relativePath": "guide.html",
+      "source": "pages/guide",
+      "strategy": "generated"
+    }
+  ]
+}

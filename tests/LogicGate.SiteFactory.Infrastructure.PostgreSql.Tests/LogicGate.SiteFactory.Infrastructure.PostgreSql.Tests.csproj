@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <StartupObject>LogicGate.SiteFactory.Cli.Tests.G04TestEntryPoint</StartupObject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/LogicGate.SiteFactory.Infrastructure.PostgreSql/LogicGate.SiteFactory.Infrastructure.PostgreSql.csproj" />
+    <ProjectReference Include="../../src/LogicGate.SiteFactory.Migrator/LogicGate.SiteFactory.Migrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PostgreSql/PostgreSqlHarnessDiagnostics.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../PostgreSql/Public/Invoke-PostgreSqlTests.ps1" Link="PostgreSql/Public/Invoke-PostgreSqlTests.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../PostgreSql/Public/PostgreSqlProof.ps1" Link="PostgreSql/Public/PostgreSqlProof.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../PostgreSql/Public/shards.json" Link="PostgreSql/Public/shards.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Existing BCL-only junction/symlink helper; no dependency on the Infrastructure test assembly. -->
+    <Compile Include="../LogicGate.SiteFactory.Infrastructure.Tests/Generation/DirectoryLinkFixture.cs" Link="FileHelpers/DirectoryLinkFixture.cs" />
+    <!-- Reuse only the owned BCL process supervisor, not the CLI assembly or its composition. -->
+    <Compile Include="../LogicGate.SiteFactory.Cli.Tests/OwnedProcessRunner.cs" Link="ProcessHelpers/OwnedProcessRunner.cs" />
+    <Compile Include="../LogicGate.SiteFactory.Cli.Tests/OwnedProcessScope.cs" Link="ProcessHelpers/OwnedProcessScope.cs" />
+  </ItemGroup>
+</Project>
