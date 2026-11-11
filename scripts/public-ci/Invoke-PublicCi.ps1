@@ -100,9 +100,39 @@ function Get-CiFailureCode([Management.Automation.ErrorRecord]$Failure) {
     if($codes -ccontains $Failure.Exception.Message){return $Failure.Exception.Message}
     return 'SF-CI-FAILED'
 }
-function Run-CiDotnet([string[]]$Arguments,[string]$Log) {
+function Run-CiDotnet([string[]]$Arguments,[string]$Log,[switch]$ReturnExitCode) {
     & dotnet @Arguments *> (Join-Path $scratch $Log)
-    if($LASTEXITCODE -ne 0){throw 'SF-CI-DOTNET'}
+    $exitCode=$LASTEXITCODE
+    if($ReturnExitCode){return $exitCode}
+    if($exitCode -ne 0){throw 'SF-CI-DOTNET'}
+}
+function Invoke-CiOfflineSuite($Project,[string[]]$Expected) {
+    $known=@(Get-PublicCiProjects | Where-Object {$_.Offline -gt 0 -and $_.Assembly -ceq $Project.Assembly -and $_.Path -ceq $Project.Path})
+    if($known.Count -ne 1 -or $Expected.Count -ne $known[0].Offline){throw 'SF-CI-INVENTORY'}
+    $started=[DateTimeOffset]::UtcNow
+    $raw=Join-Path $scratch ($Project.Assembly+'.trx');$exitCode=$null
+    try{
+        # Keep the real process result before any TRX validation can throw.
+        $exitCode=Run-CiDotnet @('test',$Project.Path,'--configuration','Release','--no-build','--no-restore','--filter','Category!=PostgreSql','--logger',('trx;LogFileName='+$Project.Assembly+'.trx'),'--results-directory',$scratch) ($Project.Assembly+'.log') -ReturnExitCode
+        $finished=[DateTimeOffset]::UtcNow
+        if($exitCode -ne 0){throw 'SF-CI-DOTNET'}
+        $validated=Assert-PublicCiOfflineTrx ([IO.File]::ReadAllBytes($raw)) $Expected $Project.Assembly $started $finished
+        $safe=Join-Path $ProofDirectory ('offline/'+$Project.Assembly+'.trx')
+        Save-PublicCiOfflineTrx $validated $safe $Project.Assembly
+        $inventory=@($validated.Rows|ForEach-Object {Get-PublicCiArchivedCaseName $_}|Sort-Object -CaseSensitive)
+        $report.suites+=@{assembly=$Project.Assembly;passed=$validated.Count;inventory=$inventory;start=$started.ToString('O');finish=$finished.ToString('O');sha256=(Get-FileHash -LiteralPath $safe).Hash}
+        Save-CiReport
+    }catch{
+        $executionFailure=$_
+        $report.status='FAILED';$report.code=Get-CiFailureCode $executionFailure
+        try{$report['failure']=Get-PublicCiOfflineFailureDiagnostic $raw $Expected $Project.Assembly $exitCode}catch{
+            $report['failure']=@{kind='OfflineFailure';suite=$known[0].Assembly;expectedCount=$known[0].Offline;status='FAILED';completeProof=$false;diagnostic='Unavailable';processExitCode=$exitCode}
+        }
+        # A diagnostic persistence failure must neither hide the original
+        # failure nor prevent the outer finally from cleaning owned resources.
+        try{Save-CiReport}catch{}
+        throw $executionFailure
+    }
 }
 function Set-CiGitProvenance {
     # P04 provenance only, AFTER build (--no-build). The SDK discovers public
@@ -176,17 +206,8 @@ try{
                 $expected=@($all|Where-Object {$excluded -cnotcontains $_})
                 if($expected.Count -ne $project.Offline){throw 'SF-CI-DISCOVERY'}
                 Set-CiPhase 'TEST'
-                $started=[DateTimeOffset]::UtcNow
-                $raw=Join-Path $scratch ($project.Assembly+'.trx')
                 # R01 execution, bounded by the offline CI job; the P04 360s limit is for DB shards only.
-                Run-CiDotnet @('test',$project.Path,'--configuration','Release','--no-build','--no-restore','--filter','Category!=PostgreSql','--logger',('trx;LogFileName='+$project.Assembly+'.trx'),'--results-directory',$scratch) ($project.Assembly+'.log')
-                $finished=[DateTimeOffset]::UtcNow
-                $validated=Assert-PublicCiOfflineTrx ([IO.File]::ReadAllBytes($raw)) $expected $project.Assembly $started $finished
-                $safe=Join-Path $ProofDirectory ('offline/'+$project.Assembly+'.trx')
-                Save-PublicCiOfflineTrx $validated $safe $project.Assembly
-                $inventory=@($validated.Rows|ForEach-Object {Get-PublicCiArchivedCaseName $_}|Sort-Object -CaseSensitive)
-                $report.suites+=@{assembly=$project.Assembly;passed=$validated.Count;inventory=$inventory;start=$started.ToString('O');finish=$finished.ToString('O');sha256=(Get-FileHash -LiteralPath $safe).Hash}
-                Save-CiReport
+                Invoke-CiOfflineSuite $project $expected
             }
             Set-CiPhase 'AUDIT'
             Run-CiDotnet @('list','SiteFactory.slnx','package','--vulnerable','--include-transitive','--no-restore') 'audit.log'

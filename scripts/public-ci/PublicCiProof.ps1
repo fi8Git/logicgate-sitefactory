@@ -218,6 +218,61 @@ function Get-PublicCiArchivedCaseName($Row) {
     return $Row.class+'.'+$Row.method+'(case-sha256:'+$Row.caseHash+';id:'+$id+')'
 }
 
+function Get-PublicCiOfflineFailureDiagnostic([string]$TrxPath,[string[]]$Expected,[string]$Assembly,[Nullable[int]]$ExitCode) {
+    $project=@(Get-PublicCiProjects | Where-Object {$_.Offline -gt 0 -and $_.Assembly -ceq $Assembly})
+    if($project.Count -ne 1 -or $Expected.Count -ne $project[0].Offline){throw 'SF-CI-INVENTORY'}
+    # Observation only: never a complete/successful TRX proof. Missing values
+    # stay unknown. No XML, streams, exception text or attachments are exported.
+    $diagnostic=[ordered]@{schemaVersion=1;kind='OfflineFailure';suite=$project[0].Assembly;expectedCount=$project[0].Offline;processExitCode=$ExitCode;status='FAILED';completeProof=$false;trx='Missing';counters=$null;observedResults=$null;outcomes=$null;failedCases=@();unidentifiedFailedResults=$null}
+    if(![IO.Path]::Exists($TrxPath)){return $diagnostic}
+    $diagnostic.trx='Invalid'
+    try{
+        if(![IO.File]::Exists($TrxPath) -or ([IO.File]::GetAttributes($TrxPath) -band [IO.FileAttributes]::ReparsePoint) -or [IO.FileInfo]::new($TrxPath).Length -gt 4194304){return $diagnostic}
+        $document=Read-PublicPostgreSqlTrxBytes ([IO.File]::ReadAllBytes($TrxPath))
+    }catch{return $diagnostic}
+    if($document.DocumentElement.LocalName -cne 'TestRun' -or $document.DocumentElement.NamespaceURI -cne 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010'){return $diagnostic}
+    $diagnostic.trx='Present'
+    $counterNames=@('total','executed','passed','failed','error','timeout','aborted','inconclusive','passedButRunAborted','notRunnable','notExecuted','disconnected','warning','completed','inProgress','pending')
+    $counter=@($document.SelectNodes("/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']"))
+    if($counter.Count -eq 1){
+        $diagnostic.counters=[ordered]@{}
+        foreach($attribute in $counter[0].Attributes){
+            $value=0
+            if($counterNames -ccontains $attribute.Name -and [int]::TryParse($attribute.Value,[ref]$value) -and $value -ge 0){$diagnostic.counters[$attribute.Name]=$value}
+        }
+    }
+    $authorized=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    $pattern='\A'+[regex]::Escape($Assembly)+'\.[A-Za-z0-9_.+]+\.[A-Za-z0-9_]+\z'
+    foreach($name in $Expected){$method=$name.Split('(')[0];if($method -cmatch $pattern){[void]$authorized.Add($method)}}
+    $definitions=[Collections.Generic.Dictionary[string,object]]::new([StringComparer]::Ordinal)
+    foreach($definition in $document.SelectNodes("/*[local-name()='TestRun']/*[local-name()='TestDefinitions']/*[local-name()='UnitTest']")){
+        try{$id=Convert-PublicPostgreSqlGuid $definition.GetAttribute('id')}catch{continue}
+        if(!$definitions.TryAdd($id,$definition)){$definitions[$id]=$null}
+    }
+    $results=@($document.SelectNodes("/*[local-name()='TestRun']/*[local-name()='Results']/*[local-name()='UnitTestResult']"))
+    $diagnostic.observedResults=$results.Count;$diagnostic.outcomes=[ordered]@{};$failed=0
+    $outcomes=@('Passed','Failed','Error','Timeout','Aborted','Inconclusive','NotRunnable','NotExecuted','Disconnected','Warning','Completed','InProgress','Pending','PassedButRunAborted')
+    $ids=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach($result in $results){
+        $outcome=$result.GetAttribute('outcome');$bucket=if($outcomes -ccontains $outcome){$outcome}else{'Unrecognized'}
+        if(!$diagnostic.outcomes.Contains($bucket)){$diagnostic.outcomes[$bucket]=0};$diagnostic.outcomes[$bucket]++
+        if($outcome -cne 'Failed'){continue};$failed++
+        try{
+            $id=Convert-PublicPostgreSqlGuid $result.GetAttribute('testId')
+            $execution=Convert-PublicPostgreSqlGuid $result.GetAttribute('executionId')
+            if(!$ids.Add($id) -or !$definitions.ContainsKey($id) -or $null -eq $definitions[$id]){continue}
+            $method=@($definitions[$id].SelectNodes("*[local-name()='TestMethod']"))
+            $definitionExecution=@($definitions[$id].SelectNodes("*[local-name()='Execution']"))
+            if($method.Count -ne 1 -or $definitionExecution.Count -ne 1 -or $definitionExecution[0].GetAttribute('id') -cne $execution -or [IO.Path]::GetFileName($method[0].GetAttribute('codeBase').Replace('\','/')) -ine ($Assembly+'.dll')){continue}
+            $qualified=$method[0].GetAttribute('className')+'.'+$method[0].GetAttribute('name')
+            if(!$authorized.Contains($qualified) -or $result.GetAttribute('testName').Split('(')[0] -cne $qualified){continue}
+            $diagnostic.failedCases+=@{test=$qualified;id=$id}
+        }catch{continue}
+    }
+    $diagnostic.unidentifiedFailedResults=$failed-$diagnostic.failedCases.Count
+    return $diagnostic
+}
+
 function Assert-PublicCiOfflineTrx([byte[]]$Bytes,[string[]]$Expected,[string]$Assembly,[DateTimeOffset]$Start,[DateTimeOffset]$Finish,[switch]$Archived) {
     # Reuse P04's secure bounded XML parser, not a second PostgreSQL parser.
     $document=Read-PublicPostgreSqlTrxBytes $Bytes
