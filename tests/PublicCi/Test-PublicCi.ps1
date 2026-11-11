@@ -395,6 +395,103 @@ try{
     Test-PhaseReport 'BUILD' 'Windows' $false $false
     Test-PhaseReport 'BUILD' 'Windows' $false $false $true
 
+    # Real nonzero child processes feed native-shaped red/partial TRX fixtures
+    # through the production suite runner and its actual catch/finally cleanup.
+    # These are counter-proofs, never passed through the success TRX archiver.
+    function Test-OfflineFailure([string]$Case){
+        $ExpectedCommit=$commit;$RunId='offline-failure-fixture';$Attempt='1';$name='Windows';$environment=@{}
+        $fixtureProject=@(Get-PublicCiProjects | Where-Object Assembly -ceq 'LogicGate.SiteFactory.Domain.Tests')[0]
+        $fixtureNames=@(0..($fixtureProject.Offline-1) | ForEach-Object {$fixtureProject.Assembly+'.Fixture.Case'+$_})
+        $marker='fixture-private-argument-and-exception';$fixtureNames[0]+='(value: "'+$marker+'")'
+        $ProofDirectory=Join-Path $temporary ('failures/'+[Guid]::NewGuid().ToString('N'))
+        [void][IO.Directory]::CreateDirectory($ProofDirectory)
+        $scratch=Join-Path ([IO.Path]::GetTempPath()) ('sitefactory-public-ci-'+[Guid]::NewGuid().ToString('N'))
+        [void][IO.Directory]::CreateDirectory($scratch);$scratchOwned=$true
+        foreach($definition in $functions | Where-Object Name -cin @('Save-CiReport','Set-CiPhase','Get-CiFailureCode','Run-CiDotnet','Invoke-CiOfflineSuite')){. ([scriptblock]::Create($definition.Extent.Text))}
+        . ([scriptblock]::Create($reportAssignment.Extent.Text))
+        $seed=Join-Path $scratch 'fixture.xml';$raw=Join-Path $scratch ($fixtureProject.Assembly+'.trx')
+        $xml=[Xml.XmlDocument]::new();$ns='http://microsoft.com/schemas/VisualStudio/TeamTest/2010'
+        $root=$xml.CreateElement('TestRun',$ns);[void]$xml.AppendChild($root)
+        $results=$xml.CreateElement('Results',$ns);$definitions=$xml.CreateElement('TestDefinitions',$ns);$entries=$xml.CreateElement('TestEntries',$ns)
+        foreach($node in @($results,$definitions,$entries)){[void]$root.AppendChild($node)}
+        $rows=@(Rows $fixtureProject.Assembly $fixtureProject.Offline $fixtureNames)
+        for($i=0;$i -lt $rows.Count;$i++){
+            $row=$rows[$i];$result=$xml.CreateElement('UnitTestResult',$ns)
+            foreach($pair in @(@('testId',$row.id),@('executionId',$row.execution),@('testName',$fixtureNames[$i]),@('outcome',$(if($i -eq 0 -and $Case -cnotin @('incomplete','nonzero-passed','success')){'Failed'}else{'Passed'})),@('duration','00:00:00'))){$result.SetAttribute($pair[0],$pair[1])}
+            [void]$results.AppendChild($result)
+            $unit=$xml.CreateElement('UnitTest',$ns);$unit.SetAttribute('id',$row.id)
+            $method=$xml.CreateElement('TestMethod',$ns);$method.SetAttribute('className',$row.class);$method.SetAttribute('name',$row.method);$method.SetAttribute('codeBase',($fixtureProject.Assembly+'.dll'));[void]$unit.AppendChild($method)
+            $nativeExecution=$xml.CreateElement('Execution',$ns);$nativeExecution.SetAttribute('id',$row.execution);[void]$unit.AppendChild($nativeExecution);[void]$definitions.AppendChild($unit)
+            $entry=$xml.CreateElement('TestEntry',$ns);$entry.SetAttribute('testId',$row.id);$entry.SetAttribute('executionId',$row.execution);[void]$entries.AppendChild($entry)
+        }
+        $summary=$xml.CreateElement('ResultSummary',$ns);$summary.SetAttribute('outcome',$(if($Case -cin @('incomplete','nonzero-passed','success')){'Completed'}else{'Failed'}))
+        $counter=$xml.CreateElement('Counters',$ns)
+        foreach($pair in @(@('total',$rows.Count),@('executed',$rows.Count),@('passed',$(if($Case -cin @('incomplete','nonzero-passed','success')){$rows.Count}else{$rows.Count-1})),@('failed',$(if($Case -cin @('incomplete','nonzero-passed','success')){0}else{1})))){$counter.SetAttribute($pair[0],[string]$pair[1])}
+        [void]$summary.AppendChild($counter);[void]$root.AppendChild($summary)
+        $output=$xml.CreateElement('Output',$ns);$output.InnerText=$marker+' password=fixture-canary '+$scratch;[void]$root.AppendChild($output)
+        $errorInfo=$xml.CreateElement('ErrorInfo',$ns);$errorMessage=$xml.CreateElement('Message',$ns);$errorMessage.InnerText=$marker
+        $stackTrace=$xml.CreateElement('StackTrace',$ns);$stackTrace.InnerText=$scratch+'/'+$marker
+        [void]$errorInfo.AppendChild($errorMessage);[void]$errorInfo.AppendChild($stackTrace);[void]$output.AppendChild($errorInfo)
+        $attachments=$xml.CreateElement('ResultFiles',$ns);$attachment=$xml.CreateElement('ResultFile',$ns);$attachment.SetAttribute('path',($scratch+'/'+$marker));[void]$attachments.AppendChild($attachment);[void]$root.AppendChild($attachments)
+        if($Case -ceq 'incomplete'){[void]$results.RemoveChild($results.LastChild)}
+        if($Case -ceq 'unapproved'){
+            $method=$definitions.FirstChild.SelectSingleNode("*[local-name()='TestMethod']");$method.SetAttribute('className','Unapproved.Namespace')
+            $results.FirstChild.SetAttribute('testName','Unapproved.Namespace.Case0(value: "'+$marker+'")')
+        }
+        $xml.Save($seed)
+        $fixture=Join-Path $scratch 'child.ps1'
+        $quote={param($value) "'"+$value.Replace("'","''")+"'"}
+        $childExit=if($Case -cin @('incomplete','invalid','success')){0}else{17}
+        $body=if($Case -ceq 'missing'){''}elseif($Case -ceq 'invalid'){'[IO.File]::WriteAllText('+(& $quote $raw)+',"<broken")'}else{
+            '[xml]$x=Get-Content -LiteralPath '+(& $quote $seed)+' -Raw; $now=[DateTimeOffset]::UtcNow.ToString("O"); foreach($r in $x.SelectNodes('+(& $quote "//*[local-name()='UnitTestResult']")+')){$r.SetAttribute("startTime",$now);$r.SetAttribute("endTime",$now)}; $x.Save('+(& $quote $raw)+')'
+        }
+        $body+="`n[Console]::WriteLine('"+$marker+"');[Console]::Error.WriteLine('"+$marker+"');exit "+$childExit
+        [IO.File]::WriteAllText($fixture,$body)
+        function dotnet {& pwsh -NoProfile -File $fixture;$global:LASTEXITCODE=$LASTEXITCODE}
+        $previousExit=$global:LASTEXITCODE
+        $productionSave=${function:Save-CiReport};$injected=@{value=$false}
+        function Save-CiReport {
+            if($Case -ceq 'write-failure' -and $report.Contains('failure') -and !$injected.value){$injected.value=$true;throw $marker}
+            & $productionSave
+        }
+        function Remove-PublicCiOwnedDirectory([string]$Path){
+            $persisted=Get-Content (Join-Path $ProofDirectory 'report.json') -Raw | ConvertFrom-Json -AsHashtable
+            Check ($persisted.status -ceq 'FAILED') 'suite proof never passes before cleanup'
+            if($Case -cne 'success'){
+                if($Case -ceq 'write-failure'){Check $injected.value 'diagnostic persistence fault actually exercised'}else{
+                    Check ($persisted.ContainsKey('failure') -and $persisted.failure.processExitCode -eq $childExit) 'failure and real child exit survive before scratch cleanup'
+                }
+                Check (!(Test-Path (Join-Path $ProofDirectory ('offline/'+$fixtureProject.Assembly+'.trx')))) 'red or incomplete TRX never uses success archive'
+            }
+            & $realCleanup $Path
+        }
+        $exercise=[scriptblock]::Create('try { Set-CiPhase ''TEST''; Invoke-CiOfflineSuite $fixtureProject $fixtureNames; $report.status=''PASSED'';$report.code=$null } '+$execution[0].CatchClauses[0].Extent.Text+' finally '+$execution[0].Finally.Extent.Text)
+        $previousError=[Console]::Error;$capture=[IO.StringWriter]::new()
+        try{
+            [Console]::SetError($capture);$published=@(& $exercise)
+            $text=Get-Content (Join-Path $ProofDirectory 'report.json') -Raw;$actual=$text | ConvertFrom-Json -AsHashtable
+            Check ($actual.cleanup -ceq 'Completed' -and ![IO.Path]::Exists($scratch)) ('suite failure cleanup remains real: '+$Case)
+            if($Case -ceq 'success'){
+                Check ($actual.status -ceq 'PASSED' -and $actual.suites.Count -eq 1 -and $actual.suites[0].passed -eq $fixtureProject.Offline) 'unchanged success path validates and archives all cases'
+            }else{
+                Check ($actual.status -ceq 'FAILED' -and $actual.suites.Count -eq 0 -and !$actual.failure.completeProof) 'partial failure never becomes complete passed proof'
+                Check ($actual.failure.suite -ceq $fixtureProject.Assembly -and $actual.failure.processExitCode -eq $childExit) 'closed suite and actual native exit retained'
+                Check ($actual.code -ceq $(if($childExit){'SF-CI-DOTNET'}elseif($Case -ceq 'invalid'){'SF-CI-FAILED'}else{'SF-CI-TRX'})) ('original failure code retained: '+$Case)
+                Check ($actual.failure.trx -ceq $(if($Case -ceq 'missing'){'Missing'}elseif($Case -ceq 'invalid'){'Invalid'}else{'Present'})) 'TRX missing, invalid or present distinguished'
+                if($Case -cin @('missing','invalid')){Check ($null -eq $actual.failure.observedResults -and $null -eq $actual.failure.counters) 'unavailable results remain unknown'}else{
+                    Check ($actual.failure.observedResults -eq $(if($Case -ceq 'incomplete'){$fixtureProject.Offline-1}else{$fixtureProject.Offline})) 'observed partial result count is not fabricated'
+                    Check ($actual.failure.counters.total -eq $fixtureProject.Offline) 'reported TRX counters retained separately from observations'
+                    Check ($actual.failure.failedCases.Count -eq $(if($Case -cin @('incomplete','nonzero-passed','unapproved')){0}else{1})) 'only authorized failed identities retained without arguments'
+                }
+            }
+            foreach($forbidden in @($marker,$scratch,'password=fixture-canary','ResultFile','StackTrace')){Check (!(($text+$capture.ToString()+($published -join '')).Contains($forbidden,[StringComparison]::Ordinal))) 'failure observations disclose no arguments, paths, output or attachment'}
+        }finally{
+            [Console]::SetError($previousError);$capture.Dispose();$global:LASTEXITCODE=$previousExit
+            if([IO.Directory]::Exists($scratch)){& $realCleanup $scratch}
+        }
+    }
+    foreach($case in @('failed','missing','incomplete','invalid','nonzero-passed','unapproved','write-failure','success')){Test-OfflineFailure $case}
+
     # One real script invocation fails during COPY, before any restore or provider.
     $emptyRoot=Join-Path $temporary 'empty-source';[void][IO.Directory]::CreateDirectory($emptyRoot)
     $proof=Join-Path $temporary 'copy-failure-proof'
