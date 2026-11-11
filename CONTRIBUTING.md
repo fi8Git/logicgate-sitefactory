@@ -165,11 +165,13 @@ enregistrés explicitement, sans découverte de DLL au runtime
 [ADR-0037](docs/adr/0037-compose-modules-explicitly-without-dynamic-loading.md)).
 
 La version de développement est déclarée dans Directory.Build.props ; les
-capacités restent dans CHANGELOG sous **Unreleased**. Aucun package NuGet ou
-release officielle publié, repository public encore à créer. CI publique
-préparée, pas de preuve distante Windows/Linux acquise ici ; SourceLink public
-**PENDING**. Les documents de vision/opérations peuvent encore décrire des
-capacités futures, pas une autorisation de les implémenter ou de les exécuter.
+capacités restent dans CHANGELOG sous **Unreleased**. Aucun package NuGet ni
+aucune release officielle ne sont publiés. Le dépôt public
+[fi8Git/logicgate-sitefactory](https://github.com/fi8Git/logicgate-sitefactory)
+possède son propre historique Git ; sa CI Windows/Linux est opérationnelle,
+avec SourceLink **VERIFIED** sur les campagnes publiques validées.
+Les documents de vision/opérations peuvent encore décrire des capacités futures,
+pas une autorisation de les implémenter ou de les exécuter.
 
 Le contributeur doit inspecter le repository réel avant :
 
@@ -1868,7 +1870,7 @@ Le [guard public](tests/PublicCi/Test-PublicCi.ps1) utilise YamlDotNet déjà
 restauré et vérifie composition fermée, workflows/scripts, références/ressources
 et contre-exemples synthétiques. Conserver les assertions exactes et négatives.
 
-Pour une **future validation complète isolée**, locale et sans PostgreSQL,
+Pour une **validation complète isolée**, locale et sans PostgreSQL,
 le script public versionné peut être invoqué avec un dossier de preuves neuf :
 
 ```powershell
@@ -1879,10 +1881,11 @@ Le dossier ne doit pas déjà exister. Ce mode copie seulement le périmètre pu
 dans une racine temporaire extérieure au Git source, emploie un cache NuGet
 isolé, vérifie les 23 projets, restore verrouillé/format/build et les onze
 suites offline, puis les inventaires et TRX. Il ne lance pas PostgreSQL.
-Une copie n'est pas un export public approuvé ; un succès local n'est pas un
-résultat GitHub Actions ni une validation SourceLink du futur repository.
-Ce mode est aussi adapté au repository encore mixte, sans importer de source
-ou de binaire Business.
+Une copie n'est pas un export public approuvé ; un succès local ne remplace pas
+un résultat GitHub Actions. L'appel ci-dessus sans `-PublicRepository` ne
+revendique pas de validation SourceLink ; la CI publique fournit explicitement
+l'identité du dépôt et vérifie le SHA checkouté. Le périmètre copié et testé
+reste exclusivement public, sans importer de source ou de binaire Business.
 
 ---
 
@@ -1929,7 +1932,7 @@ sans baisse de charge ou allongement des deadlines.
 
 **P03-F1 OPEN / UNKNOWN** : **749 HTTP 200 / 19 HTTP 503 historiques**,
 cause non démontrée, risque résiduel accepté avec réserve.
-Réexamen obligatoire **2026-10-23**, sans prolongation tacite.
+Réexamen obligatoire **2026-11-16**, sans prolongation tacite.
 Les campagnes vertes ne prouvent pas une correction causale ;
 [observabilité et preuves historiques](tests/readiness-concurrency-regression.md).
 Les vingt Facts Business historiques et leurs vrais exécutables restent privés,
@@ -2002,16 +2005,20 @@ Un pourcentage élevé ne compense pas l’absence de test pertinent.
 
 ## 32.1 Checks attendus
 
-Le [workflow public](.github/workflows/ci.yml) prépare deux jobs offline
+Le [workflow public](.github/workflows/ci.yml) exécute deux jobs offline
 Windows/Linux et un job PostgreSQL REQUIRED distinct, puis une agrégation
 fail-closed des preuves. Les [scripts publics](scripts/public-ci/Invoke-PublicCi.ps1)
 restent invocables localement ; aucune donnée, assembly ou autorisation d'accès
 à Business ne doit être requise.
 
-La CI distante n'est **pas encore validée** ; SourceLink dans le véritable
-repository public reste **PENDING**. Une preuve locale Windows .NET contre
+La CI distante est validée sur Windows et Linux ; les campagnes publiques
+validées portent SourceLink **VERIFIED**. Dernier run `main` validé :
+[43009023135](https://github.com/fi8Git/logicgate-sitefactory/actions/runs/43009023135),
+SHA `4be284f4fdfdf621e7bc850833e02c4820b062a9` : onze suites et 2 726 Passed
+par plateforme, PostgreSQL REQUIRED 23 Facts sur cinq shards, P03 768/768,
+27 TRX, cleanup et agrégation conformes. Une preuve locale Windows .NET contre
 PostgreSQL Linux ne prouve pas .NET Linux distant. Ne pas afficher de badge,
-run ou SHA public fictif. Le repository public n'est pas encore créé.
+run ou SHA public fictif.
 
 La liste suivante reste un catalogue de contrôles selon le périmètre,
 **pas** l'affirmation qu'ils sont tous implémentés dans le workflow courant :
@@ -2902,7 +2909,8 @@ Avant de fusionner :
 | 2026-07-30 | Définition du workflow de branches, commits et pull requests |
 | 2026-07-30 | Ajout des règles pour mainteneur unique et agents IA |
 | 2026-07-30 | Ajout des exigences de tests, sécurité, migrations et production |
-| 2026-10-20 | Adaptation R03 au périmètre public, commandes offline/guards et harnais P04 REQUIRED ; CI distante encore non validée |
+| 2026-10-20 | Adaptation R03 au périmètre public, commandes offline/guards et harnais P04 REQUIRED ; CI distante encore non validée à cette date |
+| 2026-11-11 | État du dépôt public et de sa CI validée, SourceLink VERIFIED, preuve main de référence et échéance actuelle P03-F1 |
 
 ---
 

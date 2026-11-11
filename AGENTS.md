@@ -13,7 +13,7 @@ Il s’adresse notamment à :
 
 Les agents doivent considérer ce document comme une instruction opérationnelle obligatoire.
 
-SiteFactory est un moteur modulaire .NET 10 dont le périmètre public open source est placé sous Apache-2.0 pour son code original, avec les attributions de LICENSE et NOTICE. Le Core, le ModuleSdk, le module Documentation et les bibliothèques runtime/PostgreSQL génériques ne dépendent d'aucun module Business privé. Le repository public et les packages ne sont pas encore publiés ; aucune autorisation de publication ne découle de ce document.
+SiteFactory est un moteur modulaire .NET 10 dont le périmètre public open source est placé sous Apache-2.0 pour son code original, avec les attributions de LICENSE et NOTICE. Le Core, le ModuleSdk, le module Documentation et les bibliothèques runtime/PostgreSQL génériques ne dépendent d'aucun module Business privé. Le dépôt public fi8Git/logicgate-sitefactory existe avec son propre historique Git. Aucun package NuGet ni aucune release officielle ne sont publiés ; aucune autorisation de publication ne découle de ce document.
 
 L’objectif d’un agent n’est pas uniquement de produire du code compilable.
 
@@ -152,15 +152,19 @@ deux inventaires PostgreSQL fermés : 20 Facts Infrastructure et 3 Facts Hosts,
 cinq shards séquentiels. Ses preuves locales acquises ne doivent pas être
 présentées comme rejouées pendant une tâche documentaire.
 
-La CI publique Windows/Linux est préparée mais non validée à distance.
-SourceLink du véritable repository public reste PENDING ; le repository public
-n'est pas encore créé. Ne pas confondre preuve locale Windows .NET vers
-PostgreSQL Linux et validation multiplateforme distante.
+La CI publique Windows/Linux est opérationnelle et validée à distance dans
+fi8Git/logicgate-sitefactory, avec SourceLink VERIFIED. Dernier run `main`
+validé : [43009023135](https://github.com/fi8Git/logicgate-sitefactory/actions/runs/43009023135),
+SHA `4be284f4fdfdf621e7bc850833e02c4820b062a9` : 2 726 Passed par plateforme,
+23 Facts PostgreSQL sur cinq shards, P03 768/768, 27 TRX, cleanup et agrégation
+conformes. Ne pas confondre preuve locale Windows .NET vers PostgreSQL Linux
+et validation multiplateforme distante.
 
 **P03-F1 reste OPEN / UNKNOWN** : 749 HTTP 200 / 19 HTTP 503 historiques,
 cause non démontrée, risque accepté avec réserve. Réexamen obligatoire
-le **2026-10-23**, sans prolongation tacite ni correction causale prétendue
-à partir de campagnes vertes.
+le **2026-11-16**, sans prolongation tacite ni correction causale prétendue
+à partir de campagnes vertes. Voir les
+[observations et preuves historiques](tests/readiness-concurrency-regression.md).
 
 Les politiques ci-dessous restent obligatoires même lorsqu'elles concernent
 des fonctions futures : elles n'annoncent pas leur implémentation. En particulier,

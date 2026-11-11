@@ -1,14 +1,18 @@
 # LogicGate SiteFactory
 
+[![Public CI](https://github.com/fi8Git/logicgate-sitefactory/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fi8Git/logicgate-sitefactory/actions/workflows/ci.yml?query=branch%3Amain)
+
 SiteFactory est un moteur modulaire **.NET 10** de validation, de planification et
 de génération déterministe. Son périmètre public comprend le Core, le ModuleSdk,
 le module Documentation et les bibliothèques runtime/PostgreSQL génériques.
 
-Le code original du périmètre public est destiné à être distribué sous
+Le code original du périmètre public est distribué sous
 [Apache-2.0](LICENSE), avec les attributions de [NOTICE](NOTICE).
-Cette révision prépare le futur repository public : **il n'est pas encore créé**,
-aucun package NuGet ni aucune release officielle ne sont publiés.
-La CI publique Windows/Linux est préparée, **pas encore validée à distance**.
+Le dépôt public [fi8Git/logicgate-sitefactory](https://github.com/fi8Git/logicgate-sitefactory)
+existe et possède son propre historique Git, distinct de l'historique privé.
+La CI publique est opérationnelle sur **Windows et Linux**, avec un job
+**PostgreSQL REQUIRED** distinct et **SourceLink VERIFIED** sur les campagnes
+publiques validées. Aucun package NuGet ni aucune release officielle ne sont publiés.
 
 ## Capacités disponibles
 
@@ -152,9 +156,10 @@ Budget de 360 s **par shard**, pas une limite globale implicite.
 Secret/instance absent ou invalide, résultat absent/ignoré/échoué, TRX incohérent
 ou cleanup incomplet rendent la preuve rouge, sans retry jusqu'au vert.
 
-La campagne finale acquise P04 a produit **23/23 Passed et cinq TRX**,
+La campagne P04 historique a produit **23/23 Passed et cinq TRX**,
 Windows .NET contre PostgreSQL Linux ; P03 a acquis **32 × 24 = 768/768 HTTP 200**.
-Ce ne sont ni une nouvelle campagne, ni une preuve CI distante Windows/Linux.
+Ces preuves historiques restent distinctes de la validation CI publique décrite
+ci-dessous ; elles ne sont pas rejouées par cette mise à jour documentaire.
 Voir [rôles](tests/PostgreSql/roles.md),
 [migrations/bootstrap](tests/PostgreSql/migrations.md) et
 [permissions/diagnostics](tests/PostgreSql/permissions-and-errors.md).
@@ -163,24 +168,40 @@ nécessaire au harnais public.
 
 **Risque connu P03-F1 : OPEN / UNKNOWN.** Historique : **749 HTTP 200 /
 19 HTTP 503**, cause non démontrée, risque résiduel accepté avec réserve.
-Réexamen obligatoire **2026-10-23**, sans prolongation tacite.
+Échéance actuelle du réexamen : **2026-11-16**, sans prolongation tacite.
 Les campagnes vertes n'ont pas démontré de correction causale.
 [Observabilité et limites](tests/readiness-concurrency-regression.md).
 
 ## CI, limites et publication
 
 Le [workflow public](.github/workflows/ci.yml) et les
-[scripts public-ci](scripts/public-ci/Invoke-PublicCi.ps1) préparent les suites
+[scripts public-ci](scripts/public-ci/Invoke-PublicCi.ps1) exécutent les suites
 offline Windows/Linux, guards de composition et job PostgreSQL REQUIRED distinct.
 La validation refuse les preuves incomplètes ; elle ne repose pas sur le seul
-exit code. **CI distante non validée** à ce stade. SourceLink dans le véritable
-repository public reste **PENDING** ; aucune URL ou révision publique n'est inventée.
+exit code. Les campagnes publiques validées contrôlent **SourceLink VERIFIED**,
+les inventaires, les TRX, le cleanup et l'agrégation.
+
+Dernier run `main` validé :
+[43009023135](https://github.com/fi8Git/logicgate-sitefactory/actions/runs/43009023135),
+sur le SHA
+[`4be284f4fdfdf621e7bc850833e02c4820b062a9`](https://github.com/fi8Git/logicgate-sitefactory/commit/4be284f4fdfdf621e7bc850833e02c4820b062a9).
+
+| Preuve publique | Résultat |
+|---|---|
+| Windows offline | 11 suites, **2 726 Passed** |
+| Linux offline | 11 suites, **2 726 Passed** |
+| PostgreSQL REQUIRED sur Linux | **23 Facts Passed**, cinq shards, cinq TRX |
+| P03 | **768/768 HTTP 200** |
+| SourceLink, 27 TRX, cleanup et agrégation | **Conformes** |
+
+Les deux plateformes exécutent les mêmes suites offline. Ces résultats ne
+démontrent aucune correction causale du risque historique P03-F1.
 
 Ne sont pas annoncés comme livrés : application Business complète, modules
 métier propriétaires, déploiement client de production, exploitation/provisioning
 PostgreSQL production, backup/restore, upgrade, chargement dynamique de modules
-ou publication NuGet. Le découpage physique public/privé et l'export assaini
-restent soumis à leur décision explicite ; aucune publication n'a lieu ici.
+ou publication NuGet. La publication de packages et de releases nécessite une
+décision distincte ; aucune n'est réalisée par une contribution ordinaire.
 
 ## Contribution et licence
 
