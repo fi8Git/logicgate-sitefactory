@@ -33,11 +33,12 @@ réversible lorsque nécessaire
 sans effet implicite sur la production
 ```
 
-Ce guide concerne le **périmètre public SiteFactory**, code original sous
+Ce guide concerne **SiteFactory, moteur open source modulaire .NET 10**, sous
 [Apache-2.0](LICENSE), avec les attributions de [NOTICE](NOTICE).
-Les modules/templates/assets Business restent privés et ne sont jamais une
-dépendance requise du public. Aucun droit sur un contenu tiers ou une sortie
-client générée n'est présumé par cette licence.
+Les composants génériques se construisent et se testent sans dépendance
+propriétaire obligatoire. Les consommateurs intègrent leurs propres modules
+par les contrats publics du ModuleSdk. Aucun droit sur un contenu tiers ou une
+sortie client générée n'est présumé par cette licence.
 
 Une contribution n’implique aucun droit automatique :
 
@@ -160,16 +161,13 @@ existe par API C#, pas par une nouvelle commande.
 Les bibliothèques pures Runtime.Contracts/Runtime restent indépendantes
 d'IConfiguration/DI/Hosting et d'EF/Npgsql. Les modules sont compilés puis
 enregistrés explicitement, sans découverte de DLL au runtime
-([ADR-0033](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md),
-[ADR-0034](docs/adr/0034-apache-licence-choice-for-publish-site-factory.md),
+([ADR-0034](docs/adr/0034-apache-licence-choice-for-publish-site-factory.md),
 [ADR-0037](docs/adr/0037-compose-modules-explicitly-without-dynamic-loading.md)).
 
 La version de développement est déclarée dans Directory.Build.props ; les
 capacités restent dans CHANGELOG sous **Unreleased**. Aucun package NuGet ni
-aucune release officielle ne sont publiés. Le dépôt public
-[fi8Git/logicgate-sitefactory](https://github.com/fi8Git/logicgate-sitefactory)
-possède son propre historique Git ; sa CI Windows/Linux est opérationnelle,
-avec SourceLink **VERIFIED** sur les campagnes publiques validées.
+aucune release officielle ne sont publiés. La CI Windows/Linux/PostgreSQL est
+opérationnelle, avec SourceLink **VERIFIED** sur les campagnes publiques validées.
 Les documents de vision/opérations peuvent encore décrire des capacités futures,
 pas une autorisation de les implémenter ou de les exécuter.
 
@@ -1881,8 +1879,8 @@ Le dossier ne doit pas déjà exister. Ce mode copie seulement le périmètre pu
 dans une racine temporaire extérieure au Git source, emploie un cache NuGet
 isolé, vérifie les 23 projets, restore verrouillé/format/build et les onze
 suites offline, puis les inventaires et TRX. Il ne lance pas PostgreSQL.
-Une copie n'est pas un export public approuvé ; un succès local ne remplace pas
-un résultat GitHub Actions. L'appel ci-dessus sans `-PublicRepository` ne
+Un succès local ne remplace pas un résultat GitHub Actions.
+L'appel ci-dessus sans `-PublicRepository` ne
 revendique pas de validation SourceLink ; la CI publique fournit explicitement
 l'identité du dépôt et vérifie le SHA checkouté. Le périmètre copié et testé
 reste exclusivement public, sans importer de source ou de binaire Business.
@@ -1935,8 +1933,6 @@ cause non démontrée, risque résiduel accepté avec réserve.
 Réexamen obligatoire **2026-11-16**, sans prolongation tacite.
 Les campagnes vertes ne prouvent pas une correction causale ;
 [observabilité et preuves historiques](tests/readiness-concurrency-regression.md).
-Les vingt Facts Business historiques et leurs vrais exécutables restent privés,
-sans mélange avec les vingt Facts Infrastructure publics.
 
 ---
 
@@ -2909,7 +2905,7 @@ Avant de fusionner :
 | 2026-07-30 | Définition du workflow de branches, commits et pull requests |
 | 2026-07-30 | Ajout des règles pour mainteneur unique et agents IA |
 | 2026-07-30 | Ajout des exigences de tests, sécurité, migrations et production |
-| 2026-10-20 | Adaptation R03 au périmètre public, commandes offline/guards et harnais P04 REQUIRED ; CI distante encore non validée à cette date |
+| 2026-10-20 | Documentation des commandes de validation, guards de qualité et harnais PostgreSQL REQUIRED |
 | 2026-11-11 | État du dépôt public et de sa CI validée, SourceLink VERIFIED, preuve main de référence et échéance actuelle P03-F1 |
 
 ---

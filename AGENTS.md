@@ -13,7 +13,7 @@ Il s’adresse notamment à :
 
 Les agents doivent considérer ce document comme une instruction opérationnelle obligatoire.
 
-SiteFactory est un moteur modulaire .NET 10 dont le périmètre public open source est placé sous Apache-2.0 pour son code original, avec les attributions de LICENSE et NOTICE. Le Core, le ModuleSdk, le module Documentation et les bibliothèques runtime/PostgreSQL génériques ne dépendent d'aucun module Business privé. Le dépôt public fi8Git/logicgate-sitefactory existe avec son propre historique Git. Aucun package NuGet ni aucune release officielle ne sont publiés ; aucune autorisation de publication ne découle de ce document.
+SiteFactory est un moteur open source modulaire .NET 10, distribué sous Apache-2.0 pour son code original, avec les attributions de LICENSE et NOTICE. Le Core, le ModuleSdk, le module Documentation et les bibliothèques runtime/PostgreSQL génériques se construisent et se testent sans dépendance propriétaire obligatoire. Les consommateurs intègrent leurs propres modules par les contrats publics du ModuleSdk. Aucun package NuGet ni aucune release officielle ne sont publiés ; aucune autorisation de publication ne découle de ce document.
 
 L’objectif d’un agent n’est pas uniquement de produire du code compilable.
 
@@ -118,10 +118,10 @@ d'un repository documentaire est accessible par composition C#, pas par une
 commande CLI inventée. Les bibliothèques runtime/PostgreSQL ne constituent pas
 un générateur d'application Business dans la distribution publique.
 
-Les modules, templates et assets Business restent privés. La dépendance va du
-privé vers les contrats publics, jamais l'inverse. Après séparation physique,
-aucun ProjectReference entre repositories n'est autorisé
-([ADR-0033](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md)).
+Les modules consommateurs s'intègrent par les contrats publics du ModuleSdk.
+Leurs dépendances vont vers ces contrats, jamais l'inverse : le Core reste
+indépendant des implémentations métier concrètes. Aucun ProjectReference entre
+repositories n'est autorisé.
 
 Toute contribution doit posséder un périmètre et une responsabilité explicites.
 Aucun accès à un repository privé ne doit être nécessaire pour construire ou
@@ -130,7 +130,7 @@ ni modifier une classification, allowlist, SHA approuvé ou licence sans décisi
 humaine spécifique.
 
 [ADR-0034](docs/adr/0034-apache-licence-choice-for-publish-site-factory.md) ne
-relicencie automatiquement ni les modules Business, ni les sorties générées,
+relicencie automatiquement ni les modules consommateurs, ni les sorties générées,
 ni les contenus tiers. Leurs droits/notices doivent être conservés.
 
 ---

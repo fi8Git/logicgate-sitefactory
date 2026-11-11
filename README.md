@@ -2,14 +2,14 @@
 
 [![Public CI](https://github.com/fi8Git/logicgate-sitefactory/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fi8Git/logicgate-sitefactory/actions/workflows/ci.yml?query=branch%3Amain)
 
-SiteFactory est un moteur modulaire **.NET 10** de validation, de planification et
-de génération déterministe. Son périmètre public comprend le Core, le ModuleSdk,
+SiteFactory est un moteur open source modulaire **.NET 10** de validation, de
+planification et de génération déterministe. Il comprend le Core, le ModuleSdk,
 le module Documentation et les bibliothèques runtime/PostgreSQL génériques.
 
 Le code original du périmètre public est distribué sous
 [Apache-2.0](LICENSE), avec les attributions de [NOTICE](NOTICE).
-Le dépôt public [fi8Git/logicgate-sitefactory](https://github.com/fi8Git/logicgate-sitefactory)
-existe et possède son propre historique Git, distinct de l'historique privé.
+Le projet est disponible sur
+[GitHub](https://github.com/fi8Git/logicgate-sitefactory).
 La CI publique est opérationnelle sur **Windows et Linux**, avec un job
 **PostgreSQL REQUIRED** distinct et **SourceLink VERIFIED** sur les campagnes
 publiques validées. Aucun package NuGet ni aucune release officielle ne sont publiés.
@@ -41,8 +41,9 @@ publiques validées. Aucun package NuGet ni aucune release officielle ne sont pu
   Ces bibliothèques ne sont pas une application métier ni un outil de
   provisioning de production.
 
-Le moteur ne connaît pas les modules métier privés. Leurs fonctionnalités,
-templates, assets et exécutables clients ne font pas partie de l'offre publique.
+Les composants génériques se construisent et se testent sans dépendance
+propriétaire obligatoire. Les consommateurs intègrent leurs propres modules
+par les contrats publics du ModuleSdk.
 
 ## Solution et frontières
 
@@ -58,8 +59,8 @@ templates, assets et exécutables clients ne font pas partie de l'offre publique
 | Adaptateurs de hosts | [Runtime.Hosting](src/LogicGate.SiteFactory.Runtime.Hosting/LogicGate.SiteFactory.Runtime.Hosting.csproj), [Runtime.AspNetCore](src/LogicGate.SiteFactory.Runtime.AspNetCore/LogicGate.SiteFactory.Runtime.AspNetCore.csproj) |
 | Persistence et opérations explicites | [Infrastructure.PostgreSql](src/LogicGate.SiteFactory.Infrastructure.PostgreSql/LogicGate.SiteFactory.Infrastructure.PostgreSql.csproj), [Migrator](src/LogicGate.SiteFactory.Migrator/LogicGate.SiteFactory.Migrator.csproj) |
 
-Les dépendances vont du privé vers les contrats publics, jamais l'inverse
-([ADR-0033](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md)).
+Les modules consommateurs dépendent des contrats publics ; le Core reste
+indépendant de leurs implémentations concrètes.
 Le [composition root public](src/LogicGate.SiteFactory.Cli/Program.cs) enregistre
 DocumentationModule et transmet une `GenerationComposition` explicite à la CLI.
 Un host externe peut composer ses propres modules par les mêmes contrats,
@@ -156,15 +157,11 @@ Budget de 360 s **par shard**, pas une limite globale implicite.
 Secret/instance absent ou invalide, résultat absent/ignoré/échoué, TRX incohérent
 ou cleanup incomplet rendent la preuve rouge, sans retry jusqu'au vert.
 
-La campagne P04 historique a produit **23/23 Passed et cinq TRX**,
-Windows .NET contre PostgreSQL Linux ; P03 a acquis **32 × 24 = 768/768 HTTP 200**.
-Ces preuves historiques restent distinctes de la validation CI publique décrite
-ci-dessous ; elles ne sont pas rejouées par cette mise à jour documentaire.
+Une campagne complète exige **23/23 Passed et cinq TRX** ; le critère P03 est
+**32 × 24 = 768/768 HTTP 200**. Les résultats CI sont présentés ci-dessous.
 Voir [rôles](tests/PostgreSql/roles.md),
 [migrations/bootstrap](tests/PostgreSql/migrations.md) et
 [permissions/diagnostics](tests/PostgreSql/permissions-and-errors.md).
-L'inventaire Business historique reste privé et distinct, sans dépendance
-nécessaire au harnais public.
 
 **Risque connu P03-F1 : OPEN / UNKNOWN.** Historique : **749 HTTP 200 /
 19 HTTP 503**, cause non démontrée, risque résiduel accepté avec réserve.
@@ -197,8 +194,8 @@ sur le SHA
 Les deux plateformes exécutent les mêmes suites offline. Ces résultats ne
 démontrent aucune correction causale du risque historique P03-F1.
 
-Ne sont pas annoncés comme livrés : application Business complète, modules
-métier propriétaires, déploiement client de production, exploitation/provisioning
+Ne sont pas annoncés comme livrés : application métier complète,
+déploiement client de production, exploitation/provisioning
 PostgreSQL production, backup/restore, upgrade, chargement dynamique de modules
 ou publication NuGet. La publication de packages et de releases nécessite une
 décision distincte ; aucune n'est réalisée par une contribution ordinaire.
@@ -213,5 +210,5 @@ secret ni effet de production implicite.
 [LICENSE](LICENSE), [NOTICE](NOTICE) et
 [ADR-0034](docs/adr/0034-apache-licence-choice-for-publish-site-factory.md)
 définissent la portée Apache-2.0 du code public original et les attributions.
-Les composants tiers conservent leurs licences ; les modules Business et les
+Les composants tiers conservent leurs licences ; les modules consommateurs et les
 sorties client générées ne sont **pas automatiquement relicenciés**.
