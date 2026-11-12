@@ -1,4 +1,4 @@
-# R02: reusable R01 public-solution proof; PostgreSQL parsing/provisioning remains P04.
+# Public solution, symbol and artifact proof; PostgreSQL provisioning remains P04.
 Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot '../../tests/PostgreSql/Public/PostgreSqlProof.ps1')
 
@@ -47,39 +47,32 @@ function Initialize-PublicCiGitMetadata([string]$Checkout,[string]$Work,[string]
     [IO.File]::WriteAllText((Join-Path $metadata 'config'),('[remote "origin"]'+"`n"+'url = '+$url+"`n"),[Text.UTF8Encoding]::new($false))
 }
 
-function Get-PublicCiRoute([string[]]$Paths,[string]$Event,[bool]$PrivateRepository=$false) {
-    # Classify project membership structurally; no excluded source blob is needed.
-    $projects=@(Get-PublicCiProjects)
-    $sourceRoots=@($projects|Where-Object Path -like 'src/*'|ForEach-Object {$_.Path.Substring(0,$_.Path.LastIndexOf('/')+1)})
-    $mixed=@($Paths|Where-Object {
-        ($_.EndsWith('.csproj',[StringComparison]::Ordinal) -and $projects.Path -cnotcontains $_) -or
-        ($_.StartsWith('src/',[StringComparison]::Ordinal) -and !$(foreach($root in $sourceRoots){if($_.StartsWith($root,[StringComparison]::Ordinal)){$true;break}}))
-    }).Count -gt 0
-    if(!$PrivateRepository -and $mixed){throw 'SF-CI-PRIVATE-SOURCE'}
-    if(!$mixed -and @($Paths|Where-Object {$_.StartsWith('.github/workflows/',[StringComparison]::Ordinal) -and $_ -cne '.github/workflows/ci.yml'}).Count){throw 'SF-CI-PRIVATE-WORKFLOW'}
-    return (!$mixed -or $Event -ceq 'workflow_dispatch')
-}
-
 function Get-PublicCiSourcePaths([string]$Root) {
     & git -C $Root rev-parse --show-toplevel *> $null
     $paths=if($LASTEXITCODE -eq 0){@(Invoke-PublicCiGit $Root @('ls-files','--cached','--others','--exclude-standard'))}else{@(Get-ChildItem -LiteralPath $Root -Recurse -File -Force|Where-Object FullName -notmatch '[\\/](bin|obj|\.git)[\\/]'|ForEach-Object {[IO.Path]::GetRelativePath($Root,$_.FullName).Replace('\','/')})}
+    # A complete public checkout must fail closed before the isolated copy;
+    # unknown projects must never disappear through source selection.
+    $projects=@(Get-PublicCiProjects)
+    if(!(Assert-PublicPostgreSqlExact @($paths|Where-Object {$_.EndsWith('.csproj',[StringComparison]::Ordinal)}) @($projects.Path))){throw 'SF-CI-COMPOSITION'}
+    $sourceRoots=@($projects|Where-Object Path -like 'src/*'|ForEach-Object {$_.Path.Substring(0,$_.Path.LastIndexOf('/')+1)})
+    foreach($path in $paths){
+        if(($path.StartsWith('src/',[StringComparison]::Ordinal) -and !$(foreach($sourceRoot in $sourceRoots){if($path.StartsWith($sourceRoot,[StringComparison]::Ordinal)){$true;break}})) -or
+            ($path.StartsWith('.github/workflows/',[StringComparison]::Ordinal) -and $path -cne '.github/workflows/ci.yml')){throw 'SF-CI-SCOPE'}
+    }
     $selected=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
     $roots=@('tests/PostgreSql/Public/','tests/fixtures/public/','templates/documentation-minimal/')
     $fixed=@('SiteFactory.slnx','global.json','Directory.Build.props','Directory.Packages.props','NuGet.config','.editorconfig','.gitignore','.gitattributes','.github/workflows/ci.yml','scripts/public-ci/Invoke-PublicCi.ps1','scripts/public-ci/PublicCiProof.ps1','tests/PublicCi/Test-PublicCi.ps1')
-    foreach($project in @(Get-PublicCiProjects)){
+    foreach($project in $projects){
         $directory=$project.Path.Substring(0,$project.Path.LastIndexOf('/')+1)
         $projectFile=Join-Path $Root $project.Path
-        $xmlText=if(Test-Path -LiteralPath $projectFile){[IO.File]::ReadAllText($projectFile)}else{(Invoke-PublicCiGit $Root @('show',('HEAD:'+$project.Path))) -join [Environment]::NewLine}
-        [xml]$xml=$xmlText
-        $removed=@($xml.SelectNodes('//Compile[@Remove]')|ForEach-Object {$_.GetAttribute('Remove').Replace('\','/')})
+        [xml]$xml=[IO.File]::ReadAllText($projectFile)
         $explicit=@($xml.SelectNodes('//Compile[@Include]')|ForEach-Object {$_.GetAttribute('Include').Replace('\','/')})
         $closed=@($xml.SelectNodes('//EnableDefaultCompileItems')|Where-Object InnerText -ceq 'false').Count -gt 0
         if($closed -and @($explicit|Where-Object {$_ -match '[*?]'}).Count){throw 'SF-CI-SCOPE'}
-        foreach($remove in $removed){if($remove -match '[*?]'){throw 'SF-CI-SCOPE'}}
         foreach($path in $paths){
             if($path.StartsWith($directory,[StringComparison]::Ordinal)){
                 $relative=$path.Substring($directory.Length)
-                if($removed -cnotcontains $relative -and (!$closed -or !$relative.EndsWith('.cs',[StringComparison]::Ordinal) -or $explicit -ccontains $relative)){[void]$selected.Add($path)}
+                if(!$closed -or !$relative.EndsWith('.cs',[StringComparison]::Ordinal) -or $explicit -ccontains $relative){[void]$selected.Add($path)}
             }
         }
     }
@@ -157,6 +150,17 @@ function Assert-PublicCiComposition([string]$Root,[switch]$Evaluate) {
     $expected=@($projects.Path|Sort-Object -CaseSensitive)
     $observed=@($actual|ForEach-Object {[IO.Path]::GetRelativePath($Root,$_.FullName).Replace('\','/')}|Sort-Object -CaseSensitive)
     if(@(Compare-Object $expected $observed -CaseSensitive).Count){throw 'SF-CI-COMPOSITION'}
+    [xml]$solution=[IO.File]::ReadAllText((Join-Path $Root 'SiteFactory.slnx'))
+    if(!(Assert-PublicPostgreSqlExact @($solution.SelectNodes('//Project')|ForEach-Object {$_.GetAttribute('Path')}) $expected)){throw 'SF-CI-COMPOSITION'}
+    # Preserve the checked-in solution bytes. Only project paths and logical
+    # folders are allowed, so hidden build/restore overrides cannot be copied.
+    foreach($node in $solution.SelectNodes('//*')){
+        $attributes=@($node.Attributes|ForEach-Object Name)
+        if(($node.LocalName -ceq 'Solution' -and ($node -ne $solution.DocumentElement -or $attributes.Count)) -or
+            ($node.LocalName -ceq 'Folder' -and !(Assert-PublicPostgreSqlExact $attributes @('Name'))) -or
+            ($node.LocalName -ceq 'Project' -and !(Assert-PublicPostgreSqlExact $attributes @('Path'))) -or
+            $node.LocalName -cnotin @('Solution','Folder','Project')){throw 'SF-CI-COMPOSITION'}
+    }
     $graph=@{}
     $sources=if($Evaluate){[Collections.Generic.HashSet[string]]::new([string[]]@(Get-PublicCiSourcePaths $Root),[StringComparer]::Ordinal)}else{$null}
     foreach($project in $projects){
@@ -414,6 +418,10 @@ function Assert-PublicCiSymbols([string]$Root,[string]$Repository,[string]$Commi
     }
     $pdbs=@(Get-ChildItem (Join-Path $Root 'src'),(Join-Path $Root 'tests') -Recurse -File -Filter '*.pdb'|Where-Object FullName -match '[\\/](bin|obj)[\\/]Release[\\/]')
     $links=0;$packageSources=@{}
+    # Sources are immutable in the owned build scratch during this call. Hash
+    # each canonical file once, but compare every PDB document's own checksum.
+    # Never retain these hashes across validations, builds or jobs.
+    $sourceChecksums=[Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
     foreach($file in $pdbs){
         $owners=@($projects|Where-Object Assembly -ceq $file.BaseName)
         if($owners.Count -ne 1){throw 'SF-CI-PDB-ORIGIN'}
@@ -434,8 +442,9 @@ function Assert-PublicCiSymbols([string]$Root,[string]$Repository,[string]$Commi
                     if($relative -cmatch '(^|/)\.{1,2}(/|$)|[\\\r\n]' -or $relative.Contains('//')){throw 'SF-CI-PDB-PATH'}
                     if($sources.Contains($relative)){
                         if($Repository){$relative=Resolve-PublicCiSourceLink $mappings $name $Repository $Commit}
-                        if($reader.GetGuid($document.HashAlgorithm) -ne [guid]'8829d00f-11b8-4213-878b-770e8597ac16' -or
-                            (Get-FileHash -LiteralPath (Join-Path $Root $relative)).Hash -cne [Convert]::ToHexString($reader.GetBlobBytes($document.Hash))){throw 'SF-CI-PDB-CHECKSUM'}
+                        if($reader.GetGuid($document.HashAlgorithm) -ne [guid]'8829d00f-11b8-4213-878b-770e8597ac16'){throw 'SF-CI-PDB-CHECKSUM'}
+                        if(!$sourceChecksums.ContainsKey($relative)){$sourceChecksums.Add($relative,(Get-FileHash -LiteralPath (Join-Path $Root $relative)).Hash)}
+                        if($sourceChecksums[$relative] -cne [Convert]::ToHexString($reader.GetBlobBytes($document.Hash))){throw 'SF-CI-PDB-CHECKSUM'}
                         continue
                     }
                     if($relative -and @($generatedRoots|Where-Object {$relative.StartsWith($_,[StringComparison]::Ordinal)}).Count){continue}
@@ -556,7 +565,7 @@ function Assert-PublicCiAggregate([object[]]$Jobs,[string]$Commit,[string]$RunId
         # Keep their original provenance and validate their complete proof below.
         $jobAttempt=0L
         if(![long]::TryParse([string]$job.attempt,[Globalization.NumberStyles]::None,[Globalization.CultureInfo]::InvariantCulture,[ref]$jobAttempt) -or $jobAttempt -le 0 -or $jobAttempt -gt $currentAttempt){throw 'SF-CI-JOB'}
-        if($job.result -cne 'success' -or $job.commit -cne $Commit -or $job.runId -cne $RunId -or $job.status -cne 'PASSED' -or $job.cleanup -cne 'Completed' -or $job.sourceLink -cnotin @('PENDING','VERIFIED')){throw 'SF-CI-JOB'}
+        if($job.result -cne 'success' -or $job.commit -cne $Commit -or $job.runId -cne $RunId -or $job.status -cne 'PASSED' -or $job.cleanup -cne 'Completed' -or $job.sourceLink -cne 'VERIFIED'){throw 'SF-CI-JOB'}
         if($job.name -ceq 'PostgreSql'){
             $files=@(Get-ChildItem -LiteralPath $job.campaign -Recurse -File)
             if($files.Count -ne $job.campaignFiles.Count -or !(Assert-PublicPostgreSqlExact @($files|ForEach-Object {[IO.Path]::GetRelativePath($job.campaign,$_.FullName).Replace('\','/')}) @($job.campaignFiles.path))){throw 'SF-CI-ARCHIVE'}

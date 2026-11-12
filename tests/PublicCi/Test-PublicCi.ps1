@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param([string]$RepositoryRoot=(Join-Path $PSScriptRoot '../..'),[string]$YamlAssembly,
-    [string]$CompiledRoot,[string]$Commit,[string]$PublicRepository)
+    [string]$CompiledRoot,[string]$Commit,[string]$PublicRepository,[string]$SymbolProofFile)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 $RepositoryRoot=[IO.Path]::GetFullPath($RepositoryRoot)
@@ -63,9 +63,12 @@ if($CompiledRoot){
     try{
         if($Commit -cnotmatch '^[0-9a-f]{40}$'){throw 'SF-CI-PROVENANCE'}
         $CompiledRoot=[IO.Path]::GetFullPath($CompiledRoot)
+        $validationTimer=[Diagnostics.Stopwatch]::StartNew()
         $symbolProof=Assert-PublicCiSymbols $CompiledRoot $PublicRepository $Commit
+        $symbolValidationMs=$validationTimer.Elapsed.TotalMilliseconds;$validationTimer.Restart()
         Check ($symbolProof.pdbCount -ge 23) 'real compiled symbols accepted'
         Assert-PublicCiBinaries $CompiledRoot $PublicRepository $Commit
+        $binaryValidationMs=$validationTimer.Elapsed.TotalMilliseconds;$validationTimer.Stop()
         Check $true 'real compiled binaries accepted'
         $symbolRoot=Join-Path ([IO.Path]::GetTempPath()) ('sitefactory-ci-tests-'+[Guid]::NewGuid().ToString('N'))
         if(Test-Path -LiteralPath $symbolRoot){throw 'SF-CI-PROVENANCE'}
@@ -83,9 +86,11 @@ if($CompiledRoot){
         }
         $copied=Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit
         Check ($copied.pdbCount -eq $symbolProof.pdbCount) 'real PDB copy retains all documents and provenance'
-        $domain=Join-Path $symbolRoot 'src/LogicGate.SiteFactory.Domain/bin/Release/net10.0/LogicGate.SiteFactory.Domain.pdb'
+        # Exercise the first production assembly so malformed-record cases fail
+        # promptly, while retaining the full 23-project validator in every case.
+        $domain=Join-Path $symbolRoot 'src/LogicGate.SiteFactory.Application/bin/Release/net10.0/LogicGate.SiteFactory.Application.pdb'
         $domainBytes=[IO.File]::ReadAllBytes($domain)
-        $duplicate=Join-Path (Split-Path $domain) 'duplicate/LogicGate.SiteFactory.Domain.pdb'
+        $duplicate=Join-Path (Split-Path $domain) 'duplicate/LogicGate.SiteFactory.Application.pdb'
         [void][IO.Directory]::CreateDirectory((Split-Path $duplicate));[IO.File]::WriteAllBytes($duplicate,$domainBytes)
         [IO.File]::Delete($domain)
         Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'missing canonical PDB cannot be replaced by another copy' 'SF-CI-PDB-MISSING'
@@ -97,6 +102,24 @@ if($CompiledRoot){
         $sourceBytes=[IO.File]::ReadAllBytes($sourcePath);[IO.File]::AppendAllText($sourcePath,[Environment]::NewLine)
         Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'changed original source fails PDB checksum' 'SF-CI-PDB-CHECKSUM'
         [IO.File]::WriteAllBytes($sourcePath,$sourceBytes)
+        Check ((Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit).pdbCount -ge 23) 'restoring source bytes proves checksum state is fresh for every invocation'
+        # This canonical PDB is enumerated after dependency copies of the same
+        # document. A previously hashed file cannot compensate its bad checksum.
+        $laterPdb=Join-Path $symbolRoot 'src/LogicGate.SiteFactory.Domain/bin/Release/net10.0/LogicGate.SiteFactory.Domain.pdb'
+        $laterBytes=[IO.File]::ReadAllBytes($laterPdb);$stream=[IO.MemoryStream]::new($laterBytes,$false)
+        try{
+            $provider=[Reflection.Metadata.MetadataReaderProvider]::FromPortablePdbStream($stream)
+            try{
+                $reader=$provider.GetMetadataReader()
+                $hashes=@(foreach($handle in $reader.Documents){$document=$reader.GetDocument($handle);if($reader.GetString($document.Name) -ceq '/_/src/LogicGate.SiteFactory.Domain/AssemblyMarker.cs'){[Convert]::ToHexString($reader.GetBlobBytes($document.Hash))}})
+            }finally{$provider.Dispose()}
+        }finally{$stream.Dispose()}
+        Check ($hashes.Count -eq 1) 'real repository document has one checksum'
+        $hex=[Convert]::ToHexString($laterBytes);$offset=$hex.IndexOf($hashes[0],[StringComparison]::Ordinal)
+        Check ($offset -ge 0 -and $offset%2 -eq 0 -and $hex.LastIndexOf($hashes[0],[StringComparison]::Ordinal) -eq $offset) 'repository document checksum blob is unambiguous'
+        $changed=[byte[]]$laterBytes.Clone();$changed[$offset/2]=$changed[$offset/2] -bxor 1;[IO.File]::WriteAllBytes($laterPdb,$changed)
+        Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'every PDB checksum remains checked after source hash reuse' 'SF-CI-PDB-CHECKSUM'
+        [IO.File]::WriteAllBytes($laterPdb,$laterBytes)
         Reject {Assert-PublicCiSymbols $symbolRoot 'unapproved/expected-public' $Commit} 'missing or mismatched SourceLink rejected' $(if($PublicRepository){'SF-CI-SOURCELINK-REPOSITORY'}else{'SF-CI-SOURCELINK-RECORD'})
         if($PublicRepository){
             Reject {Assert-PublicCiSymbols $symbolRoot '' $Commit} 'public symbols cannot leak into private mode' 'SF-CI-PRIVATE-SOURCELINK'
@@ -120,7 +143,7 @@ if($CompiledRoot){
             Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'missing record in one real PDB' 'SF-CI-SOURCELINK-RECORD'
             [IO.File]::WriteAllBytes($domain,(Edit-CompiledSourceLink $domainBytes '' Duplicate))
             Reject {Assert-PublicCiSymbols $symbolRoot $PublicRepository $Commit} 'duplicate record in one real PDB' 'SF-CI-SOURCELINK-DUPLICATE'
-            $second=Join-Path $symbolRoot 'src/LogicGate.SiteFactory.Application/bin/Release/net10.0/LogicGate.SiteFactory.Application.pdb'
+            $second=Join-Path $symbolRoot 'src/LogicGate.SiteFactory.Domain/bin/Release/net10.0/LogicGate.SiteFactory.Domain.pdb'
             $secondBytes=[IO.File]::ReadAllBytes($second)
             [IO.File]::WriteAllBytes($domain,(Edit-CompiledSourceLink $domainBytes '' Missing))
             [IO.File]::WriteAllBytes($second,(Edit-CompiledSourceLink $secondBytes '' Duplicate))
@@ -160,6 +183,11 @@ if($CompiledRoot){
         }
     }
     if($symbolFailure){[Console]::Error.WriteLine('SF-CI-PDB-PROOF');exit 1}
+    if($SymbolProofFile){
+        if(Test-Path -LiteralPath $SymbolProofFile){throw 'SF-CI-PDB-PROOF'}
+        [IO.File]::WriteAllText($SymbolProofFile,(@{pdbCount=$symbolProof.pdbCount;sourceLink=$symbolProof.sourceLink;binariesVerified=$true;
+            symbolValidationMs=[Math]::Round($symbolValidationMs,3);binaryValidationMs=[Math]::Round($binaryValidationMs,3)}|ConvertTo-Json))
+    }
     Write-Output ('Public CI compiled checks: '+$script:checks+' Passed; real PDB/binary proof, no rebuild.')
     return
 }
@@ -181,80 +209,69 @@ function Assert-Workflow([string]$Text){
     if($stream.Documents.Count -ne 1){throw 'SF-CI-YAML'}
     $yaml=$stream.Documents[0].RootNode
     if((Node (Node $yaml 'permissions') 'contents').Value -cne 'read' -or (Node $yaml 'permissions').Children.Count -ne 1){throw 'SF-CI-PERMISSIONS'}
-    if($Text -match 'pull_request_target|continue-on-error|secrets\.|packages: write|uses:\s+\./'){throw 'SF-CI-SECURITY'}
+    if($Text -match 'pull_request_target|continue-on-error|secrets\.|packages: write|uses:\s+\./|DOCS_ONLY|paths(-ignore)?:|sparse-checkout|blob:none'){throw 'SF-CI-SECURITY'}
     foreach($event in @('pull_request','push','workflow_dispatch')){[void](Node (Node $yaml 'on') $event)}
     $jobs=Node $yaml 'jobs'
-    if(!(Assert-PublicPostgreSqlExact @($jobs.Children.Keys|ForEach-Object Value) @('scope','public','postgresql','proof'))){throw 'SF-CI-JOBS'}
+    if(!(Assert-PublicPostgreSqlExact @($jobs.Children.Keys|ForEach-Object Value) @('public','postgresql','proof'))){throw 'SF-CI-JOBS'}
     $offline=Node $jobs 'public';$pg=Node $jobs 'postgresql';$proof=Node $jobs 'proof'
     $matrix=Node (Node (Node $offline 'strategy') 'matrix') 'include'
     $pairs=@($matrix.Children|ForEach-Object {((Node $_ 'platform').Value)+'/'+((Node $_ 'os').Value)})
     if(!(Assert-PublicPostgreSqlExact $pairs @('Windows/windows-latest','Linux/ubuntu-latest'))){throw 'SF-CI-MATRIX'}
-    foreach($job in @($offline,$pg)){if((Node $job 'if').Value -cne "needs.scope.outputs.run == 'true'"){throw 'SF-CI-ROUTE'}}
-    if((Node $pg 'runs-on').Value -cne 'ubuntu-latest' -or (Node $proof 'if').Value -cne "always() && needs.scope.outputs.run == 'true'"){throw 'SF-CI-AGGREGATE'}
-    if(!(Assert-PublicPostgreSqlExact @((Node $proof 'needs').Children|ForEach-Object Value) @('scope','public','postgresql'))){throw 'SF-CI-NEEDS'}
-    $expected=@(Get-PublicCiSourcePaths $RepositoryRoot)
-    $roots=@((Get-PublicCiProjects).Path|ForEach-Object {'/'+$_.Substring(0,$_.LastIndexOf('/')+1)})+@('/scripts/public-ci/','/tests/PostgreSql/Public/','/tests/fixtures/public/','/templates/documentation-minimal/')
-    foreach($job in @($offline,$pg)){
-        $checkout=@((Node $job 'steps').Children|Where-Object {try{(Node $_ 'uses').Value -like 'actions/checkout@*'}catch{$false}})
+    foreach($specification in @(@{job=$offline;mode='Offline'},@{job=$pg;mode='PostgreSql'})){
+        $job=$specification.job;$mode=$specification.mode
+        if(@($job.Children.Keys|ForEach-Object Value|Where-Object {$_ -cin @('if','needs')}).Count){throw 'SF-CI-JOBS'}
+        $run=@((Node $job 'steps').Children|Where-Object {try{(Node $_ 'run').Value.Contains('-Mode '+$mode,[StringComparison]::Ordinal)}catch{$false}})
+        if($run.Count -ne 1 -or (Node (Node $run[0] 'env') 'PUBLIC_REPOSITORY').Value -cne '${{ github.repository }}' -or
+            !(Node $run[0] 'run').Value.Contains('-ExpectedCommit $env:GITHUB_SHA',[StringComparison]::Ordinal) -or
+            !(Node $run[0] 'run').Value.Contains('-PublicRepository $env:PUBLIC_REPOSITORY',[StringComparison]::Ordinal)){throw 'SF-CI-PROVENANCE'}
+    }
+    if((Node $pg 'runs-on').Value -cne 'ubuntu-latest' -or (Node $proof 'if').Value -cne 'always()' -or
+        (Node $proof 'name').Value -cne 'Require complete public proof'){throw 'SF-CI-AGGREGATE'}
+    if(!(Assert-PublicPostgreSqlExact @((Node $proof 'needs').Children|ForEach-Object Value) @('public','postgresql'))){throw 'SF-CI-NEEDS'}
+    foreach($job in @($offline,$pg,$proof)){
+        $steps=(Node $job 'steps').Children
+        $checkout=@($steps|Where-Object {try{(Node $_ 'uses').Value -like 'actions/checkout@*'}catch{$false}})
         if($checkout.Count -ne 1){throw 'SF-CI-CHECKOUT'}
         $with=Node $checkout[0] 'with'
-        if((Node $with 'persist-credentials').Value -cne 'false' -or (Node $with 'filter').Value -cne 'blob:none' -or (Node $with 'sparse-checkout-cone-mode').Value -cne 'false'){throw 'SF-CI-CHECKOUT'}
-        $patterns=@((Node $with 'sparse-checkout').Value -split '\r?\n'|Where-Object {$_})
-        if(@($patterns|Where-Object {$_ -ceq '/SiteFactory.slnx'}).Count -ne 1){throw 'SF-CI-CHECKOUT'}
-        foreach($pattern in $patterns){
-            if(!$pattern.StartsWith('!') -and $roots -cnotcontains $pattern -and $expected -cnotcontains $pattern.TrimStart('/')){throw 'SF-CI-CHECKOUT'}
+        if(!(Assert-PublicPostgreSqlExact @($with.Children.Keys|ForEach-Object Value) @('persist-credentials','fetch-depth')) -or
+            (Node $with 'persist-credentials').Value -cne 'false' -or (Node $with 'fetch-depth').Value -cne '1'){throw 'SF-CI-CHECKOUT'}
+        foreach($step in $steps){
+            $use=try{(Node $step 'uses').Value}catch{''}
+            if($use -and $use -cnotmatch '^actions/(checkout|setup-dotnet|upload-artifact|download-artifact)@[0-9a-f]{40}$'){throw 'SF-CI-PIN'}
+            if($use -like 'actions/upload-artifact@*' -and (Node $step 'if').Value -cne 'always()'){throw 'SF-CI-ARCHIVE'}
+            if($use -like 'actions/setup-dotnet@*' -and ((Node (Node $step 'with') 'cache').Value -cne 'false' -or
+                (Node (Node $step 'with') 'global-json-file').Value -cne 'global.json')){throw 'SF-CI-SDK'}
         }
-        foreach($source in $expected){
-            $include=$false
-            foreach($pattern in $patterns){$negative=$pattern.StartsWith('!');$path=$pattern.TrimStart('!').TrimStart('/');if(($path.EndsWith('/') -and $source.StartsWith($path,[StringComparison]::Ordinal)) -or $source -ceq $path){$include=!$negative}}
-            if(!$include){throw 'SF-CI-CHECKOUT'}
-        }
-        foreach($project in @(Get-PublicCiProjects)){
-            [xml]$xml=Get-Content (Join-Path $RepositoryRoot $project.Path) -Raw
-            $directory=$project.Path.Substring(0,$project.Path.LastIndexOf('/')+1)
-            foreach($removed in $xml.SelectNodes('//Compile[@Remove]')){
-                if($patterns -cnotcontains ('!/'+$directory+$removed.GetAttribute('Remove').Replace('\','/'))){throw 'SF-CI-CHECKOUT'}
-            }
-            if(@($xml.SelectNodes('//EnableDefaultCompileItems')|Where-Object InnerText -ceq 'false').Count -and $patterns -ccontains ('/'+$directory)){throw 'SF-CI-CHECKOUT'}
-        }
-    }
-    foreach($step in @($jobs.Children.Values|ForEach-Object {(Node $_ 'steps').Children})){
-        $use=try{(Node $step 'uses').Value}catch{''}
-        if($use -and $use -cnotmatch '^actions/(checkout|setup-dotnet|upload-artifact|download-artifact)@[0-9a-f]{40}$'){throw 'SF-CI-PIN'}
     }
 }
 $workflow=Get-Content (Join-Path $RepositoryRoot '.github/workflows/ci.yml') -Raw
-Assert-Workflow $workflow;Check $true 'public workflow matrix, scope and permissions'
+Assert-Workflow $workflow;Check $true 'public workflow matrix, required check, checkout and permissions'
 foreach($case in @(
     @{Old='platform: Windows';New='platform: Missing'},
     @{Old='platform: Linux';New='platform: Windows'},
-    @{Old='[scope, public, postgresql]';New='[scope, public]'},
+    @{Old='[public, postgresql]';New='[public]'},
     @{Old='contents: read';New='contents: write'},
-    @{Old='sparse-checkout-cone-mode: false';New='sparse-checkout-cone-mode: true'},
-    @{Old='/SiteFactory.slnx';New='/Unapproved.slnx'},
-    @{Old='/SiteFactory.slnx';New=''},
-    @{Old='/SiteFactory.slnx';New=('/SiteFactory.slnx'+[Environment]::NewLine+'            /SiteFactory.slnx')},
-    @{Old='/tests/PublicCi/Test-PublicCi.ps1';New='/tests/Unapproved/Test.ps1'},
+    @{Old='persist-credentials: false';New='persist-credentials: true'},
+    @{Old='fetch-depth: 1';New='fetch-depth: 0'},
+    @{Old='cache: false';New='cache: true'},
+    @{Old='Require complete public proof';New='Renamed proof'},
+    @{Old='  public:';New='  other:'},
+    @{Old='  pull_request:';New=('  pull_request:'+"`n"+'    paths: [docs/**]')},
     @{Old='actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1';New='actions/checkout@main'},
-    @{Old="always() && needs.scope.outputs.run == 'true'";New="needs.scope.outputs.run == 'true'"}
+    @{Old='if: always()';New='if: success()'},
+    @{Old='${{ github.repository }}';New='UNKNOWN'}
 )){Reject {Assert-Workflow $workflow.Replace($case.Old,$case.New)} ('workflow rejects '+$case.New)}
 Reject {Assert-Workflow 'jobs: [ unclosed'} 'corrupt YAML'
-Check (!(Get-PublicCiRoute @('src/Unapproved/Program.cs') 'push' $true)) 'mixed automatic suites not duplicated'
-Check (Get-PublicCiRoute @('src/Unapproved/Program.cs') 'workflow_dispatch' $true) 'mixed explicit proof'
-Reject {Get-PublicCiRoute @('src/Unapproved/Program.cs') 'pull_request' $false} 'unknown source project cannot disable public CI'
-Reject {Get-PublicCiRoute @('.github/workflows/extra.yml') 'push'} 'unknown workflow rejected'
-Check (Get-PublicCiRoute @('src/LogicGate.SiteFactory.Domain/AssemblyMarker.cs') 'push') 'public automatic proof'
 $projects=@(Get-PublicCiProjects)
 Check ($projects.Count -eq 23 -and @($projects|Where-Object Offline -gt 0).Count -eq 11 -and ($projects|Measure-Object Offline -Sum).Sum -eq 2726) 'closed project inventory'
 $partition=Read-PublicPostgreSqlPartition (Join-Path $RepositoryRoot 'tests/PostgreSql/Public/shards.json')
 Check ($partition.expectedTests.Count -eq 23 -and $partition.shards.Count -eq 5 -and ($partition.shards.expectedCount -join ',') -ceq '5,3,8,4,3') 'unchanged P04 partition'
 $sources=@(Get-PublicCiSourcePaths $RepositoryRoot)
-Check ($sources.Count -eq 383 -and @($sources|Where-Object {$_ -clike '*.slnx'}).Count -eq 1 -and $sources -ccontains 'SiteFactory.slnx') 'exact public solution is the only added fixed source'
+Check (@($sources|Where-Object {$_ -clike '*.slnx'}).Count -eq 1 -and $sources -ccontains 'SiteFactory.slnx') 'public solution is the only selected solution'
 [xml]$publicSolution=Get-Content (Join-Path $RepositoryRoot 'SiteFactory.slnx') -Raw
 $solutionProjects=@($publicSolution.SelectNodes('//Project')|ForEach-Object {$_.GetAttribute('Path')})
 Check (Assert-PublicPostgreSqlExact $solutionProjects @($projects.Path)) 'checked-out public solution contains exactly the closed23 projects'
 foreach($script in @('scripts/public-ci/Invoke-PublicCi.ps1','scripts/public-ci/PublicCiProof.ps1','tests/PublicCi/Test-PublicCi.ps1')){Check ($sources -ccontains $script) 'required public tool'}
-Check (@($sources|Where-Object {$_ -like 'tests/PublicExtraction/*'}).Count -eq 0) 'no extraction-policy test imported'
 $temporary=Join-Path ([IO.Path]::GetTempPath()) ('sitefactory-ci-tests-'+[Guid]::NewGuid().ToString('N'))
 if(Test-Path -LiteralPath $temporary){throw 'SF-CI-PROVENANCE'}
 [void][IO.Directory]::CreateDirectory($temporary)
@@ -346,10 +363,11 @@ try{
         [void][IO.Directory]::CreateDirectory($scratch);$scratchOwned=$true
         $secretMarker=[Guid]::NewGuid().ToString('N');$toolMarker='untrusted-tool-output'
         $privateMessage=$secretMarker+' '+$scratch+' '+$toolMarker
-        foreach($definition in $functions|Where-Object Name -cin @('Save-CiReport','Set-CiPhase','Get-CiFailureCode')){
+        foreach($definition in $functions|Where-Object Name -cin @('Save-CiReport','Complete-CiTiming','Set-CiPhase','Get-CiFailureCode')){
             . ([scriptblock]::Create($definition.Extent.Text))
         }
         . ([scriptblock]::Create($reportAssignment.Extent.Text))
+        $phaseTimer=[Diagnostics.Stopwatch]::StartNew()
         $productionSave=${function:Save-CiReport};$reportFailure=@{Injected=$false}
         function Save-CiReport {
             if($ReportFails -and $report.phase -ceq 'CLEANUP' -and !$reportFailure.Injected){
@@ -374,6 +392,7 @@ try{
             Check ($actual.status -ceq $expectedStatus -and $actual.phase -ceq $expectedPhase) 'phase and terminal status retained'
             Check ($actual.commit -ceq $commit -and $actual.runId -ceq $RunId -and $actual.attempt -ceq $Attempt -and $actual.name -ceq $name) 'phase report provenance preserved'
             Check ($actual.cleanup -ceq $(if($CleanupFails){'Failed'}else{'Completed'})) 'phase report records actual cleanup'
+            Check ($actual.timings.Count -gt 0 -and @($actual.timings|Where-Object {$_.phase -cnotin $phases -or $_.durationMs -lt 0}).Count -eq 0) 'timings contain only closed phases and measured nonnegative durations'
             Check ($actual.code -ceq $(if($CleanupFails){'SF-CI-CLEANUP'}elseif($ReportFails){'SF-CI-REPORT'}elseif($WorkFails){'SF-CI-FAILED'}else{$null})) 'failure code remains controlled'
             $published=$json+$errorCapture.ToString()+($captured -join '')
             foreach($forbidden in @($secretMarker,$scratch,$toolMarker)){
@@ -407,8 +426,9 @@ try{
         [void][IO.Directory]::CreateDirectory($ProofDirectory)
         $scratch=Join-Path ([IO.Path]::GetTempPath()) ('sitefactory-public-ci-'+[Guid]::NewGuid().ToString('N'))
         [void][IO.Directory]::CreateDirectory($scratch);$scratchOwned=$true
-        foreach($definition in $functions | Where-Object Name -cin @('Save-CiReport','Set-CiPhase','Get-CiFailureCode','Run-CiDotnet','Invoke-CiOfflineSuite')){. ([scriptblock]::Create($definition.Extent.Text))}
+        foreach($definition in $functions | Where-Object Name -cin @('Save-CiReport','Complete-CiTiming','Set-CiPhase','Get-CiFailureCode','Run-CiDotnet','Invoke-CiOfflineSuite')){. ([scriptblock]::Create($definition.Extent.Text))}
         . ([scriptblock]::Create($reportAssignment.Extent.Text))
+        $phaseTimer=[Diagnostics.Stopwatch]::StartNew()
         $seed=Join-Path $scratch 'fixture.xml';$raw=Join-Path $scratch ($fixtureProject.Assembly+'.trx')
         $xml=[Xml.XmlDocument]::new();$ns='http://microsoft.com/schemas/VisualStudio/TeamTest/2010'
         $root=$xml.CreateElement('TestRun',$ns);[void]$xml.AppendChild($root)
@@ -503,14 +523,33 @@ try{
         [void]$child.Start();$stdout=$child.StandardOutput.ReadToEndAsync();$stderr=$child.StandardError.ReadToEndAsync()
         if(!$child.WaitForExit(20000)){$child.Kill($true);$child.WaitForExit();throw 'SF-CI-TEST bounded diagnostic child'}
         $childReport=Get-Content (Join-Path $proof 'report.json') -Raw|ConvertFrom-Json
-        Check ($child.ExitCode -eq 1 -and $childReport.status -ceq 'FAILED' -and $childReport.phase -ceq 'COPY' -and $childReport.code -ceq 'SF-CI-GIT' -and $childReport.cleanup -ceq 'Completed') 'real script failure keeps a red COPY report, precise code and exit code'
+        Check ($child.ExitCode -eq 1 -and $childReport.status -ceq 'FAILED' -and $childReport.phase -ceq 'COPY' -and $childReport.code -ceq 'SF-CI-COMPOSITION' -and $childReport.cleanup -ceq 'Completed') 'real script failure keeps a red COPY report, precise code and exit code'
         Check ($childReport.commit -ceq $commit -and $childReport.runId -ceq 'diagnostic-child' -and $childReport.attempt -ceq '1') 'real script failure provenance'
         $published=$stdout.GetAwaiter().GetResult()+$stderr.GetAwaiter().GetResult()
-        Check ($published.Trim() -ceq 'SF-CI-GIT phase=COPY; controlled evidence retained.') 'real script failure publishes only its controlled diagnostic'
+        Check ($published.Trim() -ceq 'SF-CI-COMPOSITION phase=COPY; controlled evidence retained.') 'real script failure publishes only its controlled diagnostic'
     }finally{$child.Dispose()}
 
     $composition=Join-Path $temporary 'composition'
     foreach($source in $sources){$target=Join-Path $composition $source;[void][IO.Directory]::CreateDirectory((Split-Path $target));[IO.File]::Copy((Join-Path $RepositoryRoot $source),$target,$false)}
+    foreach($unexpected in @('src/Unapproved/Unapproved.csproj','tests/Unapproved/Unapproved.csproj','Unapproved.csproj')){
+        $path=Join-Path $composition $unexpected;[void][IO.Directory]::CreateDirectory((Split-Path $path));[IO.File]::WriteAllText($path,'<Project />')
+        Reject {Get-PublicCiSourcePaths $composition} 'unknown project cannot be hidden by source selection' 'SF-CI-COMPOSITION'
+        [IO.File]::Delete($path)
+    }
+    foreach($unexpected in @('src/Unapproved/payload.cs','.github/workflows/unapproved.yml')){
+        $path=Join-Path $composition $unexpected;[void][IO.Directory]::CreateDirectory((Split-Path $path));[IO.File]::WriteAllText($path,'unapproved fixture')
+        Reject {Get-PublicCiSourcePaths $composition} 'unknown source root or workflow fails before copy' 'SF-CI-SCOPE'
+        [IO.File]::Delete($path)
+    }
+    $solutionPath=Join-Path $composition 'SiteFactory.slnx';$solutionBytes=[IO.File]::ReadAllBytes($solutionPath)
+    foreach($mutation in @('project','override')){
+        [xml]$changed=[Text.Encoding]::UTF8.GetString($solutionBytes)
+        $project=$changed.SelectSingleNode('//Project')
+        if($mutation -ceq 'project'){$project.SetAttribute('Path','src/Unapproved/Unapproved.csproj')}else{$project.SetAttribute('Build','false')}
+        $changed.Save($solutionPath)
+        Reject {Assert-PublicCiComposition $composition} 'checked-in solution cannot hide projects or override the build' 'SF-CI-COMPOSITION'
+    }
+    [IO.File]::WriteAllBytes($solutionPath,$solutionBytes)
     $unapprovedSolution=Join-Path $composition 'Unapproved.slnx'
     [IO.File]::WriteAllText($unapprovedSolution,'<Solution />')
     Check (@(Get-PublicCiSourcePaths $composition) -cnotcontains 'Unapproved.slnx') 'an unapproved root solution never enters the public scope'
@@ -528,6 +567,7 @@ try{
         }
     }finally{[IO.File]::SetAttributes($dotfile,$attributes)}
     Assert-PublicCiComposition $composition;Check $true 'real public project graph'
+    Check ([Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([IO.File]::ReadAllBytes($solutionPath))) -ceq [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($solutionBytes))) 'composition preserves the checked-in solution bytes'
     Assert-PublicCiComposition $composition -Evaluate;Check $true 'evaluated public inputs only'
 
     # Offline package fixtures exercise the production provenance check. They do
@@ -655,7 +695,7 @@ try{
             Save-PublicCiOfflineTrx @{Rows=$rows;Count=$rows.Count} $path $project.Assembly
             $suites+=@{assembly=$project.Assembly;passed=$rows.Count;inventory=@($rows|ForEach-Object {Get-PublicCiArchivedCaseName $_});sha256=(Get-FileHash $path).Hash;start=$start;finish=$finish}
         }
-        $jobs+=@{name=$platform;result='success';status='PASSED';commit=$commit;runId='synthetic';attempt='1';cleanup='Completed';sourceLink='PENDING';root=$root;suites=$suites}
+        $jobs+=@{name=$platform;result='success';status='PASSED';commit=$commit;runId='synthetic';attempt='1';cleanup='Completed';sourceLink='VERIFIED';root=$root;suites=$suites}
     }
     # Synthetic data exercises the existing P04 parser without any DB execution.
     $pg=Join-Path $temporary 'pg';[void][IO.Directory]::CreateDirectory((Join-Path $pg 'incoming'))
@@ -737,7 +777,7 @@ try{
     Check ((Get-FileHash -LiteralPath $witness).Hash -ceq $witnessHash) 'incoming redirection target remains untouched'
 
     $files=@(Get-ChildItem $pg -Recurse -File|ForEach-Object {@{path=[IO.Path]::GetRelativePath($pg,$_.FullName).Replace('\','/');sha256=(Get-FileHash $_.FullName).Hash}})
-    $jobs+=@{name='PostgreSql';result='success';status='PASSED';commit=$commit;runId='synthetic';attempt='1';cleanup='Completed';sourceLink='PENDING';campaign=$pg;campaignFiles=$files}
+    $jobs+=@{name='PostgreSql';result='success';status='PASSED';commit=$commit;runId='synthetic';attempt='1';cleanup='Completed';sourceLink='VERIFIED';campaign=$pg;campaignFiles=$files}
     Assert-PublicCiAggregate $jobs $commit 'synthetic' '1';Check $true 'complete synthetic aggregation'
     $jobs[0].attempt='2'
     Assert-PublicCiAggregate $jobs $commit 'synthetic' '2';Check $true 'mixed attempts 2/1/1 retain all proof validation'
@@ -760,6 +800,7 @@ try{
         foreach($mutation in @(
             @{key='commit';value=('c'*40)},@{key='runId';value='other'},
             @{key='status';value='FAILED'},@{key='cleanup';value='Failed'},@{key='sourceLink';value='UNKNOWN'},
+            @{key='sourceLink';value='PENDING'},
             @{key='result';value='failure'},@{key='result';value='skipped'},
             @{key='result';value='cancelled'},@{key='result';value='unknown'}
         )){
