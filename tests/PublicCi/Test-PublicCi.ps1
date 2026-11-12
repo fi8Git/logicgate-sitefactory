@@ -739,6 +739,38 @@ try{
     $files=@(Get-ChildItem $pg -Recurse -File|ForEach-Object {@{path=[IO.Path]::GetRelativePath($pg,$_.FullName).Replace('\','/');sha256=(Get-FileHash $_.FullName).Hash}})
     $jobs+=@{name='PostgreSql';result='success';status='PASSED';commit=$commit;runId='synthetic';attempt='1';cleanup='Completed';sourceLink='PENDING';campaign=$pg;campaignFiles=$files}
     Assert-PublicCiAggregate $jobs $commit 'synthetic' '1';Check $true 'complete synthetic aggregation'
+    $jobs[0].attempt='2'
+    Assert-PublicCiAggregate $jobs $commit 'synthetic' '2';Check $true 'mixed attempts 2/1/1 retain all proof validation'
+    Assert-PublicCiAggregate $jobs $commit 'synthetic' '10';Check $true 'attempt ordering is numeric across digit lengths'
+    $jobs[0].attempt='1'
+    Assert-PublicCiAggregate $jobs $commit 'synthetic' '2';Check $true 'aggregation-only rerun accepts attempts 1/1/1'
+    $invalidAttempts=@($null,'','0','-1','1.5','1e0','unknown','+1',' 1','1 ',"1`n",'9223372036854775808')
+    foreach($attempt in $invalidAttempts){
+        Reject {Assert-PublicCiAggregate $jobs $commit 'synthetic' $attempt} 'invalid current attempt' 'SF-CI-JOB'
+    }
+    for($index=0;$index -lt $jobs.Count;$index++){
+        $remaining=@($jobs|Where-Object name -cne $jobs[$index].name)
+        $orderedJobs=@($jobs[$index])+$remaining
+        foreach($attempt in @($invalidAttempts)+@('3')){
+            $jobs[$index].attempt=$attempt
+            Reject {Assert-PublicCiAggregate $orderedJobs $commit 'synthetic' '2'} 'invalid or future job attempt' 'SF-CI-JOB'
+        }
+        $jobs[$index].attempt='1'
+        # An older attempt must still satisfy every provenance/status check.
+        foreach($mutation in @(
+            @{key='commit';value=('c'*40)},@{key='runId';value='other'},
+            @{key='status';value='FAILED'},@{key='cleanup';value='Failed'},@{key='sourceLink';value='UNKNOWN'},
+            @{key='result';value='failure'},@{key='result';value='skipped'},
+            @{key='result';value='cancelled'},@{key='result';value='unknown'}
+        )){
+            $saved=$jobs[$index][$mutation.key];$jobs[$index][$mutation.key]=$mutation.value
+            Reject {Assert-PublicCiAggregate $orderedJobs $commit 'synthetic' '2'} ('older attempt '+$mutation.key) 'SF-CI-JOB'
+            $jobs[$index][$mutation.key]=$saved
+        }
+        Reject {Assert-PublicCiAggregate $remaining $commit 'synthetic' '2'} 'missing job from mixed attempts' 'SF-CI-MATRIX'
+        $duplicate=$jobs.Clone();$duplicate[$index]=$jobs[($index+1)%3]
+        Reject {Assert-PublicCiAggregate $duplicate $commit 'synthetic' '2'} 'duplicate job from mixed attempts' 'SF-CI-MATRIX'
+    }
     Reject {Assert-PublicCiAggregate $jobs[0..1] $commit 'synthetic' '1'} 'missing job'
     Reject {Assert-PublicCiAggregate @($jobs[0],$jobs[0],$jobs[2]) $commit 'synthetic' '1'} 'duplicate matrix job'
     foreach($state in @('failure','skipped','cancelled','unknown')){$jobs[0].result=$state;Reject {Assert-PublicCiAggregate $jobs $commit 'synthetic' '1'} ('job '+$state)};$jobs[0].result='success'
