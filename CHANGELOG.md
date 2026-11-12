@@ -56,7 +56,7 @@ distinctes. Les repères SF-TASK retracent le développement, pas des releases.
 - Versions SemVer exactes, descripteurs et capacités immuables, doublons et
   enregistrements incohérents refusés. Aucun scan de DLL ni téléchargement de
   module au runtime.
-- Décisions de [séparation des repositories](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md),
+- Décisions d’[indépendance du Core et des contrats publics](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md),
   de [compatibilité explicite](docs/adr/0036-versioner-sitefactory-and-its-modules-with-semver-and-explicit-compatibility.md)
   et de [composition statique](docs/adr/0037-compose-modules-explicitly-without-dynamic-loading.md).
   Ce sont des décisions architecturales, pas l'annonce d'une publication.
@@ -81,9 +81,9 @@ distinctes. Les repères SF-TASK retracent le développement, pas des releases.
 
 #### Bibliothèques runtime et PostgreSQL
 
-- SF-TASK-062 : extraction des contrats runtime purs, de l'orchestrateur de
-  startup et de la politique pure de compatibilité des bases, sans EF Core,
-  Npgsql, IConfiguration ou Hosting dans ces bibliothèques pures.
+- SF-TASK-062 : contrats runtime purs, orchestrateur de startup et politique
+  pure de compatibilité des bases, sans EF Core, Npgsql, IConfiguration ou
+  Hosting dans ces bibliothèques pures.
 - Adaptateur Hosting : binding en snapshot immuable, validations de démarrage,
   rapport structuré, annulation et état de readiness. Adaptateur ASP.NET Core :
   endpoints liveness/readiness minimaux, `Cache-Control: no-store`, décision
@@ -106,19 +106,21 @@ distinctes. Les repères SF-TASK retracent le développement, pas des releases.
 
 - Tests de contrats, frontières architecturales, génération, chemins, contenu
   non fiable, confidentialité, annulation et concurrence.
-- Scripts public-ci autonomes et workflow Windows/Linux préparé, avec job
-  PostgreSQL REQUIRED distinct réutilisant le harnais. Résultats manquants,
-  incomplets ou ignorés refusés ; un exit code seul n'est pas une preuve.
-  La présence de ce workflow n'atteste pas une CI distante verte sur une révision
-  future ni un SourceLink vérifié dans un repository public encore à créer.
+- Scripts public-ci autonomes et CI Windows/Linux opérationnelle, avec job
+  PostgreSQL REQUIRED distinct réutilisant le harnais et **SourceLink VERIFIED**.
+  Résultats manquants, incomplets ou ignorés refusés ; un exit code seul n’est
+  pas une preuve. L’agrégation vérifie provenance, tentatives admissibles,
+  inventaires, TRX, checksums et cleanup. Voir les [gates actuels](docs/04-quality-security/20-quality-gates-and-ci.md)
+  et les [preuves publiques acquises](CONTRIBUTING.md#321-checks-attendus) ; une
+  campagne passée ne garantit pas une révision future.
 
 ### Changed
 
 - SF-TASK-011 : constructeur `PlannedFile` rendu explicite pour l'identifiant,
   le chemin relatif, l'origine, la stratégie et l'action prévue, sans défaut caché.
 - SF-TASK-062 : composition console publique injectée, projets et fixtures de
-  tests publics autonomes, séparation du CHANGELOG et exemples d'ADR recentrés
-  sur les contrats publics. Aucune publication déclenchée par ces adaptations.
+  tests publics autonomes fondés sur les contrats publics. Aucune publication
+  déclenchée par ces adaptations.
 
 ### Fixed
 
@@ -142,7 +144,7 @@ distinctes. Les repères SF-TASK retracent le développement, pas des releases.
   atomique, sans écrasement silencieux des customizations.
 - SQL des décisions de sécurité qualifié contre un `search_path` hostile,
   préfixe système `pg_` comparé littéralement et graphe Migrator strict ;
-  garanties conservées dans les extractions génériques.
+  garanties conservées dans les bibliothèques génériques.
 - Readiness : seuls les rapports complets sont publiés ; la réponse utilise
   le résultat de sa vérification, et l'annulation n'invente pas un succès.
 - Secrets exclus des sorties publiques, logs, diagnostics, lock et rapports.
@@ -155,6 +157,10 @@ Le merge structuré, l'upgrade/adoption automatique de sorties, le provisioning
 et l'exploitation PostgreSQL de production, les déploiements et la publication
 de packages ne sont pas présentés comme implémentés. Les commandes de génération
 ne lancent pas automatiquement les quality gates du résultat.
+
+**P03-F1 reste OPEN / UNKNOWN** : historique 749 HTTP 200 / 19 HTTP 503, cause
+non démontrée ; réexamen **2026-11-16**, sans prolongation tacite. Une campagne
+verte ne vaut pas correction causale. Voir les [preuves et limites PostgreSQL](tests/PostgreSql/README.md).
 
 Toute release future doit être explicitement approuvée, datée et vérifiée.
 Aucun tag, URL de release ou succès CI inexistant n'est créé par ce journal.

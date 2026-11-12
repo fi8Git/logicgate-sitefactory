@@ -50,16 +50,20 @@ aucune source, fixture, DLL, secret ou infrastructure Business.
 Les décisions relatives à Identity, l'administration, aux formulaires, à l'audit,
 à la CSP ou à l'exploitation prescrivent aussi des capacités futures. Leur
 statut accepté n'est ni une preuve d'implémentation, ni une autorisation de
-publication ou d'action de production. Les packages et le véritable dépôt public
-ne sont pas encore publiés ; SourceLink public reste PENDING dans ce futur dépôt.
-La [CI publique](../04-quality-security/20-quality-gates-and-ci.md) distingue
-la preuve acquise sur scope public dans le dépôt de préparation privé des
-vérifications encore nécessaires après création du véritable dépôt public.
+publication ou d’action de production. Le [repository public](https://github.com/fi8Git/logicgate-sitefactory)
+est actif ; aucun package NuGet ni aucune release officielle ne sont publiés.
+La [CI publique](../04-quality-security/20-quality-gates-and-ci.md) Windows/Linux,
+avec PostgreSQL REQUIRED sous Linux, est opérationnelle et SourceLink VERIFIED.
+Les [preuves acquises](../../CONTRIBUTING.md#321-checks-attendus) identifient leur
+run, tentative et SHA ; elles ne garantissent pas une révision future.
 
-Le statut historique de chaque ADR est distinct de l'état de préparation de sa
-documentation : cette mise à jour n'accepte, ne remplace et ne clôture aucune
-décision par elle-même. Aucun lien vers une gouvernance privée n'est nécessaire
-pour lire les décisions ci-dessous.
+**P03-F1 reste OPEN / UNKNOWN**, réexamen **2026-11-16**, sans prolongation tacite.
+Une campagne verte ne prouve pas de correction causale ; conserver les
+[observations historiques](../../tests/readiness-concurrency-regression.md).
+
+Le statut de chaque ADR reste distinct de son implémentation : cette mise à
+jour n’accepte, ne remplace et ne clôture aucune décision par elle-même.
+Aucun lien vers une gouvernance privée n’est nécessaire pour lire ces décisions.
 
 ---
 
@@ -283,6 +287,10 @@ Une implémentation existante ne remplace pas silencieusement une décision acce
 | [ADR-0038](./0038-make-the-public-ci-autonomous-and-the-private-ci-consuming.md) | Accepté | Rendre la CI publique autonome et la CI privée consommatrice |
 | [ADR-0039](./0039-publish-sitefactory-from-a-new-sanitized-git-repository.md) | Accepté | Publier SiteFactory depuis un nouveau repository Git assaini |
 
+Les intitulés ci-dessus conservent les décisions acceptées dans leur contexte ;
+ils ne désignent pas une liste d’opérations restant à exécuter. Leurs statuts et
+fichiers sources sont inchangés.
+
 La licence du code original public ne relicencie automatiquement ni les modules
 propriétaires ni les sorties générées ou contenus tiers. Les contrats publics
 versionnés et la composition statique ne nécessitent pas de package déjà publié.
@@ -292,10 +300,11 @@ et [la clarification réciproque 0035](0035-partage-public-component-via-nuget.m
 admettent exactement `LogicGate.SiteFactory.ModuleSdk` au public ; tout autre
 ID public exige une admission explicite. Le préfixe commun ne classe pas la
 confidentialité, les autres packages internes restent privés sans fallback.
-L'exemple initial de mapping est qualifié historique, pas configuration actuelle
-du consommateur mixte. Sources, versions/locks, provenance et sécurité de
-publication restent obligatoires ; preuve du mapping/cache isolé/substitution
-encore à exécuter, aucun package déclaré publié. Statuts et compteurs inchangés.
+L’exemple initial de mapping est historique ; il ne décrit pas une configuration
+active du moteur public. Sources, versions/locks, provenance et sécurité de
+publication restent obligatoires ; la preuve de distribution NuGet
+(mapping des sources/cache isolé/substitution) reste à exécuter, distincte
+de SourceLink. Aucun package déclaré publié ; statuts et compteurs inchangés.
 
 ---
 
@@ -463,13 +472,17 @@ ADR-0033
 → ADR-0036
 → ADR-0037
 → ADR-0038
-→ ADR-0039
 ```
 
-Elles imposent l'autonomie du public, les contrats/packages versionnés, la
-composition explicite sans chargement dynamique, la séparation des pipelines et
-un nouvel historique public assaini. Elles ne donnent aucune autorisation
-implicite de publier, d'exporter ou de lancer une release.
+Elles imposent l’autonomie du moteur public, les contrats/packages versionnés,
+la composition explicite sans chargement dynamique et une CI indépendante
+des consommateurs. Elles ne donnent aucune autorisation implicite de publier,
+d’exporter ou de lancer une release.
+
+[ADR-0039](0039-publish-sitefactory-from-a-new-sanitized-git-repository.md) conserve
+le contexte de la publication initiale déjà effectuée ; ses règles de
+confidentialité et de source de vérité restent applicables. Ce n’est pas
+une procédure de création à recommencer pour contribuer.
 
 ---
 
@@ -1121,28 +1134,28 @@ Une revue doit être déclenchée lorsque :
 
 # 22. État de maturité du socle MVP
 
-Les ADR `0001` à `0032` décrivent une architecture volontairement plus robuste qu’un simple générateur de site.
-Le portrait ci-dessous conserve ce contexte historique ; les décisions `0033`
-à `0039` étendent désormais le moteur modulaire à un périmètre public autonome,
-sans dépendance du public vers les modules propriétaires. Il ne prouve pas
-l'implémentation des capacités futures d'application ou d'exploitation.
+Les ADR `0001` à `0032` décrivent une architecture volontairement plus robuste
+qu’un simple générateur de site. Les décisions `0033` à `0039` fixent les
+frontières du moteur modulaire public autonome, sans dépendance vers les modules
+propriétaires. Ce cadre ne prouve pas l’implémentation des capacités futures
+d’application ou d’exploitation.
 
-Ils définissent SiteFactory comme :
+Ils définissent les propriétés architecturales suivantes :
 
 ```text
-une usine logicielle interne
+un moteur de génération
 
-déclarative
+déclaratif
 
 modulaire
 
-sécurisée
+sécurisé
 
 déterministe
 
 testable
 
-versionnée
+versionné
 
 exploitable
 
@@ -1251,6 +1264,7 @@ Ils ne doivent pas être décidés prématurément pour le MVP.
 | 2026-07-30 | Déclaration du socle architectural MVP comme complet |
 | 2026-11-09 | Mise à jour de l'index public : ADR-0033 à ADR-0039, 39 décisions acceptées, distinction décisions/capacités livrées et statuts historiques préservés |
 | 2026-11-09 | Réconciliation humaine de la portée ADR-0008/0035 : admission publique par ID exact, sans nouvelle décision numérotée ni changement de statut/compteur |
+| 2026-11-12 | Statut du dépôt et de la CI actualisé, publication initiale distinguée des règles actives ; aucun ADR ni statut modifié |
 
 ---
 
