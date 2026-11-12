@@ -2,176 +2,85 @@
 
 ## 1. Objet
 
-Ce fichier définit les règles de travail applicables aux agents de développement intervenant sur LogicGate SiteFactory.
+Ce fichier fixe les instructions obligatoires pour tout agent, développeur ou outil
+automatisé intervenant sur SiteFactory. Un changement doit être borné, compilable,
+conforme aux décisions architecturales, testé, maintenable, documenté, sans
+affaiblissement de sécurité ni effet de production implicite.
 
-Il s’adresse notamment à :
-
-- Codex ;
-- tout autre agent de développement assisté par IA ;
-- tout outil automatisé modifiant le repository ;
-- tout développeur utilisant un agent pour implémenter, revoir ou corriger du code.
-
-Les agents doivent considérer ce document comme une instruction opérationnelle obligatoire.
-
-SiteFactory est un moteur modulaire .NET 10 dont le périmètre public open source est placé sous Apache-2.0 pour son code original, avec les attributions de LICENSE et NOTICE. Le Core, le ModuleSdk, le module Documentation et les bibliothèques runtime/PostgreSQL génériques ne dépendent d'aucun module Business privé. Le repository public et les packages ne sont pas encore publiés ; aucune autorisation de publication ne découle de ce document.
-
-L’objectif d’un agent n’est pas uniquement de produire du code compilable.
-
-Il doit produire un changement :
-
-```text
-borné
-
-conforme aux décisions architecturales
-
-testé
-
-maintenable
-
-documenté
-
-sans affaiblissement de sécurité
-
-sans effet de production implicite
-```
-
----
+SiteFactory est un moteur open source modulaire .NET 10, sous Apache-2.0 pour
+son code original, avec LICENSE et NOTICE. Core, ModuleSdk, DocumentationModule
+et bibliothèques runtime/PostgreSQL génériques se construisent sans dépendance
+propriétaire obligatoire. Aucun package NuGet ni aucune release officielle ne sont publiés;
+ce document n’autorise aucune publication.
 
 ## 2. Portée
 
-Ce fichier s’applique à l’ensemble du repository.
-
-```text
-/
-├── src/
-├── tests/
-├── templates/
-├── modules/
-├── samples/
-├── deploy/
-├── scripts/
-├── docs/
-└── fichiers racine
-```
-
-Un fichier `AGENTS.md` placé dans un sous-répertoire peut ajouter des règles plus spécifiques pour ce périmètre.
-
-Un fichier enfant ne doit pas affaiblir les invariants non dérogeables du présent document sans :
-
-- décision humaine explicite ;
-- mise à jour documentaire ;
-- ADR accepté lorsque nécessaire.
-
----
+Ces instructions s’appliquent à tout le repository. Un AGENTS.md enfant peut
+ajouter des règles locales; il ne peut affaiblir un invariant non dérogeable sans
+décision humaine explicite, mise à jour documentaire et ADR accepté si nécessaire.
 
 ## 3. Langage normatif
 
-Les termes suivants sont normatifs :
-
-```text
-DOIT
-→ exigence obligatoire
-
-NE DOIT PAS
-→ interdiction
-
-DEVRAIT
-→ règle recommandée, sauf justification explicite
-
-PEUT
-→ possibilité facultative
-```
-
-En cas de doute, l’agent doit privilégier :
-
-```text
-le changement le plus petit
-
-le comportement le plus sûr
-
-la solution la plus explicite
-
-l’absence d’effet irréversible
-```
-
----
+**DOIT** désigne une exigence obligatoire; **NE DOIT PAS**, une interdiction;
+**DEVRAIT**, une recommandation sauf justification explicite; **PEUT**, une option.
+En cas de doute, choisir le changement le plus petit, le plus sûr, le plus
+explicite et sans effet irréversible.
 
 ## 4. Contexte public et contributions
 
-Le périmètre public implémenté comprend :
+Le [README](README.md#capacités-disponibles) décrit les capacités livrées:
+Core générique, ModuleSdk/catalogue/contributions, CLI validate/plan/generate
+composée avec DocumentationModule, scanner Git local read-only, site statique,
+contrats/runtime purs, adaptateurs Hosting/ASP.NET Core, PostgreSQL générique,
+Migrator explicite, tests et guards publics.
 
-- Domain, Application et Infrastructure génériques ;
-- ModuleSdk, catalogue et contributions de génération explicites ;
-- CLI publique validate/plan/generate, composée avec DocumentationModule ;
-- scanner Git local read-only, modèle documentaire et rendu de site statique ;
-- Runtime.Contracts et Runtime purs, adaptateurs Hosting/ASP.NET Core ;
-- Infrastructure PostgreSQL et Migrator explicite ;
-- tests publics, guards architecturaux et harnais PostgreSQL REQUIRED.
+La configuration V1 est `client.sitefactory.yml`. Les sorties disponibles sont
+`sitefactory.lock.json`, `generation-report.json` et
+`.sitefactory/generation-state.json`; les autres manifests/plans cibles ne sont
+pas déjà produits. La CLI génère le template documentaire embarqué; l’import
+d’un repository est une API C#, pas une commande CLI. Les bibliothèques runtime
+et PostgreSQL ne sont pas un générateur d’application métier complète.
 
-La configuration structurelle V1 reste `client.sitefactory.yml`.
-Les sorties de génération disponibles incluent `sitefactory.lock.json`,
-`generation-report.json` et `.sitefactory/generation-state.json`.
-Ne pas présenter les autres manifests/plans cibles comme déjà produits.
+Les consommateurs composent leurs modules par les contrats publics. Le Core ne
+dépend d’aucune implémentation métier concrète; aucun ProjectReference entre
+repositories n’est autorisé ([ADR-0033](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md)).
+Chaque contribution doit avoir un périmètre et une responsabilité explicites.
+Aucun accès privé ne doit être requis pour construire ou tester le public.
+Ne copier aucun code, fixture ou binaire privé; ne modifier aucune classification,
+allowlist, SHA approuvé ou licence sans décision humaine spécifique.
 
-La CLI publique génère le template documentaire embarqué ; l'import complet
-d'un repository documentaire est accessible par composition C#, pas par une
-commande CLI inventée. Les bibliothèques runtime/PostgreSQL ne constituent pas
-un générateur d'application Business dans la distribution publique.
-
-Les modules, templates et assets Business restent privés. La dépendance va du
-privé vers les contrats publics, jamais l'inverse. Après séparation physique,
-aucun ProjectReference entre repositories n'est autorisé
-([ADR-0033](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md)).
-
-Toute contribution doit posséder un périmètre et une responsabilité explicites.
-Aucun accès à un repository privé ne doit être nécessaire pour construire ou
-tester le public. Ne pas copier de code, fixture ou binaire privé dans le public,
-ni modifier une classification, allowlist, SHA approuvé ou licence sans décision
-humaine spécifique.
-
-[ADR-0034](docs/adr/0034-apache-licence-choice-for-publish-site-factory.md) ne
-relicencie automatiquement ni les modules Business, ni les sorties générées,
-ni les contenus tiers. Leurs droits/notices doivent être conservés.
-
----
+[ADR-0034](docs/adr/0034-apache-licence-choice-for-publish-site-factory.md) ne relicencie ni les modules consommateurs, ni les sorties
+générées, ni les contenus tiers: conserver leurs droits et notices.
 
 ## 5. État actuel et limites des preuves
 
-La solution publique réelle est `SiteFactory.slnx` : 12 projets de production,
-11 projets de tests. SDK .NET 10 déclaré dans `global.json`.
-Le code et les capacités sont décrits dans README et CHANGELOG ; les capacités
-développées restent sous Unreleased, sans release ou package NuGet publié.
+[SiteFactory.slnx](SiteFactory.slnx) contient 12 projets de production et 11 de
+tests; le SDK .NET 10 déclaré est dans [global.json](global.json). Les capacités
+restent sous [Unreleased](CHANGELOG.md#unreleased), sans package ni release publié.
+Génération/régénération sont déterministes, préservent les customizations et
+refusent états/stratégies inconnus sans overwrite implicite. L’atomicité est
+**par fichier**, pas une transaction filesystem globale.
 
-La génération et la régénération contrôlée sont implémentées. Elles restent
-déterministes, préservent les customizations et refusent les états/stratégies
-inconnus sans overwrite implicite. Atomicité par fichier seulement, pas
-transaction filesystem globale.
+La CI publique Windows/Linux/PostgreSQL est opérationnelle, avec SourceLink
+VERIFIED. Le [run main 43228653055](https://github.com/fi8Git/logicgate-sitefactory/actions/runs/43228653055),
+tentative 1, exécute `e001093a1cfce5c5d1716b182fc84a785f5696f8`.
+Voir les [résultats et limites de preuve](CONTRIBUTING.md#321-checks-attendus).
+Le harnais PostgreSQL garde deux inventaires fermés, 20 Facts Infrastructure
+et 3 Hosts, sur cinq shards. Ne jamais présenter une preuve acquise comme
+rejouée pendant une tâche documentaire, ni confondre un test local Windows
+contre PostgreSQL Linux avec une validation .NET multiplateforme distante.
 
-Le harnais public `tests/PostgreSql/Public/Invoke-PostgreSqlTests.ps1` possède
-deux inventaires PostgreSQL fermés : 20 Facts Infrastructure et 3 Facts Hosts,
-cinq shards séquentiels. Ses preuves locales acquises ne doivent pas être
-présentées comme rejouées pendant une tâche documentaire.
+**P03-F1 reste OPEN / UNKNOWN**: 749 HTTP 200 / 19 HTTP 503 historiques, cause
+non démontrée, risque accepté avec réserve; réexamen obligatoire le
+**2026-11-16**, sans prolongation tacite. Une campagne verte ne démontre aucune
+correction causale. Conserver les [observations historiques](tests/readiness-concurrency-regression.md).
 
-La CI publique Windows/Linux est préparée mais non validée à distance.
-SourceLink du véritable repository public reste PENDING ; le repository public
-n'est pas encore créé. Ne pas confondre preuve locale Windows .NET vers
-PostgreSQL Linux et validation multiplateforme distante.
-
-**P03-F1 reste OPEN / UNKNOWN** : 749 HTTP 200 / 19 HTTP 503 historiques,
-cause non démontrée, risque accepté avec réserve. Réexamen obligatoire
-le **2026-10-23**, sans prolongation tacite ni correction causale prétendue
-à partir de campagnes vertes.
-
-Les politiques ci-dessous restent obligatoires même lorsqu'elles concernent
-des fonctions futures : elles n'annoncent pas leur implémentation. En particulier,
-aucun déploiement client complet, provisioning/exploitation PostgreSQL production,
-backup/restore, job métier ou publication ne doit être inféré des exemples.
-
-L’agent doit inspecter le repository réel avant d’utiliser un nom de solution,
-de projet ou de fichier. Il ne doit pas inventer un fichier absent uniquement
-parce que la documentation décrit son existence future.
-
----
+Les politiques techniques suivantes restent obligatoires pour les composants
+concernés, y compris futurs; elles n’en annoncent pas l’implémentation. Ne pas
+déduire des exemples un déploiement client complet, une exploitation/provisioning
+PostgreSQL production, un backup/restore, un job métier ou une publication.
+Inspecter les fichiers réels avant d’utiliser un nom de solution/projet/fichier;
+ne pas créer un fichier absent pour satisfaire un exemple futur.
 
 ## 6. Sources de vérité
 
@@ -207,155 +116,73 @@ demander une décision humaine si nécessaire
 
 ## 7. Documents obligatoires
 
-Avant une tâche structurante, l’agent doit identifier et lire les documents applicables.
+Avant une tâche structurante, identifier et lire les documents applicables au
+périmètre. Une description cible n’autorise ni fonctionnalité supplémentaire
+ni opération de production.
 
 ### 7.1 Documentation générale
 
-```text
-README.md
-
-CONTRIBUTING.md
-
-CHANGELOG.md
-```
+[README](README.md), [CONTRIBUTING](CONTRIBUTING.md), [CHANGELOG](CHANGELOG.md).
 
 ### 7.2 Documentation architecturale
 
-```text
-docs/02-architecture/
-```
+[Architecture](docs/02-architecture/).
 
 ### 7.3 Génération
 
-```text
-docs/03-generation/
-```
+[Génération et contrats V1](docs/03-generation/).
 
 ### 7.4 Qualité et sécurité
 
-```text
-docs/04-quality-security/
-```
+[Qualité et sécurité](docs/04-quality-security/), [contrat CI actuel](scripts/public-ci/README.md).
 
 ### 7.5 Opérations
 
-```text
-docs/05-operations/
-```
+[Contrats d’opérations](docs/05-operations/): exigences cibles, pas preuve de livraison.
 
 ### 7.6 Règles Codex
 
-```text
-docs/06-codex/28-codex-operating-guide.md
-
-docs/06-codex/29-codex-task-specification-template.md
-
-docs/06-codex/30-codex-review-template.md
-
-docs/06-codex/31-codex-correction-template.md
-```
+[Guide](docs/06-codex/28-codex-operating-guide.md),
+[tâche](docs/06-codex/29-codex-task-specification-template.md),
+[revue](docs/06-codex/30-codex-review-template.md),
+[correction](docs/06-codex/31-codex-correction-template.md).
 
 ### 7.7 Décisions
 
-```text
-docs/adr/README.md
-
-docs/adr/
-```
-
-L’agent ne doit pas lire systématiquement les 32 ADR pour une modification locale.
-
-Il doit identifier ceux qui s’appliquent réellement à la tâche.
-
----
+L’[index ADR](docs/adr/README.md) réunit 39 décisions acceptées. Lire celles
+réellement applicables, sans relire tout l’ensemble pour une correction locale.
+Acceptation d’une décision et implémentation sont distinctes.
 
 ## 8. ADR fondamentaux par domaine
 
+Les fichiers correspondants sont liés dans l’[index ADR](docs/adr/README.md).
+
 ### 8.1 Génération et configuration
 
-```text
-ADR-0001
-ADR-0002
-ADR-0005
-ADR-0007
-ADR-0009
-ADR-0014
-ADR-0015
-```
+ADR-0001, ADR-0002, ADR-0005, ADR-0007, ADR-0009, ADR-0014, ADR-0015.
 
 ### 8.2 PostgreSQL et données
 
-```text
-ADR-0003
-ADR-0004
-ADR-0016
-ADR-0023
-ADR-0027
-ADR-0028
-```
+ADR-0003, ADR-0004, ADR-0016, ADR-0023, ADR-0027, ADR-0028.
 
 ### 8.3 Sécurité
 
-```text
-ADR-0008
-ADR-0012
-ADR-0018
-ADR-0019
-ADR-0020
-ADR-0021
-ADR-0022
-ADR-0025
-ADR-0026
-```
+ADR-0008, ADR-0012, ADR-0018, ADR-0019, ADR-0020, ADR-0021, ADR-0022, ADR-0025, ADR-0026.
 
 ### 8.4 API, jobs et runtime
 
-```text
-ADR-0017
-ADR-0028
-ADR-0029
-ADR-0030
-ADR-0031
-```
+ADR-0017, ADR-0028, ADR-0029, ADR-0030, ADR-0031.
 
 ### 8.5 Production
 
-```text
-ADR-0011
-ADR-0014
-ADR-0024
-ADR-0026
-ADR-0027
-ADR-0031
-ADR-0032
-```
-
----
+ADR-0011, ADR-0014, ADR-0024, ADR-0026, ADR-0027, ADR-0031, ADR-0032.
 
 ## 9. Rôle de l’agent
 
-L’agent est un exécutant technique guidé par :
-
-- une tâche ;
-- les documents ;
-- les ADR ;
-- les tests ;
-- les décisions humaines.
-
-Il peut :
-
-- analyser le repository ;
-- proposer un plan ;
-- implémenter une tâche bornée ;
-- ajouter ou corriger des tests ;
-- mettre à jour une documentation ;
-- effectuer une revue ;
-- signaler un risque ;
-- proposer un ADR lorsqu’une nouvelle décision est nécessaire.
-
-Il ne doit pas devenir le décideur implicite du produit ou de l’architecture.
-
----
+L’agent exécute une tâche guidée par les documents, ADR, tests et décisions
+humaines. Il peut analyser, proposer un plan, implémenter un changement borné,
+ajouter/corriger des tests, documenter, revoir et signaler un risque ou le besoin
+d’un ADR. Il ne décide pas implicitement du produit ou de l’architecture.
 
 ## 10. Actions interdites à un agent
 
@@ -2111,36 +1938,22 @@ Règles :
 
 # 49. Commandes de validation
 
-Les commandes des suites publiques offline, depuis la racine, sont :
+Utiliser les [commandes offline](CONTRIBUTING.md#30-commandes-de-validation) et
+les [guards](CONTRIBUTING.md#301-guards-et-preuve-publique-isolée) depuis la racine.
+Le filtre `Category!=PostgreSql` exclut les Facts réels sans les déclarer réussis;
+Docker/PostgreSQL ne sont pas requis pour les suites offline. Ne pas assouplir
+les guards de frontières.
 
-```powershell
-dotnet restore SiteFactory.slnx --locked-mode
-dotnet build SiteFactory.slnx --configuration Release --no-restore
-dotnet test SiteFactory.slnx --configuration Release --no-build --no-restore --filter "Category!=PostgreSql"
-```
+Pour une preuve PostgreSQL explicitement demandée, suivre
+[PostgreSQL REQUIRED](CONTRIBUTING.md#302-postgresql-required-distinct), après
+restore/build et avec Docker Linux. Le [contrat du harnais](tests/PostgreSql/README.md)
+reste: PostgreSQL 18.6, TLS VerifyFull, 23 Facts exacts, cinq shards, 360 s par
+shard, TRX contrôlés et cleanup strict. Absence, skip, échec ou cleanup incomplet
+ne valent jamais succès. Aucun retry jusqu’au vert, réduction des 32 × 24
+requêtes P03 ou allongement des deadlines pour masquer un refus.
 
-Le filtre exclut les Facts PostgreSQL réels sans les présenter comme réussis.
-Docker/PostgreSQL ne sont pas requis pour ces suites offline. Les guards de
-frontières font partie des tests publics ; ne pas les assouplir.
-
-Pour une preuve PostgreSQL explicitement demandée, après restore/build et avec
-Docker Linux disponible :
-
-```powershell
-pwsh -NoProfile -File tests/PostgreSql/Public/Invoke-PostgreSqlTests.ps1 -RunRequired
-```
-
-[Contrat du harnais](tests/PostgreSql/README.md) : PostgreSQL 18.6, TLS VerifyFull,
-23 Facts exacts, cinq shards, 360 s par shard, TRX contrôlés et cleanup strict.
-Une absence, un skip, un échec ou un cleanup incomplet ne vaut jamais succès.
-Aucun retry jusqu'au vert, réduction des 32 × 24 requêtes P03 ou allongement
-des deadlines ne doit masquer un refus.
-
-L’agent doit utiliser le nom réel présent dans le repository.
-
-Il ne doit pas créer artificiellement `SiteFactory.slnx` uniquement pour correspondre à ce document si une autre convention a été validée.
-
----
+Utiliser les noms réels; ne jamais créer une solution absente pour satisfaire
+un exemple documentaire plutôt que la convention validée du repository.
 
 ## 49.1 Tests ciblés
 
@@ -2569,74 +2382,18 @@ les limites restantes sont déclarées
 
 ---
 
-# 65. Repère historique du bootstrap
+<a id="65-repère-historique-du-bootstrap"></a>
 
-La séquence suivante rappelle le bootstrap déjà réalisé ; elle n'est pas une
-liste de capacités encore absentes ni une autorisation de recommencer ces lots.
-Les nouvelles contributions doivent conserver le principe de tâches courtes :
+# 65. Tâches courtes
 
-```text
-1. Bootstrap de la solution et des projets
-
-2. Conventions de build et tests
-
-3. CLI minimale
-
-4. Modèle de résultat et codes de sortie
-
-5. Chargement YAML
-
-6. Validation du schéma client
-
-7. Génération du plan
-
-8. Abstraction de génération de fichiers
-
-9. Lock SiteFactory
-
-10. Rapport de génération
-
-11. Premier projet généré minimal
-
-12. Build du projet généré
-
-13. Test de déterminisme
-
-14. CI initiale
-```
-
-Ne pas commencer simultanément :
-
-- l’administration complète ;
-- les 32 ADR ;
-- les 500 tâches ;
-- le déploiement production ;
-- tous les modules commerciaux.
-
----
+Respecter le [découpage des tâches](#13-taille-des-tâches). Ne pas rouvrir des
+lots validés ni commencer simultanément administration complète, ensemble des
+ADR, backlog entier, déploiement production et tous les modules métier.
 
 # 66. Résumé opérationnel
 
-```text
-Lire la tâche
-
-Inspecter le repository
-
-Identifier les ADR
-
-Planifier un petit changement
-
-Implémenter dans la bonne couche
-
-Ajouter les tests
-
-Exécuter les quality gates
-
-Auto-revoir le diff
-
-Rendre compte honnêtement
-
-Ne jamais agir en production implicitement
-```
-
-> L’agent doit optimiser la qualité de la décision déjà prise, pas remplacer la décision humaine. Dans SiteFactory, un changement réussi est un changement petit, prouvé, conforme aux contrats et suffisamment explicite pour être maintenu ou repris sans dépendre de la mémoire de son auteur.
+Suivre le [workflow obligatoire](#12-workflow-obligatoire): comprendre la tâche,
+inspecter le repository et les ADR, planifier, implémenter dans la bonne couche,
+ajouter les tests, exécuter les contrôles, auto-revoir le diff et rendre compte
+honnêtement. Aucune action de production implicite. L’agent améliore l’exécution
+d’une décision humaine; il ne la remplace pas.

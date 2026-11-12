@@ -2,184 +2,80 @@
 
 ## 1. Objet
 
-Ce document décrit le processus de contribution au repository LogicGate SiteFactory.
+Ce guide s’applique aux développeurs, reviewers, mainteneurs, agents IA et outils
+automatisés. Une contribution doit être bornée, compréhensible, testée, conforme
+aux ADR, sécurisée, documentée, réversible lorsque nécessaire et sans effet
+implicite sur la production.
 
-Il s’applique :
+Le code original est sous [Apache-2.0](LICENSE), avec [NOTICE](NOTICE).
+Le public se construit sans dépendance propriétaire obligatoire; les contrats
+permettent aux consommateurs de composer leurs propres modules. La licence
+ne présume aucun droit sur les contenus tiers ou les sorties générées.
 
-- aux développeurs ;
-- aux reviewers ;
-- aux mainteneurs ;
-- à Codex ;
-- aux autres agents de développement ;
-- aux outils automatisés modifiant le repository.
-
-Une contribution doit produire un changement :
-
-```text
-borné
-
-compréhensible
-
-testé
-
-conforme aux ADR
-
-sécurisé
-
-documenté
-
-réversible lorsque nécessaire
-
-sans effet implicite sur la production
-```
-
-Ce guide concerne le **périmètre public SiteFactory**, code original sous
-[Apache-2.0](LICENSE), avec les attributions de [NOTICE](NOTICE).
-Les modules/templates/assets Business restent privés et ne sont jamais une
-dépendance requise du public. Aucun droit sur un contenu tiers ou une sortie
-client générée n'est présumé par cette licence.
-
-Une contribution n’implique aucun droit automatique :
-
-- d’accéder à un projet client ;
-- de manipuler des données réelles ;
-- de publier un package ;
-- de créer un repository distant ;
-- de déployer ;
-- d’appliquer une migration ;
-- de modifier une infrastructure.
-
----
+Contribuer n’autorise ni accès à un projet client ou à des données réelles, ni
+publication de package, création de repository distant, déploiement, migration
+ou modification d’infrastructure. Ces opérations nécessitent leur autorisation.
 
 ## 2. Documents à lire
 
-Avant toute contribution, consulter au minimum :
-
-```text
-README.md
-
-AGENTS.md
-
-docs/adr/README.md
-```
-
-Puis identifier les documents correspondant au périmètre de la tâche.
+Lire [README](README.md), [AGENTS](AGENTS.md) et l’[index ADR](docs/adr/README.md),
+puis les documents applicables au périmètre; pas tous les ADR pour chaque correction.
 
 ### 2.1 Vision et produit
 
-```text
-docs/00-vision/
-
-docs/01-product/
-```
+[Capacités et limites](README.md#capacités-disponibles), [CHANGELOG](CHANGELOG.md).
 
 ### 2.2 Architecture
 
-```text
-docs/02-architecture/
-```
+[Composants, frontières et contrats](docs/02-architecture/).
 
 ### 2.3 Génération
 
-```text
-docs/03-generation/
-```
+[CLI et guides actuels](README.md#cli-publique--validate-plan-generate).
 
 ### 2.4 Qualité et sécurité
 
-```text
-docs/04-quality-security/
-```
+[Exigences](docs/04-quality-security/), [contrat CI actuel](scripts/public-ci/README.md).
 
 ### 2.5 Exploitation
 
-```text
-docs/05-operations/
-```
+[Opérations](docs/05-operations/): contrats cibles, pas outils ou exploitation livrés.
 
 ### 2.6 Travail avec Codex
 
-```text
-docs/06-codex/
-```
+[Instructions](AGENTS.md), [guide et modèles](docs/06-codex/).
 
 ### 2.7 Décisions architecturales
 
-```text
-docs/adr/
-```
-
-Il n’est pas nécessaire de relire tous les ADR pour chaque correction locale.
-
-Le contributeur doit cependant identifier et lire les ADR réellement applicables à sa tâche.
-
----
+[ADR](docs/adr/README.md): lire les décisions du domaine concerné; leur acceptation
+ne prouve pas l’implémentation des capacités cibles.
 
 ## 3. Sources de vérité
 
-En cas d’ambiguïté, appliquer l’ordre suivant :
-
-1. décision humaine explicite associée à la tâche ;
-2. ADR accepté applicable ;
-3. `AGENTS.md` ;
-4. documentation de vision et d’architecture ;
-5. spécification de tâche ;
-6. documentation du module ;
-7. tests existants ;
-8. implémentation actuelle ;
-9. comportement historique non documenté.
-
-Le code existant ne remplace pas silencieusement une décision architecturale acceptée.
-
-Lorsqu’une divergence est détectée :
-
-```text
-identifier la divergence
-
-déterminer si le code est incorrect
-
-déterminer si la documentation est obsolète
-
-corriger le code
-
-ou proposer une nouvelle décision
-
-ne pas réécrire silencieusement l’historique
-```
-
----
+Appliquer l’[ordre des sources de vérité](AGENTS.md#6-sources-de-vérité) et la
+conduite à tenir en cas de conflit. Le code ne remplace pas silencieusement une
+décision acceptée. Identifier si la divergence vient du code ou d’une documentation
+obsolète; corriger le défaut ou proposer une nouvelle décision, sans réécrire
+l’histoire ni arbitrer implicitement un conflit architectural.
 
 ## 4. État actuel du projet
 
-[SiteFactory.slnx](SiteFactory.slnx) contient les **12 projets de production et
-11 projets de tests publics** : Core/ModuleSdk, CLI Documentation,
-Infrastructure générique/PostgreSQL, Migrator et adaptateurs runtime.
-La CLI fournit validate/plan/generate ; l'import d'un repository documentaire
-existe par API C#, pas par une nouvelle commande.
+[SiteFactory.slnx](SiteFactory.slnx) contient **12 projets de production et 11 de
+tests**. Le [README](README.md) décrit les capacités livrées: moteur .NET 10,
+CLI validate/plan/generate, DocumentationModule, API documentaire C# et
+bibliothèques runtime/PostgreSQL génériques. Runtime.Contracts/Runtime restent
+purs, sans IConfiguration/DI/Hosting, EF ou Npgsql; composition explicite au
+build, sans découverte de DLL au runtime ([ADR-0037](docs/adr/0037-compose-modules-explicitly-without-dynamic-loading.md)).
 
-Les bibliothèques pures Runtime.Contracts/Runtime restent indépendantes
-d'IConfiguration/DI/Hosting et d'EF/Npgsql. Les modules sont compilés puis
-enregistrés explicitement, sans découverte de DLL au runtime
-([ADR-0033](docs/adr/0033-split-public-sitefactory-and-private-logicgate-modules.md),
-[ADR-0034](docs/adr/0034-apache-licence-choice-for-publish-site-factory.md),
-[ADR-0037](docs/adr/0037-compose-modules-explicitly-without-dynamic-loading.md)).
+La version de développement est déclarée dans [Directory.Build.props](Directory.Build.props);
+les évolutions restent sous [Unreleased](CHANGELOG.md#unreleased). Aucun package
+NuGet ni aucune release officielle ne sont publiés. La CI publique Windows/Linux/PostgreSQL est
+opérationnelle, SourceLink VERIFIED; voir [CI et provenance](#321-checks-attendus).
+Les documents cibles ne valent ni livraison ni autorisation d’exécution.
 
-La version de développement est déclarée dans Directory.Build.props ; les
-capacités restent dans CHANGELOG sous **Unreleased**. Aucun package NuGet ou
-release officielle publié, repository public encore à créer. CI publique
-préparée, pas de preuve distante Windows/Linux acquise ici ; SourceLink public
-**PENDING**. Les documents de vision/opérations peuvent encore décrire des
-capacités futures, pas une autorisation de les implémenter ou de les exécuter.
-
-Le contributeur doit inspecter le repository réel avant :
-
-- de choisir un nom de solution ;
-- de créer un projet ;
-- d'ajouter une dépendance ;
-- de modifier une convention ;
-- d'exécuter une commande.
-
----
+Inspecter les projets, fichiers et conventions réels avant de choisir un nom de
+solution, créer un projet, ajouter une dépendance, modifier une convention ou
+exécuter une commande.
 
 # 5. Principes de contribution
 
@@ -1868,74 +1764,65 @@ Le [guard public](tests/PublicCi/Test-PublicCi.ps1) utilise YamlDotNet déjà
 restauré et vérifie composition fermée, workflows/scripts, références/ressources
 et contre-exemples synthétiques. Conserver les assertions exactes et négatives.
 
-Pour une **future validation complète isolée**, locale et sans PostgreSQL,
-le script public versionné peut être invoqué avec un dossier de preuves neuf :
+Pour une validation complète isolée, locale et sans PostgreSQL, utiliser un
+dossier de preuves neuf et l’identité du repository public:
 
 ```powershell
-pwsh -NoProfile -File scripts/public-ci/Invoke-PublicCi.ps1 -Mode Offline -ProofDirectory ./artifacts/public-ci-local-proof
+pwsh -NoProfile -File scripts/public-ci/Invoke-PublicCi.ps1 -Mode Offline -PublicRepository fi8Git/logicgate-sitefactory -ProofDirectory ./artifacts/public-ci-local-proof
 ```
 
-Le dossier ne doit pas déjà exister. Ce mode copie seulement le périmètre public
-dans une racine temporaire extérieure au Git source, emploie un cache NuGet
-isolé, vérifie les 23 projets, restore verrouillé/format/build et les onze
-suites offline, puis les inventaires et TRX. Il ne lance pas PostgreSQL.
-Une copie n'est pas un export public approuvé ; un succès local n'est pas un
-résultat GitHub Actions ni une validation SourceLink du futur repository.
-Ce mode est aussi adapté au repository encore mixte, sans importer de source
-ou de binaire Business.
-
----
+Le dossier ne doit pas déjà exister. Le harnais vérifie le checkout et son SHA,
+les 23 projets et les entrées autorisées avant copie dans un scratch possédé,
+extérieur au Git source. Il vérifie les octets copiés, utilise un cache NuGet
+neuf, puis exécute restore verrouillé, guards, format, build, contrôle des
+symboles/binaires, discovery et onze suites offline. Aucun PostgreSQL n’est lancé.
+La preuve SourceLink porte sur les PDB réellement produits et leur mapping;
+un passage local ne prouve pas l’autre OS ni un résultat GitHub Actions.
+Voir le [contrat CI](scripts/public-ci/README.md) pour provenance, diagnostics
+expurgés, isolation et cleanup.
 
 ## 30.2 PostgreSQL REQUIRED distinct
 
-Après restore/build Release, avec PowerShell 7 et Docker Linux disponible,
-exécuter seulement si une vraie campagne est voulue :
+Après restore/build Release, avec PowerShell 7 et Docker Linux, seulement pour
+une vraie campagne explicitement voulue:
 
 ```powershell
 pwsh -NoProfile -File tests/PostgreSql/Public/Invoke-PostgreSqlTests.ps1 -RunRequired
 ```
 
-Le [harnais public P04](tests/PostgreSql/README.md) provisionne **PostgreSQL
-18.6 / 180006**, image par digest approuvé, port loopback dynamique, credentials
-éphémères et certificats temporaires pour **TLS VerifyFull**.
-Le moteur Docker doit pouvoir obtenir l'image approuvée et créer/supprimer les
-seules ressources de la campagne. Ne pas désactiver TLS ni utiliser une base
-développeur, partagée ou de production.
+Le [harnais P04](tests/PostgreSql/README.md) crée PostgreSQL **18.6 / 180006**,
+image par digest approuvé, port loopback dynamique, credentials/certificats
+éphémères et **TLS VerifyFull**. Docker doit pouvoir obtenir cette image et
+gérer uniquement les ressources possédées. Aucune base développeur, partagée ou
+de production; aucune désactivation TLS.
 
-Inventaires distincts : **20 Facts Infrastructure + 3 Facts Hosts = 23**.
-Cinq shards séquentiels **g04=5, g05=3, p01=8, p02=4, p03=3**.
-Budget **360 s par invocation dotnet test**, pas 360 s pour toute la campagne ;
-budgets auxiliaires conservés. Pas de NoBuild/Shard/UseConfiguredInstance dans
-le script public. Sans RunRequired, il fait seulement la discovery hors base,
-pas une preuve PostgreSQL.
+Inventaires fermés: **20 Facts Infrastructure + 3 Hosts**; cinq shards séquentiels
+**g04=5, g05=3, p01=8, p02=4, p03=3**. Budget **360 s par invocation dotnet test**,
+avec budgets auxiliaires distincts, pas 360 s pour toute la campagne. Aucun
+paramètre NoBuild/Shard/UseConfiguredInstance. Sans RunRequired: discovery hors
+base uniquement, jamais une preuve PostgreSQL.
 
-Les secrets sont fournis par référence de fichier privée au processus de test,
-jamais en argument ou dans Git. Les 23 résultats doivent être Passed, exacts et
-distincts ; cinq TRX neufs sont contrôlés sur provenance, identités,
-multiplicités, résultats, compteurs et durées. XML décodé contrôlé avant
-archivage ; un TRX sensible n'est jamais publié. Secret/instance absent ou
-invalide, skip, résultat absent/échoué, timeout, TRX incohérent et cleanup
-incomplet restent des échecs, même avec un exit code nul.
+Secrets transmis par référence de fichier au processus, jamais en argument ou
+dans Git. Exiger **23 Passed** exacts et distincts, cinq TRX neufs: provenance,
+identités, multiplicités, résultats, compteurs et durées contrôlés, XML décodé
+vérifié avant archivage expurgé. Ne jamais publier un TRX sensible. Secret ou
+instance absent/invalide, skip, résultat manquant/échoué, timeout, TRX incohérent
+ou cleanup incomplet restent des échecs, même si l’exit code est nul.
 
-Cleanup : zéro base/rôle/session possédés résiduels avant destruction, puis
-conteneur exact, secrets/certificats et processus possédés supprimés ;
-ressources préexistantes préservées. Conserver les campagnes rouges expurgées,
-sans retry jusqu'au vert ni réutilisation d'un ancien TRX.
+Cleanup: zéro base/rôle/session possédés résiduels avant destruction, puis
+suppression du conteneur exact, secrets/certificats et processus possédés;
+préserver les ressources préexistantes. Conserver les preuves rouges expurgées,
+sans retry jusqu’au vert ni réutilisation d’un ancien TRX.
 
-Preuve acquise P04, non rejouée par ce guide : **23/23 Passed, cinq TRX**,
-Windows .NET contre PostgreSQL Linux, TLS VerifyFull et cleanup vérifié.
-Le stress P03 reste **32 × 24 = 768/768 HTTP 200**, 256 par route,
-sans baisse de charge ou allongement des deadlines.
+Preuve locale P04 acquise, non rejouée par ce guide: **23/23 Passed, cinq TRX**,
+Windows .NET contre PostgreSQL Linux, TLS VerifyFull et cleanup vérifiés.
+P03 reste **32 × 24 = 768/768 HTTP 200**, 256 par route, sans réduction de
+charge ni allongement des deadlines.
 
-**P03-F1 OPEN / UNKNOWN** : **749 HTTP 200 / 19 HTTP 503 historiques**,
-cause non démontrée, risque résiduel accepté avec réserve.
-Réexamen obligatoire **2026-10-23**, sans prolongation tacite.
-Les campagnes vertes ne prouvent pas une correction causale ;
-[observabilité et preuves historiques](tests/readiness-concurrency-regression.md).
-Les vingt Facts Business historiques et leurs vrais exécutables restent privés,
-sans mélange avec les vingt Facts Infrastructure publics.
-
----
+**P03-F1 OPEN / UNKNOWN**: **749 HTTP 200 / 19 HTTP 503 historiques**, cause
+non démontrée, risque accepté avec réserve; réexamen obligatoire **2026-11-16**,
+sans prolongation tacite. Une campagne verte ne prouve aucune correction causale.
+Conserver les [observations et preuves historiques](tests/readiness-concurrency-regression.md).
 
 ## 30.3 Documentation
 
@@ -2002,53 +1889,35 @@ Un pourcentage élevé ne compense pas l’absence de test pertinent.
 
 ## 32.1 Checks attendus
 
-Le [workflow public](.github/workflows/ci.yml) prépare deux jobs offline
-Windows/Linux et un job PostgreSQL REQUIRED distinct, puis une agrégation
-fail-closed des preuves. Les [scripts publics](scripts/public-ci/Invoke-PublicCi.ps1)
-restent invocables localement ; aucune donnée, assembly ou autorisation d'accès
-à Business ne doit être requise.
+Le [workflow Public CI](.github/workflows/ci.yml) exécute le parcours complet sur
+chaque PR et push main: Windows/Linux offline, PostgreSQL REQUIRED sous Linux,
+puis **Require complete public proof**. Le [contrat CI](scripts/public-ci/README.md)
+fait référence pour checkout, permissions minimales, actions SHA, scratch/cache
+isolés et provenance. Aucun accès, secret, package ou source propriétaire requis.
 
-La CI distante n'est **pas encore validée** ; SourceLink dans le véritable
-repository public reste **PENDING**. Une preuve locale Windows .NET contre
-PostgreSQL Linux ne prouve pas .NET Linux distant. Ne pas afficher de badge,
-run ou SHA public fictif. Le repository public n'est pas encore créé.
+| Preuve | Exigence |
+|---|---|
+| Windows | 11 suites, 2 726 Passed, 11 TRX |
+| Linux | Même inventaire, 2 726 Passed, 11 TRX |
+| PostgreSQL | 20 Facts Infrastructure + 3 Hosts, 5 shards, 5 TRX |
+| P03 | 32 × 24 = 768/768 HTTP 200, 256 par route, zéro HTTP 503 |
+| Ensemble | SourceLink VERIFIED, 27 TRX, checksums, cleanup et agrégation conformes |
 
-La liste suivante reste un catalogue de contrôles selon le périmètre,
-**pas** l'affirmation qu'ils sont tous implémentés dans le workflow courant :
+**Preuve publique acquise:** [run main 43228653055](https://github.com/fi8Git/logicgate-sitefactory/actions/runs/43228653055),
+tentative 1, SHA exécuté `e001093a1cfce5c5d1716b182fc84a785f5696f8`: les quatre
+jobs sont en succès, agrégation SF-CI-PASSED. Cette preuve n’est pas une nouvelle
+exécution locale. Windows .NET contre PostgreSQL Linux ne prouve pas .NET Linux
+distant. Aucun badge, run ou SHA ne doit être inventé.
 
-```text
-restore verrouillé
+L’agrégation exige même SHA exécuté/runId, tentative entière positive au plus
+égale à la tentative courante et tous les inventaires/TRX exacts. Aucun rapport
+rouge, étranger, futur, incomplet ou dupliqué ne vaut succès; un résultat partiel
+reste partiel. Diagnostic expurgé avant cleanup, sans empêcher celui-ci.
 
-format
-
-build
-
-tests
-
-analyzers
-
-secret scan
-
-dependency scan
-
-SAST
-
-documentation
-
-génération déterministe
-
-PostgreSQL
-
-Docker
-
-SBOM
-
-container scan
-
-OpenAPI diff
-```
-
----
+Selon la tâche, les contrôles applicables comprennent restore verrouillé, format,
+build, tests, analyzers, secret/dependency scan, SAST, documentation, déterminisme,
+PostgreSQL, Docker, SBOM, container scan et OpenAPI diff. Ce catalogue ne prétend
+pas que chaque outil ou workflow futur est déjà implémenté.
 
 ## 32.2 Checks requis
 
@@ -2804,49 +2673,13 @@ la pull request est fusionnable
 
 ---
 
-# 50. Repère historique du bootstrap
+<a id="50-repère-historique-du-bootstrap"></a>
 
-La séquence suivante rappelle la construction initiale ; elle ne décrit pas
-un bootstrap encore absent et n'autorise pas à rouvrir les lots validés.
-Les nouvelles pull requests doivent rester petites et bornées.
+# 50. Découpage des contributions
 
-Séquence historique indicative :
-
-```text
-1. Bootstrap de la solution .NET
-
-2. Conventions de build et Directory.Build.props
-
-3. Premiers projets et tests
-
-4. CLI minimale
-
-5. Résultats et codes de sortie
-
-6. Chargement YAML
-
-7. Validation du schéma
-
-8. Génération d’un plan
-
-9. Abstraction de fichiers générés
-
-10. Lock SiteFactory
-
-11. Rapport de génération
-
-12. Projet généré minimal
-
-13. Test de build du projet généré
-
-14. Test de déterminisme
-
-15. CI initiale
-```
-
-Chaque étape doit laisser `main` dans un état vert et cohérent.
-
----
+Suivre les [changements courts](#53-changements-courts) et garder
+[main intégrable](#52-main-toujours-intégrable). Chaque étape doit être revue,
+testée et utilisable indépendamment, sans rouvrir des lots déjà validés.
 
 # 51. Checklist rapide du contributeur
 
@@ -2894,40 +2727,19 @@ Avant de fusionner :
 
 ---
 
-# 52. Historique de ce document
+<a id="52-historique-de-ce-document"></a>
 
-| Date | Changement |
-|---|---|
-| 2026-07-30 | Création du guide de contribution |
-| 2026-07-30 | Définition du workflow de branches, commits et pull requests |
-| 2026-07-30 | Ajout des règles pour mainteneur unique et agents IA |
-| 2026-07-30 | Ajout des exigences de tests, sécurité, migrations et production |
-| 2026-10-20 | Adaptation R03 au périmètre public, commandes offline/guards et harnais P04 REQUIRED ; CI distante encore non validée |
+# 52. Suivi documentaire
 
----
+L’historique des modifications est conservé dans Git. Les évolutions notables
+suivent la [politique de changelog](#42-changelog), sans transformer une ancienne
+preuve en état courant ni réécrire une décision architecturale acceptée.
 
 # 53. Synthèse
 
-```text
-Une tâche bornée
-
-Une branche courte
-
-Une pull request
-
-Des ADR identifiés
-
-Un diff ciblé
-
-Des tests positifs et négatifs
-
-Une CI verte
-
-Une auto-revue
-
-Une fusion explicite
-
-Aucune action de production implicite
-```
-
-> Contribuer à SiteFactory ne consiste pas seulement à ajouter du code. Chaque modification doit préserver la capacité de générer des projets client cohérents, de les faire évoluer sans écrasement, de les exploiter sans secrets implicites et de comprendre précisément pourquoi le système se comporte ainsi.
+Une contribution suit le [workflow de développement](#12-workflow-de-développement)
+et les [critères de fusion](#40-critères-de-fusion): objectif borné, branche
+courte, PR relue, ADR respectés, tests positifs/négatifs et checks verts,
+fusion explicite et aucune opération de production implicite. Les changements
+doivent préserver génération cohérente, customizations et compréhension des
+contrats, sans secret implicite.
