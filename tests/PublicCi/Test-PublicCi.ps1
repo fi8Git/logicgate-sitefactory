@@ -354,7 +354,7 @@ try{
     $exercise=[scriptblock]::Create('try { Set-CiPhase $RequestedPhase; if($WorkFails){throw $privateMessage}; $report.status=''PASSED'';$report.code=$null } '+
         $execution[0].CatchClauses[0].Extent.Text+' finally '+$execution[0].Finally.Extent.Text)
     $realCleanup=${function:Remove-PublicCiOwnedDirectory}
-    function Test-PhaseReport([string]$RequestedPhase,[string]$name,[bool]$WorkFails=$true,[bool]$CleanupFails=$false,[bool]$ReportFails=$false){
+    function Test-PhaseReport([string]$RequestedPhase,[string]$name,[bool]$WorkFails=$true,[bool]$CleanupFails=$false,[bool]$ReportFails=$false,[bool]$TimingFails=$false){
         $ExpectedCommit=$commit;$RunId='diagnostic';$Attempt='2';$environment=@{}
         $ProofDirectory=Join-Path $temporary ('phases/'+[Guid]::NewGuid().ToString('N'))
         [void][IO.Directory]::CreateDirectory($ProofDirectory)
@@ -369,6 +369,12 @@ try{
         . ([scriptblock]::Create($reportAssignment.Extent.Text))
         $phaseTimer=[Diagnostics.Stopwatch]::StartNew()
         $productionSave=${function:Save-CiReport};$reportFailure=@{Injected=$false}
+        $productionTiming=${function:Complete-CiTiming}
+        function Complete-CiTiming {
+            param([string]$Phase=$report.phase)
+            if($TimingFails -and ($report.status -ceq 'PASSED' -or $Phase -ceq 'CLEANUP')){throw $privateMessage}
+            & $productionTiming $Phase
+        }
         function Save-CiReport {
             if($ReportFails -and $report.phase -ceq 'CLEANUP' -and !$reportFailure.Injected){
                 $reportFailure.Injected=$true;throw $privateMessage
@@ -387,13 +393,13 @@ try{
             $captured=@(& $exercise)
             $json=Get-Content (Join-Path $ProofDirectory 'report.json') -Raw
             $actual=$json|ConvertFrom-Json
-            $expectedStatus=if($WorkFails -or $CleanupFails -or $ReportFails){'FAILED'}else{'PASSED'}
+            $expectedStatus=if($WorkFails -or $CleanupFails -or $ReportFails -or $TimingFails){'FAILED'}else{'PASSED'}
             $expectedPhase=if($WorkFails){$RequestedPhase}else{'CLEANUP'}
             Check ($actual.status -ceq $expectedStatus -and $actual.phase -ceq $expectedPhase) 'phase and terminal status retained'
             Check ($actual.commit -ceq $commit -and $actual.runId -ceq $RunId -and $actual.attempt -ceq $Attempt -and $actual.name -ceq $name) 'phase report provenance preserved'
             Check ($actual.cleanup -ceq $(if($CleanupFails){'Failed'}else{'Completed'})) 'phase report records actual cleanup'
             Check ($actual.timings.Count -gt 0 -and @($actual.timings|Where-Object {$_.phase -cnotin $phases -or $_.durationMs -lt 0}).Count -eq 0) 'timings contain only closed phases and measured nonnegative durations'
-            Check ($actual.code -ceq $(if($CleanupFails){'SF-CI-CLEANUP'}elseif($ReportFails){'SF-CI-REPORT'}elseif($WorkFails){'SF-CI-FAILED'}else{$null})) 'failure code remains controlled'
+            Check ($actual.code -ceq $(if($CleanupFails){'SF-CI-CLEANUP'}elseif($ReportFails -or ($TimingFails -and !$WorkFails)){'SF-CI-REPORT'}elseif($WorkFails){'SF-CI-FAILED'}else{$null})) 'failure code remains controlled'
             $published=$json+$errorCapture.ToString()+($captured -join '')
             foreach($forbidden in @($secretMarker,$scratch,$toolMarker)){
                 Check (!$published.Contains($forbidden,[StringComparison]::Ordinal)) 'no exception, tool output or personal path published'
@@ -413,6 +419,8 @@ try{
     Test-PhaseReport 'RESTORE' 'Windows' $true $true
     Test-PhaseReport 'BUILD' 'Windows' $false $false
     Test-PhaseReport 'BUILD' 'Windows' $false $false $true
+    Test-PhaseReport 'BUILD' 'Windows' $false $false $false $true
+    Test-PhaseReport 'RESTORE' 'Windows' $true $false $false $true
 
     # Real nonzero child processes feed native-shaped red/partial TRX fixtures
     # through the production suite runner and its actual catch/finally cleanup.

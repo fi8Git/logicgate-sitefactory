@@ -243,9 +243,12 @@ try{
     $report.status='FAILED';$report.code=Get-CiFailureCode $_
     [Console]::Error.WriteLine(($report.code+' phase='+$report.phase+'; controlled evidence retained.'))
 }finally{
-    Complete-CiTiming
     $workPassed=$report.status -ceq 'PASSED'
     $reportingFailed=$false
+    try{Complete-CiTiming}catch{
+        $reportingFailed=$true
+        if($workPassed){$report.status='FAILED';$report.code='SF-CI-REPORT'}
+    }
     # A diagnostic write failure must not prevent owned-resource cleanup.
     if($workPassed){
         $report.status='FAILED';$report.code='SF-CI-INCOMPLETE'
@@ -267,7 +270,10 @@ try{
         $report.cleanup='Completed'
         if($workPassed -and !$reportingFailed){$report.status='PASSED';$report.code=$null}
     }
-    try{Complete-CiTiming 'CLEANUP';$phaseTimer.Stop();Save-CiReport}catch{
+    try{Complete-CiTiming 'CLEANUP';$phaseTimer.Stop()}catch{
+        if($workPassed -and !$cleanupFailed){$report.status='FAILED';$report.code='SF-CI-REPORT'}
+    }
+    try{Save-CiReport}catch{
         [Console]::Error.WriteLine(('SF-CI-REPORT phase='+$report.phase+'; proof could not be saved.'))
         exit 1
     }
