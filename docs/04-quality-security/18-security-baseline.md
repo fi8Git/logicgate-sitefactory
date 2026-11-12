@@ -11,43 +11,39 @@
 | Propriétaire | LogicGate |
 | Public principal | LogicGate, développeurs, opérateurs, contributeurs, Codex |
 | Documents parents | `../../README.md`, `../../AGENTS.md`, `../03-generation/13-generation-pipeline.md`, `../adr/0009-client-customizations-and-extension-points.md`, `../02-architecture/core-module-boundary.md`, `09-module-architecture.md`, `10-feature-flags-and-entitlements.md`, `../adr/0023-data-retention-deletion-and-privacy-lifecycle.md`, `../adr/0028-database-transaction-boundaries-and-concurrency-control.md`, `../adr/0020-administrator-session-security-and-step-up-authentication.md`, `../adr/0021-administrator-provisioning-invitations-and-account-recovery.md`, `13-generation-pipeline.md`, `14-client-configuration-schema.md`, `15-cli-specification.md`, `../adr/0015-deterministic-generation-and-optional-ai.md`, `Contrat SEO du site : title et description, H1, canonical, robots, sitemap, JSON-LD, slugs, redirections et domaine coherents ; contenu factuel sans promesse de classement` |
-| Dernière mise à jour | 2026-11-09 |
+| Dernière mise à jour | 2026-11-12 |
 
 ## Périmètre public et niveau de preuve
 
-Cette baseline conserve des **exigences de sécurité**, y compris pour des
-capacités futures ; elle n'est pas un inventaire de fonctions déjà livrées.
-Le périmètre public actuel comprend le Core, ModuleSdk, DocumentationModule,
-la CLI et les bibliothèques runtime/PostgreSQL génériques. Les sources, fixtures,
-modules et exécutables Business ne sont ni requis pour son build ni inclus dans
-sa validation. La dépendance va du privé vers les contrats publics, jamais
-l'inverse ([ADR-0033](../adr/0033-split-public-sitefactory-and-private-logicgate-modules.md)).
+Cette baseline conserve des **exigences de sécurité**, y compris pour les
+capacités futures ; elle n’est pas un inventaire de fonctions déjà livrées.
+Le [README](../../README.md) décrit le moteur, ModuleSdk, DocumentationModule,
+la CLI et les bibliothèques runtime/PostgreSQL génériques. Les consommateurs
+utilisent les contrats publics ; le Core reste indépendant de leurs modules
+concrets, sans dépendance propriétaire obligatoire
+([ADR-0033](../adr/0033-split-public-sitefactory-and-private-logicgate-modules.md)).
 
 Les protections Identity, administration, formulaires, uploads, audit métier,
-CSP, conteneurs applicatifs et exploitation décrites plus bas restent des
-politiques à appliquer lorsqu'un composant les implémente. Elles ne constituent
-pas une application métier publique disponible ni une preuve de production.
-Les contrôles publics réellement implémentés incluent le confinement des chemins,
-la génération déterministe, la protection des customizations, les diagnostics
-non sensibles, le refus des secrets invalides et les frontières PostgreSQL
-Owner/Migrator/Web/Worker. Aucune auto-migration runtime n'est autorisée.
+CSP, conteneurs applicatifs et exploitation ci-dessous restent obligatoires
+lorsqu’un composant les implémente ; elles n’annoncent ni application métier
+publique disponible ni preuve de production. Les contrôles livrés incluent
+confinement des chemins, génération déterministe, customizations préservées,
+diagnostics non sensibles, refus des secrets invalides et frontières PostgreSQL
+Owner/Migrator/Web/Worker. Aucune auto-migration runtime n’est autorisée.
 
-La [CI publique](../../.github/workflows/ci.yml) isole les sources autorisées,
-vérifie restore verrouillé, build Release, guards, symboles, binaires, discovery,
-TRX, provenance et cleanup. Une campagne distante complète a validé **onze suites
-offline / 2 726 cas Passed sous Windows** et les **mêmes 2 726 cas sous Linux**,
-et **23 Facts PostgreSQL réels** dans cinq shards ; ce n'est pas 5 452 scénarios
-fonctionnels distincts. L'agrégation refuse les preuves absentes, incohérentes ou
-non Passed. Cette preuve porte sur le scope public isolé dans le dépôt de
-préparation privé ; elle ne qualifie aucun check Business ni une disponibilité
-ou une sécurité absolue.
+La CI publique Windows/Linux/PostgreSQL est **opérationnelle**, avec **SourceLink
+VERIFIED**. Voir les [gates réellement exécutés](20-quality-gates-and-ci.md), le
+[workflow](../../.github/workflows/ci.yml) et le
+[contrat de preuve](../../scripts/public-ci/README.md) pour isolation, inventaires,
+provenance, symboles/checksums, refus des résultats incomplets et cleanup.
+La [stratégie de tests](19-testing-strategy.md) distingue tests actuels et
+exigences futures ; ni une campagne verte ni un outil absent ne prouvent une
+sécurité absolue. Les preuves acquises ne sont pas rejouées par ce document.
 
-Le véritable dépôt public n'est pas encore créé. Sa CI, ses protections de
-branche et le **SourceLink public PENDING** devront être vérifiés dans ce dépôt,
-sans URL inventée ni désactivation de SourceLink. Les détails de provenance et
-de gouvernance restent dans le suivi privé, pas dans les artefacts publics.
-Voir la [stratégie de tests](19-testing-strategy.md) et les
-[gates réellement exécutés](20-quality-gates-and-ci.md).
+**P03-F1 reste OPEN / UNKNOWN** : historique **749 HTTP 200 / 19 HTTP 503**,
+cause non démontrée, risque accepté avec réserve ; réexamen **2026-11-16**,
+sans prolongation tacite. Une campagne verte ne prouve pas la cause corrigée.
+Conserver les [observations historiques](../../tests/readiness-concurrency-regression.md).
 
 ---
 
@@ -2400,62 +2396,35 @@ Les artefacts ne doivent pas contenir :
 
 # 46. Scans CI obligatoires
 
-Pipeline initial recommandé :
-
-```text
-restore
-build Release
-tests
-secret scan
-dependency scan
-static analysis
-generated project validation
-container checks lorsque Docker est utilisé
-```
-
----
+Le [guide CI](20-quality-gates-and-ci.md#isolation-et-contrôles-effectifs) et les
+[sources d’exécution](../../scripts/public-ci/README.md) décrivent les contrôles
+réellement exécutés. Les exigences suivantes restent applicables selon les
+composants ; la présence d’un outil dans une proposition n’atteste pas son exécution.
 
 ## 46.1 Secret scanning
 
-Outil possible :
-
-```text
-Gitleaks
-```
-
----
+La [politique de détection et de refus](20-quality-gates-and-ci.md#contrôles-futurs-non-livrés-par-ce-workflow)
+reste obligatoire ; Gitleaks est un exemple d’outil possible, pas un scan livré
+par ci.yml. Aucun secret ne peut être accepté faute de workflow dédié.
 
 ## 46.2 Analyse statique
 
-Outils possibles :
-
-```text
-Semgrep
-CodeQL
-analyseurs .NET
-```
-
-Le choix exact dépend du repository et des capacités disponibles.
-
----
+Les analyseurs .NET sont exécutés au build. Semgrep et CodeQL restent des outils
+possibles à configurer selon le repository et les capacités disponibles ; ne
+pas présenter leur absence comme une analyse réussie.
 
 ## 46.3 Dépendances
 
-Outils ou commandes possibles :
-
-```text
-dotnet list package --vulnerable --include-transitive
-Dependabot
-audit NuGet
-```
-
----
+L’audit NuGet est exécuté dans les jobs offline ; sa portée et ses limites sont
+précisées dans le [guide CI](20-quality-gates-and-ci.md#isolation-et-contrôles-effectifs).
+Une revue automatisée supplémentaire reste à configurer selon la politique de
+sources, versions, licences et vulnérabilités. Aucun outil proposé n’est réputé actif.
 
 ## 46.4 Conteneur
 
-Un scan d’image peut être ajouté lorsque l’image est construite dans la CI.
-
----
+Un scan d’image peut être ajouté lorsqu’une image applicative est construite
+en CI ; l’image PostgreSQL éphémère de tests ne prouve pas un build ou scan
+d’image applicative de production.
 
 ## 46.5 Résultat
 
@@ -4370,20 +4339,11 @@ Codex ne peut pas affaiblir seul un contrôle de sécurité.
 
 # 87. Checklist de revue CI/CD
 
-```text
-[ ] Restore
-[ ] Build Release
-[ ] Tests
-[ ] Secret scan
-[ ] Dependency scan
-[ ] Analyse statique
-[ ] Permissions minimales
-[ ] Actions approuvées
-[ ] Aucun secret sur PR non fiable
-[ ] Aucun artefact sensible
-[ ] Image sans secret
-[ ] Échec bloquant non masqué
-```
+Appliquer les [gates CI](20-quality-gates-and-ci.md) : restore/build Release/tests,
+scans de secrets/dépendances et analyse statique selon les composants concernés,
+permissions minimales, actions approuvées, aucun secret sur code de PR non fiable,
+aucun artefact sensible ni secret dans une image, aucun échec bloquant masqué.
+La liste ne signifie pas que tous les scans proposés sont configurés dans ci.yml.
 
 ---
 
