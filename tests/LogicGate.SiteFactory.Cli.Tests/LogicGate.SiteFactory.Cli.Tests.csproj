@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Existing offline client-package baseline remains locked during the test split. -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" PrivateAssets="all" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Hosting" PrivateAssets="all" />
@@ -22,43 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="../../src/LogicGate.SiteFactory.Cli/LogicGate.SiteFactory.Cli.csproj" />
     <ProjectReference Include="../../src/LogicGate.SiteFactory.Modules.Documentation/LogicGate.SiteFactory.Modules.Documentation.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="BusinessCliProcessRunner.cs" />
-    <Compile Remove="GeneratedDotnetProjectTests.cs" />
-    <Compile Remove="GeneratedGitIgnoreTests.cs" />
-    <Compile Remove="GeneratedProjectContract.cs" />
-    <Compile Remove="GeneratedProjectEndToEndTests.cs" />
-    <Compile Remove="GeneratedSkeletonTestReport.cs" />
-    <Compile Remove="GeneratedSkeletonTestReportTests.cs" />
-    <Compile Remove="GeneratedSolutionTopology.cs" />
-    <Compile Remove="GeneratedSolutionTopologyTests.cs" />
-    <Compile Remove="IsolatedPlanCliBuild.cs" />
-    <Compile Remove="ModuleCompositionTests.cs" />
-    <Compile Remove="PostgreSql/GeneratedPostgreSqlHosts.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlBootstrapTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlCatalogSnapshot.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlCatalogSnapshotTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlCompatibilityTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlFoundationEndToEndTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlHarnessDiagnosticsTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlIntegrationTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlMigrationTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlMigratorRoleGraphTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlMigratorSearchPathCases.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlPermissionMatrixTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlRoleBaseline.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlRoleBaselineTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlRoleFixture.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlRoleTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlSchemaPrivilegeCases.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlTestConfiguration.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlTestConfigurationTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlTestDatabase.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlTestMetrics.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlWebReadinessTests.cs" />
-    <Compile Remove="PostgreSql/PostgreSqlWorkerReadinessTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

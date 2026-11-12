@@ -13,6 +13,7 @@ $PSNativeCommandUseErrorActionPreference = $false
 $campaign=$null; $temporary=$null; $container=$null; $creationAttempted=$false
 $cleanupCompleted=$true; $beforeContainers=$null; $exitCode=1; $diagnostic='SF-TEST-PG-HARNESS'
 $image='docker.io/library/postgres:18.6-bookworm@sha256:3725f4e2499eef5134592b3b4ab79a543ed7f8e533b05b5b637af926630f6650'
+$preparationTimer=[Diagnostics.Stopwatch]::StartNew()
 
 try {
     $partition=Read-PublicPostgreSqlPartition $ManifestPath
@@ -158,6 +159,10 @@ try {
         $observationSource=Resolve-PublicPostgreSqlEvidencePath $observationParent ($observationRun+'/observations.json')
         if ([IO.Path]::Exists([IO.Path]::GetDirectoryName($observationSource))) {throw 'SF-TEST-PG-PROVENANCE'}
         $campaign.Manifest.observationRun=$observationRun
+        # Initial discovery, provenance, image/TLS/container readiness and
+        # credentials are ready. Missing measurements remain absent on failure.
+        $campaign.Manifest.preparationMs=[Math]::Round($preparationTimer.Elapsed.TotalMilliseconds,3)
+        $preparationTimer.Stop()
         foreach ($shardName in @('g04','g05','p01','p02','p03')) {
             $shard=@($partition.shards|Where-Object name -CEQ $shardName)[0]
             $environment=@{SITEFACTORY_TEST_POSTGRES_ADMIN_FILE=$adminFile;SITEFACTORY_TEST_POSTGRES_REQUIRED='1';

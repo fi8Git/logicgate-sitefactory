@@ -54,7 +54,8 @@ public sealed partial class CoreModuleBoundaryTests(PublicRepositorySnapshot rep
         Assert.DoesNotContain("BuiltInComposition", dispatcher, StringComparison.Ordinal);
         AssertPublicReferences(dispatcher, DispatcherReferences);
         XDocument publicProject = XDocument.Load(Path.Combine(root, "src", "LogicGate.SiteFactory.Cli", "LogicGate.SiteFactory.Cli.csproj"));
-        Assert.Equal("BuiltInComposition.cs", Assert.Single(publicProject.Descendants("Compile")).Attribute("Remove")?.Value);
+        Assert.DoesNotContain(publicProject.Descendants("Compile"), static element => element.Attribute("Remove") is not null);
+        Assert.False(File.Exists(Path.Combine(root, "src", "LogicGate.SiteFactory.Cli", "BuiltInComposition.cs")));
         AssertReferenceCounterproofs();
     }
 

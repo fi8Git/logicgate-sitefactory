@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Route','Checkout','Offline','PostgreSql','Aggregate')][string]$Mode='Offline',
+    [ValidateSet('Offline','PostgreSql','Aggregate')][string]$Mode='Offline',
     [string]$RepositoryRoot=(Join-Path $PSScriptRoot '../..'),
     [string]$ProofDirectory,
     [string]$ExpectedCommit,
@@ -14,27 +14,6 @@ $ErrorActionPreference='Stop'
 $PSNativeCommandUseErrorActionPreference=$false
 . (Join-Path $PSScriptRoot 'PublicCiProof.ps1')
 $RepositoryRoot=[IO.Path]::GetFullPath($RepositoryRoot)
-if($Mode -ceq 'Route'){
-    $paths=@(Invoke-PublicCiGit $RepositoryRoot @('ls-tree','-r','--name-only','HEAD'))
-    $run=Get-PublicCiRoute $paths $env:GITHUB_EVENT_NAME ($env:CI_REPOSITORY_PRIVATE -ceq 'true')
-    if($env:GITHUB_OUTPUT){[IO.File]::AppendAllText($env:GITHUB_OUTPUT,('run='+$run.ToString().ToLowerInvariant()+[Environment]::NewLine))}
-    Write-Output $(if($run){'SF-CI-ROUTE Public validation selected.'}else{'SF-CI-ROUTE Mixed repository: historical Business CI only; public proof requires an explicit manual run.'})
-    exit 0
-}
-if($Mode -ceq 'Checkout'){
-    if($env:GITHUB_ACTIONS -cne 'true'){throw 'SF-CI-CHECKOUT Ephemeral Actions checkout only.'}
-    $paths=@(Get-PublicCiSourcePaths $RepositoryRoot)
-    # Checkout itself performs the sparse fetch while its short-lived credential is active.
-    # No later private lazy fetch, credentials persisted, or full checkout is permitted.
-    $allowed=[Collections.Generic.HashSet[string]]::new([string[]]$paths,[StringComparer]::Ordinal)
-    $observed=@(Get-ChildItem -LiteralPath $RepositoryRoot -Recurse -File -Force|Where-Object FullName -notmatch '[\\/]\.git[\\/]')
-    foreach($file in $observed){
-        $relative=[IO.Path]::GetRelativePath($RepositoryRoot,$file.FullName).Replace('\','/')
-        if(!$allowed.Contains($relative) -or ($file.Attributes -band [IO.FileAttributes]::ReparsePoint)){throw 'SF-CI-CHECKOUT'}
-    }
-    Write-Output 'SF-CI-CHECKOUT Exact public sources selected; no Business blob needed.'
-    exit 0
-}
 if(!$ExpectedCommit){$ExpectedCommit=(Invoke-PublicCiGit $RepositoryRoot @('rev-parse','HEAD')) -join ''}
 if($ExpectedCommit -cnotmatch '^[0-9a-f]{40}$' -or ($PublicRepository -and $PublicRepository -cnotmatch '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$')){throw 'SF-CI-PROVENANCE'}
 if(!$RunId){$RunId=[Guid]::NewGuid().ToString('N')}
@@ -43,7 +22,7 @@ if(!$ProofDirectory){throw 'SF-CI-PROOF-DIRECTORY'}
 $ProofDirectory=[IO.Path]::GetFullPath($ProofDirectory)
 if($Mode -ceq 'Aggregate'){
     $needs=$NeedsJson|ConvertFrom-Json -AsHashtable
-    if($needs.Count -ne 3 -or $needs.scope.result -cne 'success' -or $needs.public.result -cne 'success' -or $needs.postgresql.result -cne 'success'){throw 'SF-CI-JOB'}
+    if(!(Assert-PublicPostgreSqlExact @($needs.Keys) @('public','postgresql')) -or $needs.public.result -cne 'success' -or $needs.postgresql.result -cne 'success'){throw 'SF-CI-JOB'}
     $jobs=@(foreach($directory in Get-ChildItem -LiteralPath $ProofDirectory -Directory){
         $job=[IO.File]::ReadAllText((Join-Path $directory.FullName 'report.json'))|ConvertFrom-Json -AsHashtable
         $job.result=if($job.name -ceq 'PostgreSql'){$needs.postgresql.result}else{$needs.public.result}
@@ -55,7 +34,7 @@ if($Mode -ceq 'Aggregate'){
         $job
     })
     Assert-PublicCiAggregate $jobs $ExpectedCommit $RunId $Attempt
-    Write-Output 'SF-CI-PASSED Windows/Linux offline proofs and all23 real PostgreSQL Facts verified. Public SourceLink may still be PENDING; P03-F1 remains OPEN/UNKNOWN.'
+    Write-Output 'SF-CI-PASSED Windows/Linux offline proofs, SourceLink and all23 real PostgreSQL Facts verified; P03-F1 remains OPEN/UNKNOWN.'
     exit 0
 }
 if(Test-Path -LiteralPath $ProofDirectory){throw 'SF-CI-PROVENANCE Fresh proof directory required.'}
@@ -64,7 +43,8 @@ $scratch=Join-Path ([IO.Path]::GetTempPath()) ('sitefactory-public-ci-'+[Guid]::
 $work=Join-Path $scratch 'source'
 $scratchOwned=$false
 $name=if($Mode -ceq 'PostgreSql'){'PostgreSql'}elseif($IsWindows){'Windows'}else{'Linux'}
-$report=[ordered]@{schemaVersion=1;name=$name;commit=$ExpectedCommit;runId=$RunId;attempt=$Attempt;status='FAILED';code='SF-CI-INCOMPLETE';phase='COPY';sourceLink='PENDING';cleanup='NotObserved';suites=@();campaign=$null}
+$report=[ordered]@{schemaVersion=1;name=$name;commit=$ExpectedCommit;runId=$RunId;attempt=$Attempt;status='FAILED';code='SF-CI-INCOMPLETE';phase='COPY';sourceLink='PENDING';cleanup='NotObserved';suites=@();campaign=$null;timings=@()}
+$phaseTimer=[Diagnostics.Stopwatch]::StartNew()
 $environment=@{}
 foreach($key in @('GIT_DIR','GIT_WORK_TREE','GIT_COMMON_DIR','NUGET_PACKAGES','SITEFACTORY_TEST_PUBLIC_REPOSITORY','DOTNET_CLI_USE_MSBUILD_SERVER','MSBUILDDISABLENODEREUSE')){
     $environment[$key]=[Environment]::GetEnvironmentVariable($key)
@@ -72,8 +52,14 @@ foreach($key in @('GIT_DIR','GIT_WORK_TREE','GIT_COMMON_DIR','NUGET_PACKAGES','S
 function Save-CiReport {
     [IO.File]::WriteAllText((Join-Path $ProofDirectory 'report.json'),($report|ConvertTo-Json -Depth 12),[Text.UTF8Encoding]::new($false))
 }
+function Complete-CiTiming {
+    param([ValidateSet('COPY','COMPOSITION','RESTORE','GUARDS','FORMAT','BUILD','SYMBOLS','BINARIES','DISCOVERY','TEST','POSTGRESQL','AUDIT','CLEANUP')][string]$Phase=$report.phase)
+    $report.timings+=@{phase=$Phase;durationMs=[Math]::Round($phaseTimer.Elapsed.TotalMilliseconds,3)}
+    $phaseTimer.Restart()
+}
 function Set-CiPhase {
     param([ValidateSet('COPY','COMPOSITION','RESTORE','GUARDS','FORMAT','BUILD','SYMBOLS','BINARIES','DISCOVERY','TEST','POSTGRESQL','AUDIT','CLEANUP')][string]$Phase)
+    Complete-CiTiming
     $report.phase=$Phase.ToUpperInvariant()
     Save-CiReport
 }
@@ -81,14 +67,14 @@ function Get-CiFailureCode([Management.Automation.ErrorRecord]$Failure) {
     # Publish only exact codes owned by this proof. Never forward exception text,
     # a matching prefix with a provider suffix, or an untrusted tool message.
     $codes=@(
-        'SF-CI-ARCHIVE','SF-CI-BINARY','SF-CI-BINARY-REFERENCE','SF-CI-CASE-IDENTITY','SF-CI-CHECKOUT',
+        'SF-CI-ARCHIVE','SF-CI-BINARY','SF-CI-BINARY-REFERENCE','SF-CI-CASE-IDENTITY',
         'SF-CI-CLEANUP','SF-CI-COMPOSITION','SF-CI-COPY','SF-CI-COUNTERS',
         'SF-CI-CYCLE','SF-CI-DISCOVERY','SF-CI-DOTNET','SF-CI-GIT','SF-CI-GUARDS',
         'SF-CI-IDENTITY','SF-CI-INCOMING','SF-CI-INCOMPLETE','SF-CI-INVENTORY',
         'SF-CI-ISOLATION','SF-CI-JOB','SF-CI-MATRIX','SF-CI-MSBUILD',
         'SF-CI-OBSERVATIONS','SF-CI-PDB','SF-CI-PDB-CHECKSUM','SF-CI-PDB-MISSING',
         'SF-CI-PDB-ORIGIN','SF-CI-PDB-PATH','SF-CI-PDB-PROOF','SF-CI-PG','SF-CI-PG-PROOF',
-        'SF-CI-PRIVATE-SOURCE','SF-CI-PRIVATE-SOURCELINK','SF-CI-PRIVATE-WORKFLOW',
+        'SF-CI-PRIVATE-SOURCELINK',
         'SF-CI-PROOF-DIRECTORY','SF-CI-PROVENANCE','SF-CI-REFERENCE',
         'SF-CI-REPORT','SF-CI-REPOSITORY','SF-CI-RESOURCE','SF-CI-RESULT',
         'SF-CI-REVISION','SF-CI-SCOPE','SF-CI-SHARDS','SF-CI-SOURCELINK',
@@ -163,9 +149,6 @@ try{
         if((Get-FileHash -LiteralPath $source).Hash -cne (Get-FileHash -LiteralPath $target).Hash){throw 'SF-CI-COPY'}
     }
     Set-CiPhase 'COMPOSITION'
-    $solution=[xml]'<Solution />'
-    foreach($project in @(Get-PublicCiProjects)){$node=$solution.CreateElement('Project');$node.SetAttribute('Path',$project.Path);[void]$solution.DocumentElement.AppendChild($node)}
-    $solution.Save((Join-Path $work 'SiteFactory.slnx'))
     Assert-PublicCiComposition $work
     $env:NUGET_PACKAGES=Join-Path $scratch 'packages'
     $env:SITEFACTORY_TEST_PUBLIC_REPOSITORY=$work
@@ -186,12 +169,18 @@ try{
         Set-CiPhase 'COMPOSITION'
         Assert-PublicCiComposition $work -Evaluate
         Set-CiPhase 'SYMBOLS'
-        $symbols=Assert-PublicCiSymbols $work $PublicRepository $ExpectedCommit
-        & pwsh -NoProfile -File (Join-Path $work 'tests/PublicCi/Test-PublicCi.ps1') -RepositoryRoot $work -CompiledRoot $work -Commit $ExpectedCommit -PublicRepository $PublicRepository *> (Join-Path $scratch 'symbols-guard.log')
+        # The compiled guard invokes the same original-root symbol and binary
+        # validators, then all adversarial checks. Consume its bounded result
+        # instead of repeating both original-root scans around that process.
+        $symbolProof=Join-Path $scratch 'symbols.json'
+        & pwsh -NoProfile -File (Join-Path $work 'tests/PublicCi/Test-PublicCi.ps1') -RepositoryRoot $work -CompiledRoot $work -Commit $ExpectedCommit -PublicRepository $PublicRepository -SymbolProofFile $symbolProof *> (Join-Path $scratch 'symbols-guard.log')
         if($LASTEXITCODE -ne 0){throw 'SF-CI-PDB-PROOF'}
+        $symbols=[IO.File]::ReadAllText($symbolProof)|ConvertFrom-Json
+        if($symbols.pdbCount -lt 23 -or $symbols.sourceLink -cne $(if($PublicRepository){'VERIFIED'}else{'PENDING'}) -or $symbols.binariesVerified -cne $true){throw 'SF-CI-PDB-PROOF'}
         $report.sourceLink=$symbols.sourceLink
         Set-CiPhase 'BINARIES'
-        Assert-PublicCiBinaries $work $PublicRepository $ExpectedCommit
+        $report.symbolValidationMs=$symbols.symbolValidationMs
+        $report.binaryValidationMs=$symbols.binaryValidationMs
         Set-CiPhase 'DISCOVERY'
         $bridge=Join-Path $work 'tests/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests/bin/Release/net10.0/LogicGate.SiteFactory.Infrastructure.PostgreSql.Tests.dll'
         $partition=Read-PublicPostgreSqlPartition (Join-Path $work 'tests/PostgreSql/Public/shards.json')
@@ -256,6 +245,10 @@ try{
 }finally{
     $workPassed=$report.status -ceq 'PASSED'
     $reportingFailed=$false
+    try{Complete-CiTiming}catch{
+        $reportingFailed=$true
+        if($workPassed){$report.status='FAILED';$report.code='SF-CI-REPORT'}
+    }
     # A diagnostic write failure must not prevent owned-resource cleanup.
     if($workPassed){
         $report.status='FAILED';$report.code='SF-CI-INCOMPLETE'
@@ -276,6 +269,9 @@ try{
     if($cleanupFailed){$report.cleanup='Failed';$report.status='FAILED';$report.code='SF-CI-CLEANUP'}else{
         $report.cleanup='Completed'
         if($workPassed -and !$reportingFailed){$report.status='PASSED';$report.code=$null}
+    }
+    try{Complete-CiTiming 'CLEANUP';$phaseTimer.Stop()}catch{
+        if($workPassed -and !$cleanupFailed){$report.status='FAILED';$report.code='SF-CI-REPORT'}
     }
     try{Save-CiReport}catch{
         [Console]::Error.WriteLine(('SF-CI-REPORT phase='+$report.phase+'; proof could not be saved.'))

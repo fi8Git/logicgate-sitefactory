@@ -22,12 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Templates/EmbeddedTemplateCatalogTests.cs" />
-    <Compile Remove="Templates/GenerationPlanPipelineTests.cs" />
-    <Compile Remove="Templates/PmeModuleTests.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="../fixtures/public/generation-plan/valid-minimal/generation-plan.json"
           Link="fixtures/generation-plan/valid-minimal/generation-plan.json"
           CopyToOutputDirectory="PreserveNewest" />
