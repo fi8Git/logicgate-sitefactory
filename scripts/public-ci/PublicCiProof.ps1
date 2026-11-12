@@ -549,8 +549,14 @@ function Assert-PublicCiPostgreSql([string]$Root,[string]$Commit) {
 
 function Assert-PublicCiAggregate([object[]]$Jobs,[string]$Commit,[string]$RunId,[string]$Attempt) {
     if($Jobs.Count -ne 3 -or !(Assert-PublicPostgreSqlExact @($Jobs.name) @('Windows','Linux','PostgreSql'))){throw 'SF-CI-MATRIX'}
+    $currentAttempt=0L
+    if(![long]::TryParse($Attempt,[Globalization.NumberStyles]::None,[Globalization.CultureInfo]::InvariantCulture,[ref]$currentAttempt) -or $currentAttempt -le 0){throw 'SF-CI-JOB'}
     foreach($job in $Jobs){
-        if($job.result -cne 'success' -or $job.commit -cne $Commit -or $job.runId -cne $RunId -or $job.attempt -cne $Attempt -or $job.status -cne 'PASSED' -or $job.cleanup -cne 'Completed' -or $job.sourceLink -cnotin @('PENDING','VERIFIED')){throw 'SF-CI-JOB'}
+        # A workflow rerun can retain successful jobs from earlier attempts.
+        # Keep their original provenance and validate their complete proof below.
+        $jobAttempt=0L
+        if(![long]::TryParse([string]$job.attempt,[Globalization.NumberStyles]::None,[Globalization.CultureInfo]::InvariantCulture,[ref]$jobAttempt) -or $jobAttempt -le 0 -or $jobAttempt -gt $currentAttempt){throw 'SF-CI-JOB'}
+        if($job.result -cne 'success' -or $job.commit -cne $Commit -or $job.runId -cne $RunId -or $job.status -cne 'PASSED' -or $job.cleanup -cne 'Completed' -or $job.sourceLink -cnotin @('PENDING','VERIFIED')){throw 'SF-CI-JOB'}
         if($job.name -ceq 'PostgreSql'){
             $files=@(Get-ChildItem -LiteralPath $job.campaign -Recurse -File)
             if($files.Count -ne $job.campaignFiles.Count -or !(Assert-PublicPostgreSqlExact @($files|ForEach-Object {[IO.Path]::GetRelativePath($job.campaign,$_.FullName).Replace('\','/')}) @($job.campaignFiles.path))){throw 'SF-CI-ARCHIVE'}
