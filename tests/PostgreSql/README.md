@@ -34,8 +34,7 @@ CLI de sélection libre.
 ## Exécution explicite, depuis la racine
 
 Prérequis : SDK de global.json, PowerShell 7 et moteur Docker Linux pour REQUIRED.
-Exemple de préparation et d'exécution d'une **future** campagne, non exécuté
-lors de la présente adaptation documentaire :
+Préparation et exécution d’une campagne REQUIRED :
 
 ```powershell
 dotnet restore SiteFactory.slnx --locked-mode
@@ -48,7 +47,6 @@ Paramètres publics réels : `-RepositoryRoot`, `-ManifestPath`, `-RunRequired`,
 hors base et ne constitue **aucune preuve PostgreSQL**. Les binaires Release
 doivent déjà être disponibles ; le harnais n'effectue pas leur build.
 Il ne propose ni NoBuild, Shard, UseConfiguredInstance ni retry automatique.
-Ces anciennes options appartiennent au harnais historique, pas au public.
 
 ## Instance éphémère, TLS et secrets
 
@@ -133,22 +131,15 @@ corrélée résiduelle. Pas de retry, baisse de charge ou délai augmenté.
 
 **P03-F1 OPEN / UNKNOWN** : historique **749 HTTP 200 / 19 HTTP 503**,
 cause non démontrée, risque accepté avec réserve. Propriétaire : responsable
-technique LogicGate SiteFactory ; réexamen **2026-10-23**.
+technique LogicGate SiteFactory ; réexamen **2026-11-16**, sans prolongation tacite.
 Les campagnes vertes et l'investigation terminée ne corrigent ni n'expliquent F1.
 [Concurrence et limites causales](../readiness-concurrency-regression.md).
 
-## Business historique : inventaire séparé
+## Limites du parcours validé
 
-La suite historique privée conserve **20 Facts** et cinq anciens shards :
-**core=12, migrator=2, compatibility=2, hosts=3, e2e=1**.
-Elle inclut les vrais exécutables clients métier, génération/build/tests,
-régénération et les deux tests du véritable processus Worker.
-Ce n'est ni l'inventaire Infrastructure public de 20 ni celui inter-assemblies de 23.
-
-Les scripts historiques du dossier parent ne constituent pas la commande
-publique ; aucun lien vers un code, template, secret ou binaire privé n'est
-nécessaire aux commandes ci-dessus. Les résultats historiques ne sont pas
-recomptés comme publics. [Frontière E2E](foundation-e2e.md).
+Les 23 Facts valident les bibliothèques et hosts génériques, pas des exécutables
+clients métier générés. Les résultats d’autres parcours ne sont pas recomptés
+dans cet inventaire. Voir la [frontière E2E](foundation-e2e.md).
 
 ## Documents et CI
 
@@ -156,9 +147,12 @@ recomptés comme publics. [Frontière E2E](foundation-e2e.md).
 - [Migration/bootstrap explicites](migrations.md), [graphe Migrator](migrator-role-graph-regression.md).
 - [Résolution hostile des catalogues](catalog-resolution-regression.md), [préfixe pg_](schema-privilege-regression.md).
 
-Le workflow public Windows/Linux est préparé ; **CI distante non encore validée**
-dans cette preuve documentaire. La preuve locale Windows/.NET vers serveur Linux
-ne certifie ni .NET Linux distant ni PostgreSQL natif Windows.
-Aucun PostgreSQL, test applicatif ou CI rejoué ici ; P05/P06 restent à revue humaine.
+La [CI publique](../../docs/04-quality-security/20-quality-gates-and-ci.md) est
+opérationnelle sous Windows et Linux, avec PostgreSQL REQUIRED sous Linux et
+**SourceLink VERIFIED**. Les [preuves publiques acquises](../../CONTRIBUTING.md#321-checks-attendus)
+restent distinctes des preuves locales ci-dessus : un test local Windows/.NET
+vers serveur Linux ne certifie ni .NET Linux distant ni PostgreSQL natif Windows.
+Aucun résultat n’est acquis par la seule lecture de ce document ; P05/P06 restent
+à revue humaine.
 Hors portée : provisioning/exploitation production, backup/restore, upgrade
 client, déploiement et fonctionnalités métier.
