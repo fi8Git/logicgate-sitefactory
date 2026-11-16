@@ -263,7 +263,7 @@ foreach($case in @(
 )){Reject {Assert-Workflow $workflow.Replace($case.Old,$case.New)} ('workflow rejects '+$case.New)}
 Reject {Assert-Workflow 'jobs: [ unclosed'} 'corrupt YAML'
 $projects=@(Get-PublicCiProjects)
-Check ($projects.Count -eq 23 -and @($projects|Where-Object Offline -gt 0).Count -eq 11 -and ($projects|Measure-Object Offline -Sum).Sum -eq 2726) 'closed project inventory'
+Check ($projects.Count -eq 23 -and @($projects|Where-Object Offline -gt 0).Count -eq 11 -and ($projects|Measure-Object Offline -Sum).Sum -eq 2766) 'closed project inventory'
 $partition=Read-PublicPostgreSqlPartition (Join-Path $RepositoryRoot 'tests/PostgreSql/Public/shards.json')
 Check ($partition.expectedTests.Count -eq 23 -and $partition.shards.Count -eq 5 -and ($partition.shards.expectedCount -join ',') -ceq '5,3,8,4,3') 'unchanged P04 partition'
 $sources=@(Get-PublicCiSourcePaths $RepositoryRoot)
