@@ -41,9 +41,11 @@ public sealed class DependencyBoundaryTests
     }
 
     [Fact]
-    public void PublicSurfaceIsLimitedToFiveContractsAndOneDescriptorProperty()
+    public void PublicSurfaceIsLimitedToApprovedContractsAndOneDescriptorProperty()
     {
-        Type[] expected = [typeof(ISiteFactoryModule), typeof(ModuleDescriptor), typeof(ModuleId), typeof(ModuleVersion), typeof(ModuleCapability)];
+        Type[] expected = [typeof(ISiteFactoryModule), typeof(ModuleDescriptor), typeof(ModuleId), typeof(ModuleVersion), typeof(ModuleCapability),
+            typeof(ISiteFactoryTemplateProvider), typeof(TemplateIdentity), typeof(TemplateDefinition), typeof(TemplateFileDefinition),
+            typeof(TemplateFilePolicy), typeof(TemplateRenderContext), typeof(TemplateCatalogResult), typeof(TemplateContentResult), typeof(TemplateReadFailure)];
         Assert.Equal(expected.OrderBy(static type => type.FullName, StringComparer.Ordinal),
             typeof(ISiteFactoryModule).Assembly.GetExportedTypes().OrderBy(static type => type.FullName, StringComparer.Ordinal));
 
@@ -55,6 +57,26 @@ public sealed class DependencyBoundaryTests
         {
             Assert.All(type.GetProperties(), static property => Assert.Null(property.SetMethod));
         }
+    }
+
+    [Fact]
+    public void TemplateProviderIsIndependentAndExposesOnlyTheTwoApprovedOperations()
+    {
+        Type provider = typeof(ISiteFactoryTemplateProvider);
+        Assert.Empty(provider.GetInterfaces());
+        Assert.Empty(provider.GetProperties());
+        MethodInfo[] methods = provider.GetMethods().OrderBy(static method => method.Name, StringComparer.Ordinal).ToArray();
+        Assert.Equal(["ReadCatalogAsync", "ReadContentAsync"], methods.Select(static method => method.Name));
+        Assert.Equal(typeof(Task<TemplateCatalogResult>), methods[0].ReturnType);
+        Assert.Equal(typeof(Task<TemplateContentResult>), methods[1].ReturnType);
+        Assert.Equal([typeof(CancellationToken)], methods[0].GetParameters().Select(static parameter => parameter.ParameterType));
+        Assert.Equal([typeof(TemplateIdentity), typeof(string), typeof(TemplateRenderContext), typeof(CancellationToken)],
+            methods[1].GetParameters().Select(static parameter => parameter.ParameterType));
+        Assert.All(methods, static method => Assert.True(method.GetParameters()[^1].HasDefaultValue));
+        Assert.Equal(["Files", "Identity", "SupportedProductIds"], typeof(TemplateDefinition).GetProperties().Select(static property => property.Name).Order(StringComparer.Ordinal));
+        Assert.Equal(["DefaultLocale", "DisplayName"], typeof(TemplateRenderContext).GetProperties().Select(static property => property.Name).Order(StringComparer.Ordinal));
+        Assert.NotNull(typeof(TemplateRenderContext).GetConstructor([typeof(string), typeof(string)]));
+        Assert.Equal([TemplateFilePolicy.Generated, TemplateFilePolicy.CreateOnce], Enum.GetValues<TemplateFilePolicy>());
     }
 
     private static XDocument ReadProject(string path)

@@ -1,0 +1,70 @@
+using LogicGate.SiteFactory.ModuleSdk;
+
+internal static class TemplateProviderConsumer
+{
+    internal static async Task VerifyAsync()
+    {
+        ISiteFactoryTemplateProvider provider = new Provider();
+        if (provider is ISiteFactoryModule) throw new InvalidOperationException();
+        TemplateCatalogResult catalog = await provider.ReadCatalogAsync();
+        Require(catalog.IsSuccess && catalog.Error is null && catalog.Templates.Count == 2);
+        Require(catalog.Templates[0].Identity == new TemplateIdentity("docs", "1.0.0"));
+        Require(catalog.Templates[1].Identity == new TemplateIdentity("starter", "2.0.0"));
+        Require(TemplateCatalogResult.Success([catalog.Templates[0], catalog.Templates[0]]).Templates.Count == 2);
+        TemplateRenderContext context = new("Example", "fr-FR");
+        foreach (TemplateDefinition template in catalog.Templates)
+        {
+            TemplateFileDefinition file = template.Files.Single();
+            Require(file.FileId != file.RelativePath && file.ContentKey != file.RelativePath);
+            TemplateContentResult content = await provider.ReadContentAsync(template.Identity, file.ContentKey, context);
+            Require(content.IsSuccess && content.Error is null && content.Content.Span.SequenceEqual(new byte[] { 0, 255, 128 }));
+        }
+        TemplateContentResult wrongVersion = await provider.ReadContentAsync(new("docs", "2.0.0"), "home", context);
+        Require(!wrongVersion.IsSuccess && wrongVersion.Error == TemplateReadFailure.UnsupportedTemplate && wrongVersion.Content.IsEmpty);
+        TemplateContentResult unknown = await provider.ReadContentAsync(new("docs", "1.0.0"), "unknown", context);
+        Require(!unknown.IsSuccess && unknown.Error == TemplateReadFailure.UnknownContent);
+        byte[] input = [1, 255];
+        TemplateContentResult copy = TemplateContentResult.Success(input);
+        input[0] = 99;
+        Require(copy.Content.Span[0] == 1);
+        using CancellationTokenSource cancelled = new();
+        cancelled.Cancel();
+        try { await provider.ReadCatalogAsync(cancelled.Token); throw new InvalidOperationException(); }
+        catch (OperationCanceledException) when (cancelled.IsCancellationRequested) { }
+        try { await provider.ReadContentAsync(new("docs", "1.0.0"), "home", context, cancelled.Token); throw new InvalidOperationException(); }
+        catch (OperationCanceledException) when (cancelled.IsCancellationRequested) { }
+    }
+
+    private static void Require(bool condition)
+    {
+        if (!condition) throw new InvalidOperationException();
+    }
+
+    private sealed class Provider : ISiteFactoryTemplateProvider
+    {
+        private static readonly TemplateDefinition[] Templates =
+        [
+            new(new("docs", "1.0.0"), ["documentation"], [new("home-id", "index.bin", "home", TemplateFilePolicy.Generated)]),
+            new(new("starter", "2.0.0"), ["documentation"], [new("starter-id", "starter.bin", "intro", TemplateFilePolicy.CreateOnce)]),
+        ];
+
+        public Task<TemplateCatalogResult> ReadCatalogAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.FromResult(TemplateCatalogResult.Success(Templates));
+        }
+
+        public Task<TemplateContentResult> ReadContentAsync(TemplateIdentity template, string contentKey,
+            TemplateRenderContext context, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            TemplateDefinition? definition = Templates.SingleOrDefault(item => item.Identity == template);
+            if (definition is null) return Task.FromResult(TemplateContentResult.Failure(TemplateReadFailure.UnsupportedTemplate));
+            if (!definition.Files.Any(file => file.ContentKey == contentKey))
+                return Task.FromResult(TemplateContentResult.Failure(TemplateReadFailure.UnknownContent));
+            if (context.DisplayName != "Example" || context.DefaultLocale != "fr-FR")
+                return Task.FromResult(TemplateContentResult.Failure(TemplateReadFailure.ContentUnavailable));
+            return Task.FromResult(TemplateContentResult.Success([0, 255, 128]));
+        }
+    }
+}
