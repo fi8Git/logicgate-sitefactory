@@ -19,11 +19,34 @@ public sealed class ClientFileApplier
     /// Protected reports the write prohibition without inspecting existence. Custom and preserve-only
     /// intentions never create directories. No ownership state, backup, sidecar or merge is produced.
     /// </remarks>
-    public async Task<FileGenerationResult> ApplyAsync(
+    public Task<FileGenerationResult> ApplyAsync(
         GenerationRoot root,
         PlannedFile file,
         string? content = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) =>
+        ApplyCoreAsync(root, file, () =>
+        {
+            ArgumentNullException.ThrowIfNull(content);
+            return new GeneratedFileContent(content);
+        }, cancellationToken);
+
+    /// <summary>Applies exact prepared bytes only when creation is authorized; preservation needs no candidate.</summary>
+    internal Task<FileGenerationResult> ApplyPreparedAsync(
+        GenerationRoot root,
+        PlannedFile file,
+        GeneratedFileContent? content = null,
+        CancellationToken cancellationToken = default) =>
+        ApplyCoreAsync(root, file, () =>
+        {
+            ArgumentNullException.ThrowIfNull(content);
+            return content;
+        }, cancellationToken);
+
+    private async Task<FileGenerationResult> ApplyCoreAsync(
+        GenerationRoot root,
+        PlannedFile file,
+        Func<GeneratedFileContent> prepareContent,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(root);
         ArgumentNullException.ThrowIfNull(file);
@@ -50,8 +73,7 @@ public sealed class ClientFileApplier
             cancellationToken.ThrowIfCancellationRequested();
             if (decision != ClientFileDecision.Create) return Observe(Result(file, decision));
 
-            ArgumentNullException.ThrowIfNull(content);
-            GeneratedFileContent prepared = new(content);
+            GeneratedFileContent prepared = prepareContent();
             proposedHash = prepared.Hash;
             using AtomicWriteSession? created = existing is null ? AtomicWriteSession.Open(root, file.RelativePath, cancellationToken) : null;
             AtomicWriteSession session = existing ?? created!;
