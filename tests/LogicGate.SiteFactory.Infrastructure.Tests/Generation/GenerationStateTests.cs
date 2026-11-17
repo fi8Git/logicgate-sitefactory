@@ -118,17 +118,39 @@ public sealed class GenerationStateTests
         Assert.Null(state.ReadMatchingState(Encoding.UTF8.GetBytes(changed)));
     }
 
+    [Fact]
+    public void StateReusesThePreparedContentHashReference()
+    {
+        GeneratedFileContent prepared = new("Prepared\r\ncontent\r");
+        GenerationState state = CreateState(preparedContent: prepared);
+
+        Assert.Same(prepared.Hash, state.Files[0].Hash);
+    }
+
+    [Theory]
+    [InlineData(FileGenerationStrategy.CreateOnce)]
+    [InlineData(FileGenerationStrategy.Custom)]
+    [InlineData(FileGenerationStrategy.Protected)]
+    public void PreparedClientContentDoesNotBecomeAnOwnershipReference(FileGenerationStrategy strategy)
+    {
+        GenerationState state = CreateState(strategy, preparedContent: new("Client seed\r\n"));
+
+        Assert.Null(state.Files[0].Hash);
+    }
+
     private static GenerationState CreateState(FileGenerationStrategy strategy = FileGenerationStrategy.Generated,
-        string content = "Minimal test content.\n")
+        string content = "Minimal test content.\n", GeneratedFileContent? preparedContent = null)
     {
         ClientConfigurationV1 configuration = new(1, new("public-fixture", "Public Fixture"),
             new("fixture-product", "fixture-template", "fr-FR", "https://www.example.test"), new([]), new("docker-compose-vps"), new(true, false));
         TemplateManifest template = new(new("fixture-template"), new("0.3.1"), [new("fixture-product")],
             [new(new("readme"), "README.md", "structure/readme", strategy)]);
-        PlannedFile file = new(new("readme"), "README.md", new(PlannedFileOriginKind.Template, "fixture-template"), strategy, PlannedFileAction.Create);
+        PlannedFileAction action = strategy is FileGenerationStrategy.Custom or FileGenerationStrategy.Protected
+            ? PlannedFileAction.Preserve : PlannedFileAction.Create;
+        PlannedFile file = new(new("readme"), "README.md", new(PlannedFileOriginKind.Template, "fixture-template"), strategy, action);
         GenerationPlan plan = new(new("state-test"), new("public-fixture"), new("fixture-product"), template.TemplateId, [file], []);
         GenerationExecutionRequest request = new(plan, "public-fixture");
-        return GenerationState.Create(request, configuration, template, [(file, content)],
+        return GenerationState.Create(request, configuration, template, [(file, preparedContent ?? new GeneratedFileContent(content))],
             SiteFactoryLockWriter.CreateCandidate(configuration, template));
     }
 }

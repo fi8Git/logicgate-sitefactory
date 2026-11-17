@@ -4,7 +4,7 @@ Set-StrictMode -Version Latest
 
 function Get-PublicCiProjects {
     $production=@('Application','Cli','Domain','Infrastructure','Infrastructure.PostgreSql','Migrator','ModuleSdk','Modules.Documentation','Runtime','Runtime.AspNetCore','Runtime.Contracts','Runtime.Hosting')
-    $offline=[ordered]@{Application=716;Cli=172;Domain=65;Infrastructure=906;'Infrastructure.PostgreSql'=510;ModuleSdk=132;'Runtime.Contracts'=105;'Runtime.AspNetCore'=53;'Runtime.Hosting'=52;'Runtime.PostgreSql.Hosts'=70;Runtime=55}
+    $offline=[ordered]@{Application=716;Cli=172;Domain=65;Infrastructure=931;'Infrastructure.PostgreSql'=510;ModuleSdk=132;'Runtime.Contracts'=105;'Runtime.AspNetCore'=53;'Runtime.Hosting'=52;'Runtime.PostgreSql.Hosts'=70;Runtime=55}
     foreach($name in $production){$assembly='LogicGate.SiteFactory.'+$name;[pscustomobject]@{Assembly=$assembly;Path="src/$assembly/$assembly.csproj";Offline=0}}
     foreach($name in $offline.Keys){$assembly='LogicGate.SiteFactory.'+$name+'.Tests';[pscustomobject]@{Assembly=$assembly;Path="tests/$assembly/$assembly.csproj";Offline=$offline[$name]}}
 }
