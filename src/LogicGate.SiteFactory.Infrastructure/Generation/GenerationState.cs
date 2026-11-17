@@ -34,11 +34,11 @@ internal sealed class GenerationState
     internal IReadOnlyList<Entry> Files { get; }
 
     internal static GenerationState Create(GenerationExecutionRequest request, ClientConfigurationV1 configuration,
-        TemplateManifest template, IReadOnlyList<(PlannedFile File, string? Content)> files, SiteFactoryLock composition)
+        TemplateManifest template, IReadOnlyList<(PlannedFile File, GeneratedFileContent? Content)> files, SiteFactoryLock composition)
     {
         List<Entry> entries = files.Select(item => new Entry(item.File,
             template.Files.Single(file => file.Id == item.File.Id).Source, template.TemplateVersion.Value,
-            item.File.Strategy == FileGenerationStrategy.Generated ? new GeneratedFileContent(item.Content!).Hash : null)).ToList();
+            item.File.Strategy == FileGenerationStrategy.Generated ? item.Content!.Hash : null)).ToList();
         entries.Add(new(new(new("sitefactory-lock"), SiteFactoryLockWriter.FileName,
             new(PlannedFileOriginKind.Generator, "sitefactory"), FileGenerationStrategy.Generated, PlannedFileAction.Create),
             "composition", composition.SiteFactoryVersion.Value, Hash(SiteFactoryLockJsonSerializer.Serialize(composition))));

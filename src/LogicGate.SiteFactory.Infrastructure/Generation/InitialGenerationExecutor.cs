@@ -15,7 +15,7 @@ public sealed class InitialGenerationExecutor : IGenerationExecutor
 {
     private readonly GenerationExecutionRequest preparedRequest;
     private readonly GenerationRoot root;
-    private readonly IReadOnlyList<(PlannedFile File, string? Content)> files;
+    private readonly IReadOnlyList<(PlannedFile File, GeneratedFileContent? Content)> files;
     private readonly SiteFactoryLock candidate;
     private readonly AtomicFileWriter writer;
     private readonly GenerationState state;
@@ -23,7 +23,7 @@ public sealed class InitialGenerationExecutor : IGenerationExecutor
     private int executed;
 
     private InitialGenerationExecutor(GenerationExecutionRequest request, GenerationRoot root,
-        IReadOnlyList<(PlannedFile File, string? Content)> files, SiteFactoryLock candidate, AtomicFileWriter writer,
+        IReadOnlyList<(PlannedFile File, GeneratedFileContent? Content)> files, SiteFactoryLock candidate, AtomicFileWriter writer,
         GenerationState state, RegenerationInspection? regeneration)
     {
         preparedRequest = request;
@@ -86,20 +86,20 @@ public sealed class InitialGenerationExecutor : IGenerationExecutor
             return Reject(InitialGenerationPreparationStatus.InvalidPlan, "SF-GEN-FILE-003",
                 "Template file identities must not collide with generator-owned artifacts.");
 
-        List<(PlannedFile File, string? Content)> prepared = [];
+        List<(PlannedFile File, GeneratedFileContent? Content)> prepared = [];
         foreach (PlannedFile file in plan.Files)
         {
             TemplateFile declaration = template.Files.Single(entry => entry.Id == file.Id);
-            string? content = null;
+            GeneratedFileContent? content = null;
             if (file.Action == PlannedFileAction.Create)
             {
-                content = await contentProvider.ReadAsync(template, configuration, declaration.Source, cancellationToken).ConfigureAwait(false);
-                if (content is null)
+                string? text = await contentProvider.ReadAsync(template, configuration, declaration.Source, cancellationToken).ConfigureAwait(false);
+                if (text is null)
                     return Reject(InitialGenerationPreparationStatus.InvalidTemplate, "SF-GEN-FILE-005",
                         "No content is available for the exact resolved template version and logical source.");
 
-                // Validate encoding for every candidate before the first write, not lazily per file.
-                _ = new GeneratedFileContent(content);
+                // Encode and validate once before the first write; retain these exact bytes through application.
+                content = new GeneratedFileContent(text);
             }
             prepared.Add((file, content));
         }
@@ -186,16 +186,16 @@ public sealed class InitialGenerationExecutor : IGenerationExecutor
         GeneratedFileApplier generated = new(writer);
         ClientFileApplier client = new(writer);
         List<FileGenerationResult> results = [];
-        foreach ((PlannedFile file, string? content) in files)
+        foreach ((PlannedFile file, GeneratedFileContent? content) in files)
         {
             // Only the completed exact-composition preflight authorizes a content update.
             // The prepared candidate remains immutable; never rebuild it from a changed source here.
             PlannedFile application = regeneration is not null && file.Strategy == FileGenerationStrategy.Generated
                 ? new(file.Id, file.RelativePath, file.Origin, file.Strategy, PlannedFileAction.Update) : file;
             FileGenerationResult result = file.Strategy == FileGenerationStrategy.Generated
-                ? await generated.ApplyAsync(root, application, new(content!),
+                ? await generated.ApplyAsync(root, application, content!,
                     regeneration?.PreviousState.Files.Single(entry => entry.File.Id == file.Id).Hash, cancellationToken).ConfigureAwait(false)
-                : await client.ApplyAsync(root, file, content, cancellationToken).ConfigureAwait(false);
+                : await client.ApplyPreparedAsync(root, file, content, cancellationToken).ConfigureAwait(false);
             results.Add(result);
             if (result.Status is FileGenerationStatus.Failed or FileGenerationStatus.Conflict)
                 break;
